@@ -1,2 +1,2 @@
 # TradeXMatrix
-trading indicators , strategies , guildes wesite
+trading indicators , strategies , guildes website
