@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade X Matrix - Professional Trading Platform</title>
+    <title>TradeXMatrix</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -87,6 +87,29 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        .chart-container {
+            width: 100%;
+            height: 500px; /* Adjust height as needed */
+            background-color: #24242e;
+            border-radius: 8px;
+            margin-top: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a20;
+            color: #b0b0b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
         .info-content {
             margin-top: 20px;
         }
@@ -382,20 +405,24 @@
     <div class="container">
         <div class="main-content">
             <div class="logo">
-                <img id="userLogo" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/assets/logo.png" alt="TXM Logo">
+                <img id="userLogo" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
                 <h1>Trade X Matrix</h1>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="tradingChart"></canvas>
             </div>
             
             <div class="info-content">
                 <h2>Professional Trading Platform</h2>
-                <p>Welcome to **Trade X Matrix**, your ultimate destination for advanced trading. Our platform is meticulously designed for both beginners and seasoned professionals, offering a powerful suite of tools to analyze markets and execute strategies with precision.</p>
+                <p>Welcome to Trade X Matrix, your ultimate destination for advanced trading. Our platform is meticulously designed for both beginners and seasoned professionals, offering a powerful suite of tools to analyze markets and execute strategies with precision.</p>
                 
                 <ul class="features">
-                    <li>**Advanced Charting Tools:** Gain an edge with sophisticated technical analysis tools, indicators, and real-time data.</li>
-                    <li>**Comprehensive Market Data:** Access real-time quotes, historical data, and global market news feeds to stay informed.</li>
-                    <li>**Expert-Curated Insights:** Receive weekly stock picks and market analysis reports from our team of seasoned traders.</li>
-                    <li>**Risk Management:** Utilize built-in tools to manage your funded accounts and optimize risk-reward ratios.</li>
-                    <li>**Educational Resources:** Dive into our extensive library of trading courses and guides to accelerate your learning.</li>
+                    <li>Advanced Charting Tools:** Gain an edge with sophisticated technical analysis tools, indicators, and real-time data.</li>
+                    <li>Comprehensive Market Data:** Access real-time quotes, historical data, and global market news feeds to stay informed.</li>
+                    <li>Expert-Curated Insights:** Receive weekly stock picks and market analysis reports from our team of seasoned traders.</li>
+                    <li>Risk Management:** Utilize built-in tools to manage your funded accounts and optimize risk-reward ratios.</li>
+                    <li>Educational Resources:** Dive into our extensive library of trading courses and guides to accelerate your learning.</li>
                 </ul>
                 
                 <div class="quote-box">
@@ -510,6 +537,54 @@
     </div>
     
     <script>
+        // JavaScript for the trading chart
+        const canvas = document.getElementById('tradingChart');
+        const ctx = canvas.getContext('2d');
+        const highlightColor = '#00A381'; // From CSS variable
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            drawChart();
+        }
+
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const data = [10, 15, 20, 18, 25, 30, 28, 35, 40, 38, 45, 50, 48, 55, 60, 58, 65, 70, 68, 75, 80, 78, 85, 90, 88, 95];
+            const maxData = Math.max(...data);
+            const minData = Math.min(...data);
+            const range = maxData - minData;
+
+            // Draw grid lines
+            ctx.strokeStyle = '#383845'; // Border color from CSS variable
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 5; i++) {
+                const y = (i / 4) * canvas.height;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Draw line graph
+            ctx.beginPath();
+            ctx.strokeStyle = highlightColor;
+            ctx.lineWidth = 2;
+            
+            ctx.moveTo(0, canvas.height - ((data[0] - minData) / range) * canvas.height);
+            
+            for (let i = 1; i < data.length; i++) {
+                const x = (i / (data.length - 1)) * canvas.width;
+                const y = canvas.height - ((data[i] - minData) / range) * canvas.height;
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
         let captchaCodes = {
             login: 'A7X9K',
             signup: 'B3M8R'
