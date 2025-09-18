@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeXMatrix</title>
+    <title>Trade X Matrix - Professional Trading Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Styles */
         :root {
-            --bg-color: #1C1C23;
-            --panel-color: #2A2A35;
+            --bg-color: #121217;
+            --panel-color: #1a1a20;
             --text-color: #B8B8BD;
             --highlight-color: #00A381;
-            --border-color: #383845;
-            --btn-bg-hover: #383845;
+            --border-color: #2e2e3a;
+            --card-color: #21212c;
+            --btn-bg-hover: #007a61;
+            --header-height: 70px;
         }
 
         * {
@@ -30,699 +33,398 @@
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
             background-color: var(--bg-color);
+            position: relative;
         }
 
-        /* Layout */
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 25px;
-            align-items: flex-start;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        /* Main Content Section (Chart Area) */
-        .main-content {
-            background-color: var(--panel-color);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .logo img {
-            width: 120px;
-            height: 120px;
-            transition: transform 0.3s ease;
-        }
-
-        .logo img:hover {
-            transform: scale(1.05);
-        }
-
-        .logo h1 {
-            color: white;
-            margin-top: 15px;
-            font-size: 2.2rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .chart-container {
-            width: 100%;
-            height: 500px; /* Adjust height as needed */
-            background-color: #24242e;
-            border-radius: 8px;
-            margin-top: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .chart-placeholder {
+        /* Animated Background Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: #1a1a20;
-            color: #b0b0b0;
+            background: linear-gradient(135deg, #0d0d12, #1a1a20, #26262b);
+            background-size: 400% 400%;
+            animation: backgroundAnimation 20s ease infinite;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            height: var(--header-height);
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-style: italic;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        
-        .info-content {
-            margin-top: 20px;
-        }
-
-        .info-content h2 {
-            color: white;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .info-content p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
-
-        .features {
-            list-style: none;
-            margin: 20px 0;
-            padding-left: 0;
-        }
-
-        .features li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 25px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .features li:last-child {
-            border-bottom: none;
-        }
-
-        .features li::before {
-            content: "•";
-            position: absolute;
+            padding: 0 40px;
+            background-color: rgba(26, 26, 32, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
             left: 0;
-            color: var(--highlight-color);
-            font-weight: bold;
-            font-size: 1.2rem;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .quote-box {
-            background-color: var(--border-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 25px;
-            border-left: 3px solid var(--highlight-color);
-            font-style: italic;
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .quote-box strong {
-            color: white;
-        }
-        
-        /* Sidebar/Auth Section */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .auth-section, .contact-info {
-            background-color: var(--panel-color);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            color: white;
-        }
-
-        .auth-toggle {
-            display: flex;
-            margin-bottom: 25px;
-            background: var(--border-color);
-            border-radius: 8px;
-            padding: 4px;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            color: var(--text-color);
-            background: transparent;
-        }
-
-        .toggle-btn.active {
-            background: var(--bg-color);
-            color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--bg-color);
-            color: white;
-            font-size: 15px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--highlight-color);
-            box-shadow: 0 0 5px rgba(0, 163, 129, 0.2);
-        }
-
-        .password-requirements {
-            font-size: 11px;
-            color: var(--text-color);
-            margin-top: 5px;
-        }
-
-        .requirement {
-            display: block;
-            margin: 2px 0;
-        }
-
-        .requirement.valid {
-            color: #4caf50;
-        }
-
-        .requirement.invalid {
-            color: #f44336;
-        }
-
-        .captcha-container {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .captcha-code {
-            background: #24242e;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            letter-spacing: 2px;
-            user-select: none;
-            border: 1px dashed var(--border-color);
-        }
-
-        .captcha-input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background: var(--panel-color);
-            color: white;
-        }
-
-        .refresh-captcha {
-            background: var(--border-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-        
-        .refresh-captcha:hover {
-            background: var(--btn-bg-hover);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--highlight-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .submit-btn:hover {
-            background: #007a61;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        }
-
-        .submit-btn:disabled {
-            background: #007a61;
-            opacity: 0.6;
-            color: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .form-section {
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
-        }
-
-        .contact-info {
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .contact-info h3 {
-            color: white;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .contact-item {
+        .header .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-
-        .contact-item span {
-            color: var(--text-color);
-        }
-
-        .contact-item a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
         }
         
-        .contact-item a:hover {
+        .header .logo img {
+            height: 40px;
+            width: 40px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .header nav {
+            margin-left: auto;
+        }
+
+        .header nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 25px;
+            transition: color 0.3s ease;
+        }
+
+        .header nav a:hover {
             color: white;
         }
 
-        /* Messages */
-        .success-message {
-            background: #4caf50;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: none;
-            font-size: 0.9rem;
+        .header .auth-buttons {
+            margin-left: 25px;
+            display: flex;
+            gap: 10px;
         }
 
-        .error-message {
-            background: #f44336;
+        .header .auth-buttons .login-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .auth-buttons .login-btn:hover {
+            border-color: var(--highlight-color);
             color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: none;
+        }
+
+        .header .auth-buttons .signup-btn {
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header .auth-buttons .signup-btn:hover {
+            background-color: var(--btn-bg-hover);
+        }
+        
+        /* Main Content Sections */
+        .main-content {
+            padding-top: var(--header-height);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            max-width: 900px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #d4d4d4, white, #d4d4d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-section .cta-btn {
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .hero-section .cta-btn:hover {
+            background-color: var(--btn-bg-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 163, 129, 0.2);
+        }
+
+        /* Ticker Section */
+        .ticker-section {
+            background-color: var(--panel-color);
+            padding: 20px 40px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            gap: 30px;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 0.9rem;
+            color: white;
+            animation: tickerScroll 25s linear infinite;
+        }
+        
+        .ticker-item .symbol {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .ticker-item .price {
+            color: #f4f4f4;
+        }
+
+        .ticker-item .change {
+            font-weight: 500;
+            color: #4caf50;
+        }
+
+        .ticker-item.negative .change {
+            color: #f44336;
+        }
+        
+        @keyframes tickerScroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Features Grid Section */
+        .features-grid-section {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .features-grid-section h3 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .features-grid-section p {
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: var(--card-color);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            color: var(--highlight-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        /* Testimonial Section (Optional, but adds trust) */
+        .testimonial-section {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .testimonial-card {
+            background-color: var(--card-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .testimonial-card p {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+        }
+
+        .footer .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: var(--highlight-color);
+        }
+
+        .footer p {
+            margin-top: 20px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="main-content">
-            <div class="logo">
-                <img id="userLogo" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
-                <h1>Trade X Matrix</h1>
-            </div>
-            
-            <div class="chart-container">
-                <canvas id="tradingChart"></canvas>
-            </div>
-            
-            <div class="info-content">
-                <h2>Professional Trading Platform</h2>
-                <p>Welcome to Trade X Matrix, your ultimate destination for advanced trading. Our platform is meticulously designed for both beginners and seasoned professionals, offering a powerful suite of tools to analyze markets and execute strategies with precision.</p>
-                
-                <ul class="features">
-                    <li>Advanced Charting Tools:** Gain an edge with sophisticated technical analysis tools, indicators, and real-time data.</li>
-                    <li>Comprehensive Market Data:** Access real-time quotes, historical data, and global market news feeds to stay informed.</li>
-                    <li>Expert-Curated Insights:** Receive weekly stock picks and market analysis reports from our team of seasoned traders.</li>
-                    <li>Risk Management:** Utilize built-in tools to manage your funded accounts and optimize risk-reward ratios.</li>
-                    <li>Educational Resources:** Dive into our extensive library of trading courses and guides to accelerate your learning.</li>
-                </ul>
-                
-                <div class="quote-box">
-                    <strong>Unlock Your Trading Potential</strong>
-                    <p style="margin-top: 10px;">Our mission is to democratize financial data and professional tools, empowering you to make smarter, data-driven decisions. Join a community of forward-thinking traders and elevate your skills today.</p>
-                </div>
-            </div>
+
+    <header class="header">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
+            <h1>Trade X Matrix</h1>
         </div>
-        
-        <div class="sidebar">
-            <div class="auth-section">
-                <div class="auth-toggle">
-                    <button class="toggle-btn active" onclick="showForm('login', event)">Login</button>
-                    <button class="toggle-btn" onclick="showForm('signup', event)">Sign Up</button>
-                </div>
-                
-                <div id="success-message" class="success-message"></div>
-                <div id="error-message" class="error-message"></div>
-                
-                <div id="login-form" class="form-section active">
-                    <h2 style="margin-bottom: 20px; color: white;">Welcome Back</h2>
-                    <form onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label for="login-email">Email</label>
-                            <input type="email" id="login-email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="login-password">Password</label>
-                            <input type="password" id="login-password" required>
-                        </div>
-                        
-                        <div class="captcha-container">
-                            <div class="captcha-code" id="login-captcha-code">A7X9K</div>
-                            <input type="text" class="captcha-input" id="login-captcha-input" placeholder="Enter CAPTCHA" required>
-                            <button type="button" class="refresh-captcha" onclick="refreshCaptcha('login')">🔄</button>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">Login to Platform</button>
-                    </form>
-                </div>
-                
-                <div id="signup-form" class="form-section">
-                    <h2 style="margin-bottom: 20px; color: white;">Join Us Today</h2>
-                    <form onsubmit="handleSignup(event)">
-                        <div class="form-group">
-                            <label for="signup-name">Full Name</label>
-                            <input type="text" id="signup-name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="signup-email">Email</label>
-                            <input type="email" id="signup-email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="signup-phone">Phone</label>
-                            <input type="tel" id="signup-phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="signup-password">Password</label>
-                            <input type="password" id="signup-password" required oninput="validatePassword()">
-                            <div class="password-requirements">
-                                <div class="requirement" id="length">• 8-16 characters</div>
-                                <div class="requirement" id="uppercase">• At least one uppercase letter</div>
-                                <div class="requirement" id="lowercase">• At least one lowercase letter</div>
-                                <div class="requirement" id="number">• At least one number</div>
-                                <div class="requirement" id="special">• At least one special character</div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="signup-confirm-password">Confirm Password</label>
-                            <input type="password" id="signup-confirm-password" required oninput="validatePassword()">
-                        </div>
-                        
-                        <div class="captcha-container">
-                            <div class="captcha-code" id="signup-captcha-code">B3M8R</div>
-                            <input type="text" class="captcha-input" id="signup-captcha-input" placeholder="Enter CAPTCHA" required>
-                            <button type="button" class="refresh-captcha" onclick="refreshCaptcha('signup')">🔄</button>
-                        </div>
-                        
-                        <div style="margin: 20px 0;">
-                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                <input type="checkbox" required>
-                                <span style="font-size: 14px; color: var(--text-color);">I agree to the <a href="#" onclick="showTerms()" style="color: var(--highlight-color);">Terms of Service</a> and <a href="#" onclick="showPrivacy()" style="color: var(--highlight-color);">Privacy Policy</a></span>
-                            </label>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn" id="signup-btn" disabled>Create Account</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="contact-info">
-                <h3>Support & Help Desk</h3>
-                <div class="contact-item">
-                    <span>📧</span>
-                    <a href="mailto:support@tradexmatrix.com?subject=Support Request - Trade X Matrix">support@tradexmatrix.com</a>
-                </div>
-                <div class="contact-item">
-                    <span>📞</span>
-                    <span>24/7 Customer Support</span>
-                </div>
-                <div class="contact-item">
-                    <span>💬</span>
-                    <span>Live Chat Available</span>
-                </div>
-            </div>
+        <nav>
+            <a href="#">Products</a>
+            <a href="#">Education</a>
+            <a href="#">Community</a>
+            <a href="#">Pricing</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-btn">Log In</button>
+            <button class="signup-btn">Sign Up</button>
         </div>
-    </div>
-    
-    <script>
-        // JavaScript for the trading chart
-        const canvas = document.getElementById('tradingChart');
-        const ctx = canvas.getContext('2d');
-        const highlightColor = '#00A381'; // From CSS variable
+    </header>
 
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-            drawChart();
-        }
+    <main class="main-content">
+        <section class="hero-section">
+            <h2>Empower Your Trading Journey with Professional Tools & Insights.</h2>
+            <p>From advanced charting and real-time data to expert-led education, our platform provides everything you need to succeed in the market.</p>
+            <a href="#" class="cta-btn">Start Your Free Trial</a>
+        </section>
 
-        function drawChart() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        <section class="ticker-section">
+            <div class="ticker-item"><span class="symbol">AAPL</span><span class="price">175.45</span><span class="change">+1.25%</span></div>
+            <div class="ticker-item"><span class="symbol">GOOG</span><span class="price">142.10</span><span class="change">+0.88%</span></div>
+            <div class="ticker-item negative"><span class="symbol">TSLA</span><span class="price">220.78</span><span class="change">-2.10%</span></div>
+            <div class="ticker-item"><span class="symbol">AMZN</span><span class="price">135.50</span><span class="change">+0.95%</span></div>
+            <div class="ticker-item negative"><span class="symbol">MSFT</span><span class="price">325.30</span><span class="change">-0.55%</span></div>
+            <div class="ticker-item"><span class="symbol">NVDA</span><span class="price">480.15</span><span class="change">+3.40%</span></div>
+        </section>
 
-            const data = [10, 15, 20, 18, 25, 30, 28, 35, 40, 38, 45, 50, 48, 55, 60, 58, 65, 70, 68, 75, 80, 78, 85, 90, 88, 95];
-            const maxData = Math.max(...data);
-            const minData = Math.min(...data);
-            const range = maxData - minData;
+        <section class="features-grid-section">
+            <h3>Our Core Features</h3>
+            <p>We provide a comprehensive suite of tools designed to give you a competitive edge in any market condition.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h4>Advanced Charting</h4>
+                    <p>Utilize powerful, customizable charts with hundreds of indicators and drawing tools for deep analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-database"></i></div>
+                    <h4>Real-time Data</h4>
+                    <p>Access accurate, lightning-fast data from major exchanges to make informed decisions in the moment.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h4>Expert Education</h4>
+                    <p>Enhance your skills with our extensive library of trading courses, tutorials, and market guides.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h4>Market Alerts</h4>
+                    <p>Set up automated alerts for your favorite stocks and instruments so you never miss a key opportunity.</p>
+                </div>
+            </div>
+        </section>
 
-            // Draw grid lines
-            ctx.strokeStyle = '#383845'; // Border color from CSS variable
-            ctx.lineWidth = 1;
-            for (let i = 0; i < 5; i++) {
-                const y = (i / 4) * canvas.height;
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
+        <section class="testimonial-section">
+            <div class="testimonial-card">
+                <p>"Trade X Matrix has transformed my trading. The tools are incredibly powerful, and the insights have helped me become a more confident and profitable trader."</p>
+                <div class="testimonial-author">- Alex M., Professional Trader</div>
+            </div>
+        </section>
+    </main>
 
-            // Draw line graph
-            ctx.beginPath();
-            ctx.strokeStyle = highlightColor;
-            ctx.lineWidth = 2;
-            
-            ctx.moveTo(0, canvas.height - ((data[0] - minData) / range) * canvas.height);
-            
-            for (let i = 1; i < data.length; i++) {
-                const x = (i / (data.length - 1)) * canvas.width;
-                const y = canvas.height - ((data[i] - minData) / range) * canvas.height;
-                ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-        }
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+        <p>&copy; 2025 Trade X Matrix. All Rights Reserved.</p>
+    </footer>
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        let captchaCodes = {
-            login: 'A7X9K',
-            signup: 'B3M8R'
-        };
-        
-        function showForm(formType, event) {
-            if (event) {
-                event.preventDefault();
-            }
-            
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) {
-                event.target.classList.add('active');
-            } else {
-                document.querySelector(`.toggle-btn[onclick*="${formType}"]`).classList.add('active');
-            }
-            
-            document.querySelectorAll('.form-section').forEach(form => form.classList.remove('active'));
-            document.getElementById(formType + '-form').classList.add('active');
-            
-            clearMessages();
-            refreshCaptcha(formType);
-        }
-        
-        function refreshCaptcha(type) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let newCaptcha = '';
-            for (let i = 0; i < 5; i++) {
-                newCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            captchaCodes[type] = newCaptcha;
-            document.getElementById(type + '-captcha-code').textContent = newCaptcha;
-            document.getElementById(type + '-captcha-input').value = '';
-        }
-        
-        function validatePassword() {
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
-            const requirements = {
-                length: password.length >= 8 && password.length <= 16,
-                uppercase: /[A-Z]/.test(password),
-                lowercase: /[a-z]/.test(password),
-                number: /\d/.test(password),
-                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
-            };
-            
-            Object.keys(requirements).forEach(req => {
-                const element = document.getElementById(req);
-                if (requirements[req]) {
-                    element.classList.add('valid');
-                    element.classList.remove('invalid');
-                } else {
-                    element.classList.add('invalid');
-                    element.classList.remove('valid');
-                }
-            });
-            
-            const allValid = Object.values(requirements).every(req => req);
-            const passwordsMatch = password === confirmPassword && confirmPassword !== '';
-            
-            document.getElementById('signup-btn').disabled = !(allValid && passwordsMatch);
-        }
-        
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const captchaInput = document.getElementById('login-captcha-input').value.toUpperCase();
-            
-            if (captchaInput !== captchaCodes.login) {
-                showError('Invalid CAPTCHA. Please try again.');
-                refreshCaptcha('login');
-                return;
-            }
-            
-            showSuccess('Login successful! Redirecting to dashboard...');
-            setTimeout(() => {
-                showSuccess('Welcome to Trade X Matrix Platform! 🚀');
-            }, 2000);
-        }
-        
-        function handleSignup(event) {
-            event.preventDefault();
-            
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
-            const captchaInput = document.getElementById('signup-captcha-input').value.toUpperCase();
-            
-            if (password !== confirmPassword) {
-                showError('Passwords do not match.');
-                return;
-            }
-            
-            if (captchaInput !== captchaCodes.signup) {
-                showError('Invalid CAPTCHA. Please try again.');
-                refreshCaptcha('signup');
-                return;
-            }
-            
-            showSuccess('Account created successfully! Welcome to Trade X Matrix! 🎉');
-            setTimeout(() => {
-                showForm('login');
-            }, 2000);
-        }
-        
-        function showSuccess(message) {
-            clearMessages();
-            const successDiv = document.getElementById('success-message');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-        }
-        
-        function showError(message) {
-            clearMessages();
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-        
-        function clearMessages() {
-            document.getElementById('success-message').style.display = 'none';
-            document.getElementById('error-message').style.display = 'none';
-        }
-        
-        document.getElementById('signup-password').addEventListener('input', validatePassword);
-        document.getElementById('signup-confirm-password').addEventListener('input', validatePassword);
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            validatePassword();
-            showForm('login');
-        });
-        
-        function showTerms() {
-            alert('Terms of Service:\n\n1. Trade X Matrix is a trading education platform providing courses, indicators, and market analysis.\n2. All trading involves risk. Past performance does not guarantee future results.\n3. Users must be 18+ years old to use this platform.\n4. Payment is required for premium features and funded account management.\n5. Refunds are subject to our refund policy (within 7 days of purchase).\n6. Users are responsible for their trading decisions.\n7. We provide educational content and support, not financial advice.\n8. Account suspension may occur for violation of terms.\n9. Data and privacy are protected according to our Privacy Policy.\n10. Terms may be updated with prior notice to users.');
-        }
-        
-        function showPrivacy() {
-            alert('Privacy Policy:\n\n1. We collect personal information for account creation and service delivery.\n2. Email addresses are used for platform updates and support communication.\n3. Payment information is processed securely through encrypted channels.\n4. Trading data and performance metrics are stored for analysis and improvement.\n5. We do not sell personal information to third parties.\n6. Cookies are used to enhance user experience and platform functionality.\n7. Users can request data deletion by contacting support.\n8. We comply with data protection regulations.\n9. Security measures protect against unauthorized access.\n10. Policy updates will be communicated to users via email.');
-        }
-    </script>
 </body>
 </html>
