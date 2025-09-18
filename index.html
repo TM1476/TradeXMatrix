@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade X Matrix - Professional Trading Platform</title>
     <style>
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -12,49 +13,52 @@
         }
 
         html, body {
-            height: 100%;
+            min-height: 100vh;
             overflow-x: hidden;
+            font-family: 'Arial', sans-serif;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0c0c0c, #1a1a1a, #242424);
+            background-attachment: fixed;
         }
 
+        /* Layout */
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
-            background-attachment: fixed;
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
-            z-index: -1;
         }
 
         .container {
             max-width: 1200px;
             width: 100%;
-            padding: 20px;
+            padding: 40px 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
         }
 
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        /* Info Section */
         .info-section {
-            background: rgba(40, 40, 40, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(25, 25, 25, 0.8);
+            backdrop-filter: blur(8px);
             padding: 40px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         }
 
         .logo {
@@ -65,21 +69,29 @@
         .logo img {
             width: 130px;
             height: 130px;
-            border-radius: 60%;
-            border: 3px solid #ffd700;
+            border-radius: 50%;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
         }
 
         .logo h1 {
-            color: #ffd700;
+            color: #d4af37;
             margin-top: 15px;
             font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .info-content h2 {
-            color: #ffd700;
+            color: #d4af37;
             margin-bottom: 20px;
             font-size: 1.8rem;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
         }
 
         .features {
@@ -88,32 +100,53 @@
         }
 
         .features li {
-            padding: 8px 0;
+            padding: 10px 0;
             position: relative;
-            padding-left: 25px;
+            padding-left: 30px;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .features li:last-child {
+            border-bottom: none;
         }
 
         .features li::before {
             content: "✓";
             position: absolute;
             left: 0;
-            color: #ffd700;
+            color: #d4af37;
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
+        .quote-box {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border-left: 4px solid #d4af37;
+            font-style: italic;
+        }
+
+        .quote-box strong {
+            color: #d4af37;
+        }
+
+        /* Auth Section */
         .auth-section {
-            background: rgba(255, 255, 255, 0.95);
+            background: #242424;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            color: #333;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            color: #fff;
             position: relative;
         }
 
         .auth-toggle {
             display: flex;
             margin-bottom: 30px;
-            background: #f0f0f0;
+            background: #333;
             border-radius: 25px;
             padding: 5px;
         }
@@ -127,42 +160,46 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
+            color: #e0e0e0;
+            background: transparent;
         }
 
         .toggle-btn.active {
-            background: linear-gradient(135deg, #333, #555);
-            color: white;
+            background: linear-gradient(135deg, #d4af37, #b28a2a);
+            color: #0c0c0c;
         }
 
+        /* Form Styling */
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
         }
 
         .form-group input {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid #555;
             border-radius: 8px;
+            background: #333;
+            color: #fff;
             font-size: 16px;
             transition: border-color 0.3s ease;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #ffd700;
+            border-color: #d4af37;
         }
 
         .password-requirements {
             font-size: 12px;
-            color: #666;
+            color: #999;
             margin-top: 5px;
         }
 
@@ -180,8 +217,8 @@
         }
 
         .captcha-container {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
+            background: #333;
+            border: 2px solid #555;
             border-radius: 8px;
             padding: 15px;
             margin: 20px 0;
@@ -191,8 +228,8 @@
         }
 
         .captcha-code {
-            background: linear-gradient(135deg, #333, #555);
-            color: white;
+            background: linear-gradient(135deg, #d4af37, #b28a2a);
+            color: #0c0c0c;
             padding: 10px 20px;
             border-radius: 5px;
             font-family: 'Courier New', monospace;
@@ -204,40 +241,51 @@
         .captcha-input {
             flex: 1;
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #555;
             border-radius: 5px;
+            background: #444;
+            color: #fff;
         }
 
         .refresh-captcha {
-            background: #ffd700;
+            background: #555;
+            color: #d4af37;
             border: none;
             padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .refresh-captcha:hover {
+            background: #666;
         }
 
         .submit-btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #333, #555);
-            color: white;
+            background: linear-gradient(135deg, #d4af37, #b28a2a);
+            color: #0c0c0c;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
         .submit-btn:disabled {
-            background: #ccc;
+            background: #444;
+            color: #999;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .form-section {
@@ -249,17 +297,18 @@
         }
 
         .contact-info {
-            background: rgba(40, 40, 40, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(25, 25, 25, 0.8);
+            backdrop-filter: blur(8px);
             padding: 20px;
             border-radius: 15px;
             margin-top: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .contact-info h3 {
-            color: #ffd700;
+            color: #d4af37;
             margin-bottom: 15px;
+            font-size: 1.2rem;
         }
 
         .contact-item {
@@ -269,6 +318,21 @@
             margin: 10px 0;
         }
 
+        .contact-item span {
+            color: #d4af37;
+        }
+
+        .contact-item a {
+            color: #d4af37;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-item a:hover {
+            color: #fff;
+        }
+
+        /* Messages */
         .success-message {
             background: #22c55e;
             color: white;
@@ -285,21 +349,6 @@
             border-radius: 5px;
             margin: 10px 0;
             display: none;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .info-section, .auth-section {
-                padding: 20px;
-            }
-            
-            .logo h1 {
-                font-size: 2rem;
-            }
         }
     </style>
 </head>
@@ -328,8 +377,8 @@
                     <li>All Payment Methods Accepted</li>
                 </ul>
                 
-                <div style="background: rgba(255,215,0,0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                    <strong style="color: #ffd700;">Why Choose Trade X Matrix?</strong>
+                <div class="quote-box">
+                    <strong>Why Choose Trade X Matrix?</strong>
                     <p style="margin-top: 10px; font-size: 14px;">We combine cutting-edge technology with proven trading strategies to provide you with a comprehensive trading education platform. Our data-driven approach helps you make informed decisions with historical performance insights.</p>
                 </div>
             </div>
@@ -338,7 +387,7 @@
                 <h3>Support & Help Desk</h3>
                 <div class="contact-item">
                     <span>📧</span>
-                    <a href="mailto:support@tradexmatrix.com?subject=Support Request - Trade X Matrix" style="color: #ffd700; text-decoration: none;">support@tradexmatrix.com</a>
+                    <a href="mailto:support@tradexmatrix.com?subject=Support Request - Trade X Matrix">support@tradexmatrix.com</a>
                 </div>
                 <div class="contact-item">
                     <span>📞</span>
@@ -353,15 +402,15 @@
         
         <div class="auth-section">
             <div class="auth-toggle">
-                <button class="toggle-btn active" onclick="showForm('login')">Login</button>
-                <button class="toggle-btn" onclick="showForm('signup')">Sign Up</button>
+                <button class="toggle-btn active" onclick="showForm('login', event)">Login</button>
+                <button class="toggle-btn" onclick="showForm('signup', event)">Sign Up</button>
             </div>
             
             <div id="success-message" class="success-message"></div>
             <div id="error-message" class="error-message"></div>
             
             <div id="login-form" class="form-section active">
-                <h2 style="margin-bottom: 20px; color: #333;">Welcome Back!</h2>
+                <h2 style="margin-bottom: 20px; color: #fff;">Welcome Back!</h2>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label for="login-email">Email Address</label>
@@ -384,7 +433,7 @@
             </div>
             
             <div id="signup-form" class="form-section">
-                <h2 style="margin-bottom: 20px; color: #333;">Join Trade X Matrix</h2>
+                <h2 style="margin-bottom: 20px; color: #fff;">Join Trade X Matrix</h2>
                 <form onsubmit="handleSignup(event)">
                     <div class="form-group">
                         <label for="signup-name">Full Name</label>
@@ -415,7 +464,7 @@
                     
                     <div class="form-group">
                         <label for="signup-confirm-password">Confirm Password</label>
-                        <input type="password" id="signup-confirm-password" required>
+                        <input type="password" id="signup-confirm-password" required oninput="validatePassword()">
                     </div>
                     
                     <div class="captcha-container">
@@ -427,7 +476,7 @@
                     <div style="margin: 20px 0;">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                             <input type="checkbox" required>
-                            <span style="font-size: 14px;">I agree to the <a href="#" onclick="showTerms()" style="color: #333;">Terms of Service</a> and <a href="#" onclick="showPrivacy()" style="color: #333;">Privacy Policy</a></span>
+                            <span style="font-size: 14px;">I agree to the <a href="#" onclick="showTerms()" style="color: #d4af37;">Terms of Service</a> and <a href="#" onclick="showPrivacy()" style="color: #d4af37;">Privacy Policy</a></span>
                         </label>
                     </div>
                     
@@ -443,17 +492,28 @@
             signup: 'B3M8R'
         };
         
-        function showForm(formType) {
+        function showForm(formType, event) {
+            // Prevent event from bubbling if it's a click from a button
+            if (event) {
+                event.preventDefault();
+            }
+            
             // Toggle buttons
             document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Fallback for direct function call, e.g., from handleSignup
+                document.querySelector(`.toggle-btn[onclick*="${formType}"]`).classList.add('active');
+            }
             
             // Toggle forms
             document.querySelectorAll('.form-section').forEach(form => form.classList.remove('active'));
             document.getElementById(formType + '-form').classList.add('active');
             
-            // Clear messages
+            // Clear messages and refresh captcha
             clearMessages();
+            refreshCaptcha(formType);
         }
         
         function refreshCaptcha(type) {
@@ -469,6 +529,7 @@
         
         function validatePassword() {
             const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
             const requirements = {
                 length: password.length >= 8 && password.length <= 16,
                 uppercase: /[A-Z]/.test(password),
@@ -489,7 +550,6 @@
             });
             
             const allValid = Object.values(requirements).every(req => req);
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
             const passwordsMatch = password === confirmPassword && confirmPassword !== '';
             
             document.getElementById('signup-btn').disabled = !(allValid && passwordsMatch);
@@ -498,9 +558,7 @@
         function handleLogin(event) {
             event.preventDefault();
             
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const captchaInput = document.getElementById('login-captcha-input').value;
+            const captchaInput = document.getElementById('login-captcha-input').value.toUpperCase();
             
             if (captchaInput !== captchaCodes.login) {
                 showError('Invalid CAPTCHA. Please try again.');
@@ -512,6 +570,7 @@
             showSuccess('Login successful! Redirecting to dashboard...');
             setTimeout(() => {
                 showSuccess('Welcome to Trade X Matrix Platform! 🚀');
+                // You can add your redirection logic here
             }, 2000);
         }
         
@@ -520,7 +579,7 @@
             
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('signup-confirm-password').value;
-            const captchaInput = document.getElementById('signup-captcha-input').value;
+            const captchaInput = document.getElementById('signup-captcha-input').value.toUpperCase();
             
             if (password !== confirmPassword) {
                 showError('Passwords do not match.');
@@ -536,7 +595,7 @@
             // Simulate signup process
             showSuccess('Account created successfully! Welcome to Trade X Matrix! 🎉');
             setTimeout(() => {
-                showForm('login');
+                showForm('login'); // Automatically switch to the login form
             }, 2000);
         }
         
@@ -559,37 +618,22 @@
             document.getElementById('error-message').style.display = 'none';
         }
         
-        // Add event listener for confirm password field
+        // Add event listeners for password validation
+        document.getElementById('signup-password').addEventListener('input', validatePassword);
         document.getElementById('signup-confirm-password').addEventListener('input', validatePassword);
         
-        // Initialize password validation
+        // Ensure initial state is correct
         document.addEventListener('DOMContentLoaded', function() {
             validatePassword();
-            loadUserLogo();
+            showForm('login');
         });
         
-        // Load user's uploaded logo
-        async function loadUserLogo() {
-            try {
-                if (window.fs && window.fs.readFile) {
-                    // Try to read the uploaded logo file
-                    const logoData = await window.fs.readFile('WhatsApp Image 2025-09-02 at 08.42.29.jpeg');
-                    const blob = new Blob([logoData], { type: 'image/jpeg' });
-                    const logoUrl = URL.createObjectURL(blob);
-                    document.getElementById('userLogo').src = logoUrl;
-                }
-            } catch (error) {
-                // Keep the current logo path if file reading fails
-                console.log('Using local file path for logo');
-            }
-        }
-        
         function showTerms() {
-            alert('Terms of Service:\\n\\n1. Trade X Matrix is a trading education platform providing courses, indicators, and market analysis.\\n2. All trading involves risk. Past performance does not guarantee future results.\\n3. Users must be 18+ years old to use this platform.\\n4. Payment is required for premium features and funded account management.\\n5. Refunds are subject to our refund policy (within 7 days of purchase).\\n6. Users are responsible for their trading decisions.\\n7. We provide educational content and support, not financial advice.\\n8. Account suspension may occur for violation of terms.\\n9. Data and privacy are protected according to our Privacy Policy.\\n10. Terms may be updated with prior notice to users.');
+            alert('Terms of Service:\n\n1. Trade X Matrix is a trading education platform providing courses, indicators, and market analysis.\n2. All trading involves risk. Past performance does not guarantee future results.\n3. Users must be 18+ years old to use this platform.\n4. Payment is required for premium features and funded account management.\n5. Refunds are subject to our refund policy (within 7 days of purchase).\n6. Users are responsible for their trading decisions.\n7. We provide educational content and support, not financial advice.\n8. Account suspension may occur for violation of terms.\n9. Data and privacy are protected according to our Privacy Policy.\n10. Terms may be updated with prior notice to users.');
         }
         
         function showPrivacy() {
-            alert('Privacy Policy:\\n\\n1. We collect personal information for account creation and service delivery.\\n2. Email addresses are used for platform updates and support communication.\\n3. Payment information is processed securely through encrypted channels.\\n4. Trading data and performance metrics are stored for analysis and improvement.\\n5. We do not sell personal information to third parties.\\n6. Cookies are used to enhance user experience and platform functionality.\\n7. Users can request data deletion by contacting support.\\n8. We comply with data protection regulations.\\n9. Security measures protect against unauthorized access.\\n10. Policy updates will be communicated to users via email.');
+            alert('Privacy Policy:\n\n1. We collect personal information for account creation and service delivery.\n2. Email addresses are used for platform updates and support communication.\n3. Payment information is processed securely through encrypted channels.\n4. Trading data and performance metrics are stored for analysis and improvement.\n5. We do not sell personal information to third parties.\n6. Cookies are used to enhance user experience and platform functionality.\n7. Users can request data deletion by contacting support.\n8. We comply with data protection regulations.\n9. Security measures protect against unauthorized access.\n10. Policy updates will be communicated to users via email.');
         }
     </script>
 </body>
