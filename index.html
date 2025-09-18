@@ -27,7 +27,11 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
             min-height: 100vh;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
@@ -145,6 +149,31 @@
         .main-content {
             padding-top: var(--header-height);
         }
+        
+        .section {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        .section h3 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
 
         /* Hero Section */
         .hero-section {
@@ -154,6 +183,13 @@
             justify-content: center;
             text-align: center;
             padding: 120px 20px 80px;
+        }
+        
+        .hero-section .tagline {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
         }
 
         .hero-section h2 {
@@ -238,87 +274,68 @@
             to { transform: translateX(-100%); }
         }
 
-        /* Features Grid Section */
-        .features-grid-section {
-            padding: 80px 40px;
-            text-align: center;
-        }
-
-        .features-grid-section h3 {
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 20px;
-        }
-        
-        .features-grid-section p {
-            max-width: 800px;
-            margin: 0 auto 50px;
-        }
-
-        .features-grid {
+        /* Grid Layout for Products, Education, Community */
+        .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        .feature-card {
+        
+        .product-card, .education-card, .community-card {
             background-color: var(--card-color);
-            padding: 30px;
+            padding: 40px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .feature-card:hover {
+        .product-card:hover, .education-card:hover, .community-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
-        .feature-card .icon {
-            font-size: 2rem;
+        .product-card .icon, .education-card .icon, .community-card .icon {
+            font-size: 3rem;
             color: var(--highlight-color);
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .feature-card h4 {
-            font-size: 1.2rem;
+        .product-card h3, .education-card h3, .community-card h3 {
+            font-size: 1.5rem;
             color: white;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
-        .feature-card p {
-            font-size: 0.95rem;
+        .product-card p, .education-card p, .community-card p {
+            font-size: 1rem;
             color: var(--text-color);
-        }
-
-        /* Testimonial Section (Optional, but adds trust) */
-        .testimonial-section {
-            padding: 80px 40px;
-            text-align: center;
-        }
-
-        .testimonial-card {
-            background-color: var(--card-color);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
         }
         
-        .testimonial-card p {
-            font-style: italic;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+        .product-card .cta-link, .education-card .cta-link, .community-card .cta-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--highlight-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        .testimonial-author {
-            font-weight: bold;
+        .product-card .cta-link:hover, .education-card .cta-link:hover, .community-card .cta-link:hover {
             color: white;
-            font-size: 1rem;
+            text-decoration: underline;
         }
 
         /* Footer */
@@ -350,13 +367,13 @@
 
     <header class="header">
         <div class="logo">
-            <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
+            <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/assets/logo.png" alt="TXM Logo">
             <h1>Trade X Matrix</h1>
         </div>
         <nav>
-            <a href="#">Products</a>
-            <a href="#">Education</a>
-            <a href="#">Community</a>
+            <a href="#products">Products</a>
+            <a href="#education">Education</a>
+            <a href="#community">Community</a>
             <a href="#">Pricing</a>
         </nav>
         <div class="auth-buttons">
@@ -367,6 +384,7 @@
 
     <main class="main-content">
         <section class="hero-section">
+            <p class="tagline">“The Stock Market Is A Device For Transferring Money From The Impatient To The Patient.” – Warren Buffett</p>
             <h2>Empower Your Trading Journey with Professional Tools & Insights.</h2>
             <p>From advanced charting and real-time data to expert-led education, our platform provides everything you need to succeed in the market.</p>
             <a href="#" class="cta-btn">Start Your Free Trial</a>
@@ -381,34 +399,114 @@
             <div class="ticker-item"><span class="symbol">NVDA</span><span class="price">480.15</span><span class="change">+3.40%</span></div>
         </section>
 
-        <section class="features-grid-section">
-            <h3>Our Core Features</h3>
-            <p>We provide a comprehensive suite of tools designed to give you a competitive edge in any market condition.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <h4>Advanced Charting</h4>
-                    <p>Utilize powerful, customizable charts with hundreds of indicators and drawing tools for deep analysis.</p>
+        ---
+
+        <section id="products" class="section">
+            <h2>Our Professional Trading Products</h2>
+            <p>Access a powerful suite of tools and exclusive resources designed for traders and investors committed to mastering the markets.</p>
+            
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-coins"></i></div>
+                    <h3>Golden Stocks for Long-Term</h3>
+                    <p>Receive exclusive, data-driven recommendations for long-term investment. Our picks are based on fundamental strength and a patient, value-oriented approach.</p>
+                    <a href="#" class="cta-link">View Picks <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-database"></i></div>
-                    <h4>Real-time Data</h4>
-                    <p>Access accurate, lightning-fast data from major exchanges to make informed decisions in the moment.</p>
+                
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h3>Comprehensive Chart Patterns</h3>
+                    <p>Identify and master the most profitable chart patterns. Our library provides detailed examples, psychological insights, and actionable strategies for each formation.</p>
+                    <a href="#" class="cta-link">Explore Patterns <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <h4>Expert Education</h4>
-                    <p>Enhance your skills with our extensive library of trading courses, tutorials, and market guides.</p>
+
+                 <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-signal"></i></div>
+                    <h3>Premium Buy Indicators</h3>
+                    <p>Gain a competitive edge with our custom-built buy and sell indicators, designed for accuracy and reliable signals.</p>
+                    <a href="#" class="cta-link">Browse Indicators <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fa-solid fa-bolt"></i></div>
-                    <h4>Market Alerts</h4>
-                    <p>Set up automated alerts for your favorite stocks and instruments so you never miss a key opportunity.</p>
+                
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-chart-column"></i></div>
+                    <h3>Advanced Charts</h3>
+                    <p>Our core charting platform provides powerful tools, customization, and real-time data to visualize the markets.</p>
+                    <a href="#" class="cta-link">Try Now <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </section>
 
-        <section class="testimonial-section">
+        ---
+
+        <section id="education" class="section" style="background-color: var(--panel-color);">
+            <h2>Empower Your Knowledge</h2>
+            <p>From foundational concepts to advanced market strategies, our education hub provides the resources you need to trade with confidence.</p>
+            
+            <div class="product-grid">
+                 <div class="education-card">
+                    <div class="icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3>Trade Learning Courses</h3>
+                    <p>Master the fundamentals of trading. Our curriculum covers technical analysis, risk management, and market psychology, built for actionable knowledge.</p>
+                    <a href="#" class="cta-link">View Courses <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="education-card">
+                    <div class="icon"><i class="fa-solid fa-chess-knight"></i></div>
+                    <h3>Advanced Strategies Library</h3>
+                    <p>Access a curated collection of proven trading strategies. We break down the setups, entry/exit criteria, and risk parameters to help you find your edge.</p>
+                    <a href="#" class="cta-link">Explore Strategies <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        ---
+
+        <section id="community" class="section">
+            <h2>Connect with Your Peers</h2>
+            <p>Join a network of serious traders. Our community offers a professional space to share insights, discuss market trends, and get feedback from experienced professionals.</p>
+            
+            <div class="product-grid">
+                <div class="community-card">
+                    <div class="icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h3>Funded Account Management</h3>
+                    <p>Access discussions and resources for aspiring and current funded traders. Learn how to manage capital, meet prop firm requirements, and scale your trading business.</p>
+                    <a href="#" class="cta-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="community-card">
+                    <div class="icon"><i class="fa-solid fa-chart-bar"></i></div>
+                    <h3>Indicator Buyer Forum</h3>
+                    <p>Interact with a community dedicated to proprietary indicators. Discuss performance, share customization tips, and get direct support from developers and power users.</p>
+                    <a href="#" class="cta-link">Visit Forum <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        ---
+
+        <section id="news" class="section" style="background-color: var(--panel-color);">
+            <h2>News & Event Reactions</h2>
+            <p>Stay ahead of the curve with our deep analysis of market-moving news and economic events.</p>
+            
+            <div class="product-grid">
+                 <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-rss"></i></div>
+                    <h3>Real-time Market Analytics</h3>
+                    <p>Don't just read the news—understand it. We provide deep analysis on how major events and economic releases impact market sentiment and price action in real-time.</p>
+                    <a href="#" class="cta-link">View Analysis <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                 <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <h3>Global Economic Calendar</h3>
+                    <p>Plan your trades around high-impact events. Our comprehensive calendar tracks key economic indicators, central bank meetings, and earnings reports.</p>
+                    <a href="#" class="cta-link">See Calendar <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        ---
+
+        <section class="section">
             <div class="testimonial-card">
                 <p>"Trade X Matrix has transformed my trading. The tools are incredibly powerful, and the insights have helped me become a more confident and profitable trader."</p>
                 <div class="testimonial-author">- Alex M., Professional Trader</div>
