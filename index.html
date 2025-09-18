@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade X Matrix - Professional Trading Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .info-section {
+            background: rgba(40, 40, 40, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 130px;
+            height: 130px;
+            border-radius: 60%;
+            border: 3px solid #ffd700;
+        }
+
+        .logo h1 {
+            color: #ffd700;
+            margin-top: 15px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .info-content h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .auth-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            color: #333;
+            position: relative;
+        }
+
+        .auth-toggle {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f0f0f0;
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .requirement {
+            display: block;
+            margin: 2px 0;
+        }
+
+        .requirement.valid {
+            color: #22c55e;
+        }
+
+        .requirement.invalid {
+            color: #ef4444;
+        }
+
+        .captcha-container {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .captcha-code {
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            letter-spacing: 3px;
+            user-select: none;
+        }
+
+        .captcha-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .refresh-captcha {
+            background: #ffd700;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .contact-info {
+            background: rgba(40, 40, 40, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-info h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .success-message {
+            background: #22c55e;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .error-message {
+            background: #ef4444;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .info-section, .auth-section {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-section">
+            <div class="logo">
+                <img id="userLogo" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo.png" alt="TXM Logo">
+                <h1>Trade X Matrix™</h1>
+            </div>
+            
+            <div class="info-content">
+                <h2>Professional Trading Platform</h2>
+                <p>Transform your trading journey with our comprehensive, tech-enhanced finance platform designed for modern traders.</p>
+                
+                <ul class="features">
+                    <li>Advanced Trading Education & Courses</li>
+                    <li>Premium Indicators & Strategies</li>
+                    <li>Real-time Market Analysis & News</li>
+                    <li>Golden Stock Recommendations (10-25 picks)</li>
+                    <li>User-friendly Funded Account Management</li>
+                    <li>Expert Support Team & Ideas</li>
+                    <li>Market Reaction Analytics</li>
+                    <li>Long-term Investment Insights</li>
+                    <li>Ad-free Premium Experience</li>
+                    <li>All Payment Methods Accepted</li>
+                </ul>
+                
+                <div style="background: rgba(255,215,0,0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
+                    <strong style="color: #ffd700;">Why Choose Trade X Matrix?</strong>
+                    <p style="margin-top: 10px; font-size: 14px;">We combine cutting-edge technology with proven trading strategies to provide you with a comprehensive trading education platform. Our data-driven approach helps you make informed decisions with historical performance insights.</p>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <h3>Support & Help Desk</h3>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <a href="mailto:support@tradexmatrix.com?subject=Support Request - Trade X Matrix" style="color: #ffd700; text-decoration: none;">support@tradexmatrix.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>24/7 Customer Support</span>
+                </div>
+                <div class="contact-item">
+                    <span>💬</span>
+                    <span>Live Chat Available</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="auth-section">
+            <div class="auth-toggle">
+                <button class="toggle-btn active" onclick="showForm('login')">Login</button>
+                <button class="toggle-btn" onclick="showForm('signup')">Sign Up</button>
+            </div>
+            
+            <div id="success-message" class="success-message"></div>
+            <div id="error-message" class="error-message"></div>
+            
+            <div id="login-form" class="form-section active">
+                <h2 style="margin-bottom: 20px; color: #333;">Welcome Back!</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    
+                    <div class="captcha-container">
+                        <div class="captcha-code" id="login-captcha-code">A7X9K</div>
+                        <input type="text" class="captcha-input" id="login-captcha-input" placeholder="Enter CAPTCHA" required>
+                        <button type="button" class="refresh-captcha" onclick="refreshCaptcha('login')">🔄</button>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Login to Platform</button>
+                </form>
+            </div>
+            
+            <div id="signup-form" class="form-section">
+                <h2 style="margin-bottom: 20px; color: #333;">Join Trade X Matrix</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-phone">Phone Number</label>
+                        <input type="tel" id="signup-phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required oninput="validatePassword()">
+                        <div class="password-requirements">
+                            <div class="requirement" id="length">• 8-16 characters</div>
+                            <div class="requirement" id="uppercase">• At least one uppercase letter</div>
+                            <div class="requirement" id="lowercase">• At least one lowercase letter</div>
+                            <div class="requirement" id="number">• At least one number</div>
+                            <div class="requirement" id="special">• At least one special character</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" required>
+                    </div>
+                    
+                    <div class="captcha-container">
+                        <div class="captcha-code" id="signup-captcha-code">B3M8R</div>
+                        <input type="text" class="captcha-input" id="signup-captcha-input" placeholder="Enter CAPTCHA" required>
+                        <button type="button" class="refresh-captcha" onclick="refreshCaptcha('signup')">🔄</button>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" required>
+                            <span style="font-size: 14px;">I agree to the <a href="#" onclick="showTerms()" style="color: #333;">Terms of Service</a> and <a href="#" onclick="showPrivacy()" style="color: #333;">Privacy Policy</a></span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="signup-btn" disabled>Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let captchaCodes = {
+            login: 'A7X9K',
+            signup: 'B3M8R'
+        };
+        
+        function showForm(formType) {
+            // Toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Toggle forms
+            document.querySelectorAll('.form-section').forEach(form => form.classList.remove('active'));
+            document.getElementById(formType + '-form').classList.add('active');
+            
+            // Clear messages
+            clearMessages();
+        }
+        
+        function refreshCaptcha(type) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let newCaptcha = '';
+            for (let i = 0; i < 5; i++) {
+                newCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            captchaCodes[type] = newCaptcha;
+            document.getElementById(type + '-captcha-code').textContent = newCaptcha;
+            document.getElementById(type + '-captcha-input').value = '';
+        }
+        
+        function validatePassword() {
+            const password = document.getElementById('signup-password').value;
+            const requirements = {
+                length: password.length >= 8 && password.length <= 16,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            };
+            
+            Object.keys(requirements).forEach(req => {
+                const element = document.getElementById(req);
+                if (requirements[req]) {
+                    element.classList.add('valid');
+                    element.classList.remove('invalid');
+                } else {
+                    element.classList.add('invalid');
+                    element.classList.remove('valid');
+                }
+            });
+            
+            const allValid = Object.values(requirements).every(req => req);
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const passwordsMatch = password === confirmPassword && confirmPassword !== '';
+            
+            document.getElementById('signup-btn').disabled = !(allValid && passwordsMatch);
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const captchaInput = document.getElementById('login-captcha-input').value;
+            
+            if (captchaInput !== captchaCodes.login) {
+                showError('Invalid CAPTCHA. Please try again.');
+                refreshCaptcha('login');
+                return;
+            }
+            
+            // Simulate login process
+            showSuccess('Login successful! Redirecting to dashboard...');
+            setTimeout(() => {
+                showSuccess('Welcome to Trade X Matrix Platform! 🚀');
+            }, 2000);
+        }
+        
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const captchaInput = document.getElementById('signup-captcha-input').value;
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match.');
+                return;
+            }
+            
+            if (captchaInput !== captchaCodes.signup) {
+                showError('Invalid CAPTCHA. Please try again.');
+                refreshCaptcha('signup');
+                return;
+            }
+            
+            // Simulate signup process
+            showSuccess('Account created successfully! Welcome to Trade X Matrix! 🎉');
+            setTimeout(() => {
+                showForm('login');
+            }, 2000);
+        }
+        
+        function showSuccess(message) {
+            clearMessages();
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+        
+        function showError(message) {
+            clearMessages();
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function clearMessages() {
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Add event listener for confirm password field
+        document.getElementById('signup-confirm-password').addEventListener('input', validatePassword);
+        
+        // Initialize password validation
+        document.addEventListener('DOMContentLoaded', function() {
+            validatePassword();
+            loadUserLogo();
+        });
+        
+        // Load user's uploaded logo
+        async function loadUserLogo() {
+            try {
+                if (window.fs && window.fs.readFile) {
+                    // Try to read the uploaded logo file
+                    const logoData = await window.fs.readFile('WhatsApp Image 2025-09-02 at 08.42.29.jpeg');
+                    const blob = new Blob([logoData], { type: 'image/jpeg' });
+                    const logoUrl = URL.createObjectURL(blob);
+                    document.getElementById('userLogo').src = logoUrl;
+                }
+            } catch (error) {
+                // Keep the current logo path if file reading fails
+                console.log('Using local file path for logo');
+            }
+        }
+        
+        function showTerms() {
+            alert('Terms of Service:\\n\\n1. Trade X Matrix is a trading education platform providing courses, indicators, and market analysis.\\n2. All trading involves risk. Past performance does not guarantee future results.\\n3. Users must be 18+ years old to use this platform.\\n4. Payment is required for premium features and funded account management.\\n5. Refunds are subject to our refund policy (within 7 days of purchase).\\n6. Users are responsible for their trading decisions.\\n7. We provide educational content and support, not financial advice.\\n8. Account suspension may occur for violation of terms.\\n9. Data and privacy are protected according to our Privacy Policy.\\n10. Terms may be updated with prior notice to users.');
+        }
+        
+        function showPrivacy() {
+            alert('Privacy Policy:\\n\\n1. We collect personal information for account creation and service delivery.\\n2. Email addresses are used for platform updates and support communication.\\n3. Payment information is processed securely through encrypted channels.\\n4. Trading data and performance metrics are stored for analysis and improvement.\\n5. We do not sell personal information to third parties.\\n6. Cookies are used to enhance user experience and platform functionality.\\n7. Users can request data deletion by contacting support.\\n8. We comply with data protection regulations.\\n9. Security measures protect against unauthorized access.\\n10. Policy updates will be communicated to users via email.');
+        }
+    </script>
+</body>
+</html>
