@@ -1,10 +1,15 @@
 const API_KEY = '4981616436fa40c48c553349791ca2b3'; // Make sure your API key is here
 
 const ALL_SYMBOLS = [
-    // Forex & Crypto
-    'XAU/USD', 'XAG/USD', 'EUR/USD', 'USD/JPY', 'GBP/USD', 'USD/INR', 'AUD/USD', 'USOIL', 'USTEC', 'BTC/USD', 'ETH/USD',
-    // Indian Stocks
-    'NIFTY', 'SENSEX', 'BANKNIFTY', 'IREDA', 'HINDCOPPER', 'PHARMABEES', 'BAJFINANCE', 'ITC', 'LT', 'HCLTECH', 'NTPC'
+    // Indian Stocks & ETFs
+    'NIFTYBEES', // Symbol for Nippon India Nifty 50 ETF
+    'NIFTY',
+    'SENSEX',
+    'INFY', // Infosys Ltd.
+    'ITC', // ITC Ltd.
+    'BANKNIFTY',
+    'RELIANCE', // Reliance Industries Ltd.
+    'HDFCBANK' // HDFC Bank Ltd.
 ];
 
 async function fetchAllData() {
@@ -46,7 +51,7 @@ async function updateTicker() {
     const tickerContainer = document.getElementById('live-ticker-container');
     if (!tickerContainer) return;
     
-    tickerContainer.innerHTML = ''; // Clear existing content
+    tickerContainer.innerHTML = '';
 
     const allData = await fetchAllData();
 
