@@ -1,97 +1,72 @@
 const API_KEY = '4981616436fa40c48c553349791ca2b3'; // Make sure your API key is here
 
-const FOREX_AND_CRYPTO_SYMBOLS = ['XAU/USD', 'XAG/USD', 'EUR/USD', 'USD/JPY', 'GBP/USD', 'USD/INR', 'AUD/USD', 'USOIL', 'USTEC', 'BTC/USD', 'ETH/USD'];
-const INDIAN_STOCK_SYMBOLS = ['NIFTY', 'SENSEX', 'BANKNIFTY', 'IREDA', 'HINDCOPPER', 'PHARMABEES', 'BAJFINANCE', 'ITC', 'LT', 'HCLTECH', 'NTPC'];
+const ALL_SYMBOLS = [
+    // Forex & Crypto
+    'XAU/USD', 'XAG/USD', 'EUR/USD', 'USD/JPY', 'GBP/USD', 'USD/INR', 'AUD/USD', 'USOIL', 'USTEC', 'BTC/USD', 'ETH/USD',
+    // Indian Stocks
+    'NIFTY', 'SENSEX', 'BANKNIFTY', 'IREDA', 'HINDCOPPER', 'PHARMABEES', 'BAJFINANCE', 'ITC', 'LT', 'HCLTECH', 'NTPC'
+];
 
-async function fetchStockData(symbol) {
-    const url = `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Error fetching data for ${symbol}: ${response.statusText}`);
-        }
-        const data = await response.json();
+async function fetchAllData() {
+    const promises = ALL_SYMBOLS.map(symbol => {
+        const url = `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`;
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error' || data.close === undefined) {
+                    console.error(`API Error for ${symbol}:`, data.message);
+                    return { symbol: symbol, price: '0.00', change: '0.00', percent_change: '0.00' };
+                }
 
-        if (data.status === 'error' || data.close === undefined) {
-            console.error(`API Error for ${symbol}:`, data.message);
-            return {
-                price: 'N/A',
-                change: 'N/A',
-                percent_change: 'N/A',
-                status: 'error'
-            };
-        }
+                const price = parseFloat(data.close);
+                const change = parseFloat(data.change);
+                const percentChange = parseFloat(data.percent_change);
 
-        const price = parseFloat(data.close);
-        const change = parseFloat(data.change);
-        const percentChange = parseFloat(data.percent_change);
+                if (isNaN(price) || isNaN(change) || isNaN(percentChange)) {
+                    return { symbol: symbol, price: '0.00', change: '0.00', percent_change: '0.00' };
+                }
 
-        if (isNaN(price) || isNaN(change) || isNaN(percentChange)) {
-            return {
-                price: 'N/A',
-                change: 'N/A',
-                percent_change: 'N/A',
-                status: 'NaN'
-            };
-        }
+                return {
+                    symbol: symbol,
+                    price: price.toFixed(3),
+                    change: change.toFixed(2),
+                    percent_change: percentChange.toFixed(2)
+                };
+            })
+            .catch(error => {
+                console.error(`Fetch error for ${symbol}:`, error);
+                return { symbol: symbol, price: '0.00', change: '0.00', percent_change: '0.00' };
+            });
+    });
 
-        return {
-            price: price.toFixed(3),
-            change: change.toFixed(2),
-            percent_change: percentChange.toFixed(2),
-            status: 'ok'
-        };
-
-    } catch (error) {
-        console.error(error);
-        return {
-            price: 'N/A',
-            change: 'N/A',
-            percent_change: 'N/A',
-            status: 'error'
-        };
-    }
+    return Promise.all(promises);
 }
 
-async function updateTicker(containerId, symbols) {
-    const tickerSection = document.getElementById(containerId);
-    if (!tickerSection) {
-        console.error(`Ticker section with ID '${containerId}' not found.`);
-        return;
-    }
-    tickerSection.innerHTML = '';
+async function updateTicker() {
+    const tickerContainer = document.getElementById('live-ticker-container');
+    if (!tickerContainer) return;
+    
+    tickerContainer.innerHTML = ''; // Clear existing content
 
-    for (let i = 0; i < symbols.length; i++) {
-        const symbol = symbols[i];
-        const data = await fetchStockData(symbol);
-        
-        if (data.status !== 'ok') {
-            const errorItem = document.createElement('div');
-            errorItem.classList.add('ticker-item');
-            errorItem.innerHTML = `<span class="symbol">${symbol}</span> <span class="price">N/A</span>`;
-            tickerSection.appendChild(errorItem);
-            continue;
-        }
+    const allData = await fetchAllData();
 
+    allData.forEach(item => {
         const tickerItem = document.createElement('div');
         tickerItem.classList.add('ticker-item');
         
-        const changeClass = data.change >= 0 ? 'positive' : 'negative';
-        const changeSymbol = data.change >= 0 ? '▲' : '▼';
+        const changeClass = parseFloat(item.change) >= 0 ? 'positive' : 'negative';
+        const changeArrow = parseFloat(item.change) >= 0 ? '▲' : '▼';
+        const changeSign = parseFloat(item.change) >= 0 ? '+' : '';
         
         tickerItem.innerHTML = `
-            <span class="symbol">${symbol}</span>
-            <span class="price ${changeClass}">${data.price}</span>
-            <span class="change-value ${changeClass}">${changeSymbol} ${data.change} (${data.percent_change}%)</span>
+            <span class="symbol">${item.symbol}</span>
+            <span class="price ${changeClass}">${item.price}</span>
+            <span class="change-value ${changeClass}">${changeArrow} ${changeSign}${item.percent_change}%</span>
         `;
-        tickerSection.appendChild(tickerItem);
-    }
+        tickerContainer.appendChild(tickerItem);
+    });
 }
 
-updateTicker('forex-crypto-ticker', FOREX_AND_CRYPTO_SYMBOLS);
-updateTicker('indian-stocks-ticker', INDIAN_STOCK_SYMBOLS);
-
-setInterval(() => {
-    updateTicker('forex-crypto-ticker', FOREX_AND_CRYPTO_SYMBOLS);
-    updateTicker('indian-stocks-ticker', INDIAN_STOCK_SYMBOLS);
-}, 60000);
+// Initial update and set interval
+updateTicker();
+setInterval(updateTicker, 60000); // Update every 60 seconds (1 minute)
