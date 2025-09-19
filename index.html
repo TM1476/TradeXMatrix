@@ -1,1025 +1,513 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Trade X Matrix - Professional Trading Platform</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-
-        /* Base Styles */
-
-        :root {
-
-            --bg-color: #121217;
-
-            --panel-color: #1a1a20;
-
-            --text-color: #B8B8BD;
-
-            --highlight-color: #00A381;
-
-            --border-color: #2e2e3a;
-
-            --card-color: #21212c;
-
-            --btn-bg-hover: #007a61;
-
-            --header-height: 70px;
-
-        }
-
-
-
-        * {
-
-            margin: 0;
-
-            padding: 0;
-
-            box-sizing: border-box;
-
-        }
-
-
-
-        html {
-
-            scroll-behavior: smooth;
-
-        }
-
-
-
-        body {
-
-            min-height: 100vh;
-
-            overflow-x: hidden;
-
-            font-family: 'Inter', sans-serif;
-
-            color: var(--text-color);
-
-            background-color: var(--bg-color);
-
-            position: relative;
-
-        }
-
-
-
-        /* Animated Background Gradient */
-
-        body::before {
-
-            content: '';
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            height: 100%;
-
-            background: linear-gradient(135deg, #0d0d12, #1a1a20, #26262b);
-
-            background-size: 400% 400%;
-
-            animation: backgroundAnimation 20s ease infinite;
-
-            z-index: -1;
-
-            opacity: 0.8;
-
-        }
-
-
-
-        @keyframes backgroundAnimation {
-
-            0% { background-position: 0% 50%; }
-
-            50% { background-position: 100% 50%; }
-
-            100% { background-position: 0% 50%; }
-
-        }
-
-
-
-        /* Header */
-
-        .header {
-
-            width: 100%;
-
-            height: var(--header-height);
-
-            display: flex;
-
-            align-items: center;
-
-            padding: 0 40px;
-
-            background-color: rgba(26, 26, 32, 0.8);
-
-            backdrop-filter: blur(10px);
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            z-index: 100;
-
-            border-bottom: 1px solid var(--border-color);
-
-        }
-
-
-
-        .header .logo {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-        }
-
-        
-
-        .header .logo img {
-
-            height: 40px;
-
-            width: 40px;
-
-        }
-
-
-
-        .header h1 {
-
-            font-size: 1.5rem;
-
-            color: white;
-
-            font-weight: 600;
-
-        }
-
-        
-
-        .header nav {
-
-            margin-left: auto;
-
-        }
-
-
-
-        .header nav a {
-
-            color: var(--text-color);
-
-            text-decoration: none;
-
-            font-weight: 500;
-
-            margin-left: 25px;
-
-            transition: color 0.3s ease;
-
-        }
-
-
-
-        .header nav a:hover {
-
-            color: white;
-
-        }
-
-
-
-        .header .auth-buttons {
-
-            margin-left: 25px;
-
-            display: flex;
-
-            gap: 10px;
-
-        }
-
-
-
-        .header .auth-buttons .login-btn {
-
-            background: transparent;
-
-            color: var(--text-color);
-
-            border: 1px solid var(--border-color);
-
-            padding: 8px 16px;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            transition: all 0.3s ease;
-
-        }
-
-
-
-        .header .auth-buttons .login-btn:hover {
-
-            border-color: var(--highlight-color);
-
-            color: white;
-
-        }
-
-
-
-        .header .auth-buttons .signup-btn {
-
-            background-color: var(--highlight-color);
-
-            color: white;
-
-            border: none;
-
-            padding: 8px 16px;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            transition: all 0.3s ease;
-
-        }
-
-        
-
-        .header .auth-buttons .signup-btn:hover {
-
-            background-color: var(--btn-bg-hover);
-
-        }
-
-        
-
-        /* Main Content Sections */
-
-        .main-content {
-
-            padding-top: var(--header-height);
-
-        }
-
-        
-
-        .section {
-
-            padding: 80px 40px;
-
-            text-align: center;
-
-        }
-
-
-
-        .section h2 {
-
-            font-size: 2.5rem;
-
-            color: white;
-
-            margin-bottom: 20px;
-
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-
-        }
-
-        
-
-        .section h3 {
-
-            font-size: 2rem;
-
-            color: white;
-
-            margin-bottom: 20px;
-
-        }
-
-
-
-        .section p {
-
-            max-width: 800px;
-
-            margin: 0 auto 50px;
-
-            font-size: 1.1rem;
-
-            line-height: 1.6;
-
-        }
-
-
-
-        /* Hero Section */
-
-        .hero-section {
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            text-align: center;
-
-            padding: 120px 20px 80px;
-
-        }
-
-        
-
-        .hero-section .tagline {
-
-            font-size: 1.1rem;
-
-            font-style: italic;
-
-            color: var(--highlight-color);
-
-            margin-bottom: 10px;
-
-        }
-
-
-
-        .hero-section h2 {
-
-            font-size: 3.5rem;
-
-            font-weight: 700;
-
-            color: white;
-
-            margin-bottom: 20px;
-
-            max-width: 900px;
-
-            line-height: 1.2;
-
-            background: linear-gradient(90deg, #d4d4d4, white, #d4d4d4);
-
-            -webkit-background-clip: text;
-
-            -webkit-text-fill-color: transparent;
-
-        }
-
-
-
-        .hero-section p {
-
-            font-size: 1.2rem;
-
-            color: var(--text-color);
-
-            max-width: 600px;
-
-            margin-bottom: 30px;
-
-        }
-
-        
-
-        .hero-section .cta-btn {
-
-            background-color: var(--highlight-color);
-
-            color: white;
-
-            padding: 15px 30px;
-
-            font-size: 1.1rem;
-
-            font-weight: 600;
-
-            border-radius: 8px;
-
-            text-decoration: none;
-
-            transition: all 0.3s ease;
-
-        }
-
-
-
-        .hero-section .cta-btn:hover {
-
-            background-color: var(--btn-bg-hover);
-
-            transform: translateY(-2px);
-
-            box-shadow: 0 5px 15px rgba(0, 163, 129, 0.2);
-
-        }
-
-
-
-        /* Ticker Section */
-
-        .ticker-section {
-
-            background-color: var(--panel-color);
-
-            padding: 20px 40px;
-
-            border-top: 1px solid var(--border-color);
-
-            border-bottom: 1px solid var(--border-color);
-
-            display: flex;
-
-            justify-content: space-around;
-
-            align-items: center;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            gap: 30px;
-
-        }
-
-
-
-        .ticker-item {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            font-size: 0.9rem;
-
-            color: white;
-
-            animation: tickerScroll 25s linear infinite;
-
-        }
-
-        
-
-        .ticker-item .symbol {
-
-            font-weight: bold;
-
-            color: var(--text-color);
-
-        }
-
-
-
-        .ticker-item .price {
-
-            color: #f4f4f4;
-
-        }
-
-
-
-        .ticker-item .change {
-
-            font-weight: 500;
-
-            color: #4caf50;
-
-        }
-
-
-
-        .ticker-item.negative .change {
-
-            color: #f44336;
-
-        }
-
-        
-
-        @keyframes tickerScroll {
-
-            from { transform: translateX(100%); }
-
-            to { transform: translateX(-100%); }
-
-        }
-
-
-
-        /* Grid Layout for Products, Education, Community */
-
-        .product-grid {
-
-            display: grid;
-
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-
-            gap: 30px;
-
-            max-width: 1200px;
-
-            margin: 0 auto;
-
-        }
-
-        
-
-        .product-card, .education-card, .community-card {
-
-            background-color: var(--card-color);
-
-            padding: 40px;
-
-            border-radius: 12px;
-
-            border: 1px solid var(--border-color);
-
-            text-align: left;
-
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-            position: relative;
-
-            overflow: hidden;
-
-        }
-
-
-
-        .product-card:hover, .education-card:hover, .community-card:hover {
-
-            transform: translateY(-5px);
-
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-
-        }
-
-
-
-        .product-card .icon, .education-card .icon, .community-card .icon {
-
-            font-size: 3rem;
-
-            color: var(--highlight-color);
-
-            margin-bottom: 20px;
-
-            position: relative;
-
-            z-index: 1;
-
-        }
-
-
-
-        .product-card h3, .education-card h3, .community-card h3 {
-
-            font-size: 1.5rem;
-
-            color: white;
-
-            margin-bottom: 10px;
-
-            position: relative;
-
-            z-index: 1;
-
-        }
-
-
-
-        .product-card p, .education-card p, .community-card p {
-
-            font-size: 1rem;
-
-            color: var(--text-color);
-
-            position: relative;
-
-            z-index: 1;
-
-        }
-
-        
-
-        .product-card .cta-link, .education-card .cta-link, .community-card .cta-link {
-
-            display: inline-block;
-
-            margin-top: 20px;
-
-            color: var(--highlight-color);
-
-            text-decoration: none;
-
-            font-weight: 600;
-
-            transition: color 0.3s ease;
-
-            position: relative;
-
-            z-index: 1;
-
-        }
-
-
-
-        .product-card .cta-link:hover, .education-card .cta-link:hover, .community-card .cta-link:hover {
-
-            color: white;
-
-            text-decoration: underline;
-
-        }
-
-
-
-        /* Footer */
-
-        .footer {
-
-            padding: 40px;
-
-            text-align: center;
-
-            border-top: 1px solid var(--border-color);
-
-            background-color: var(--panel-color);
-
-        }
-
-
-
-        .footer .social-icons a {
-
-            color: var(--text-color);
-
-            font-size: 1.5rem;
-
-            margin: 0 15px;
-
-            transition: color 0.3s ease;
-
-        }
-
-
-
-        .footer .social-icons a:hover {
-
-            color: var(--highlight-color);
-
-        }
-
-
-
-        .footer p {
-
-            margin-top: 20px;
-
-            font-size: 0.85rem;
-
-        }
-
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade X Matrix - Professional Trading Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --bg-color: #121217;
+            --panel-color: #1a1a20;
+            --text-color: #B8B8BD;
+            --highlight-color: #00A381;
+            --border-color: #2e2e3a;
+            --card-color: #21212c;
+            --btn-bg-hover: #007a61;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            position: relative;
+        }
+
+        /* Animated Background Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d0d12, #1a1a20, #26262b);
+            background-size: 400% 400%;
+            animation: backgroundAnimation 20s ease infinite;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            background-color: rgba(26, 26, 32, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header .logo img {
+            height: 40px;
+            width: 80px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .header nav {
+            margin-left: auto;
+        }
+
+        .header nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 25px;
+            transition: color 0.3s ease;
+        }
+
+        .header nav a:hover {
+            color: white;
+        }
+
+        .header .auth-buttons {
+            margin-left: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .header .auth-buttons .login-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .auth-buttons .login-btn:hover {
+            border-color: var(--highlight-color);
+            color: white;
+        }
+
+        .header .auth-buttons .signup-btn {
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header .auth-buttons .signup-btn:hover {
+            background-color: var(--btn-bg-hover);
+        }
+        
+        /* Main Content Sections */
+        .main-content {
+            padding-top: var(--header-height);
+        }
+        
+        .section {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        .section h3 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+        }
+        
+        .hero-section .tagline {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            max-width: 900px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #d4d4d4, white, #d4d4d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-section .cta-btn {
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .hero-section .cta-btn:hover {
+            background-color: var(--btn-bg-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 163, 129, 0.2);
+        }
+
+        /* Ticker Section */
+        .ticker-section {
+            background-color: var(--panel-color);
+            padding: 20px 40px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            gap: 30px;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: white;
+            animation: tickerScroll 25s linear infinite;
+        }
+        
+        .ticker-item .symbol {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .ticker-item .price {
+            color: #f4f4f4;
+        }
+
+        .ticker-item .change {
+            font-weight: 500;
+            color: #4caf50;
+        }
+
+        .ticker-item.negative .change {
+            color: #f44336;
+        }
+        
+        @keyframes tickerScroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Grid Layout for Products, Education, Community */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-card, .education-card, .community-card {
+            background-color: var(--card-color);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover, .education-card:hover, .community-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card .icon, .education-card .icon, .community-card .icon {
+            font-size: 3rem;
+            color: var(--highlight-color);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-card h3, .education-card h3, .community-card h3 {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-card p, .education-card p, .community-card p {
+            font-size: 1rem;
+            color: var(--text-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .product-card .cta-link, .education-card .cta-link, .community-card .cta-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--highlight-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-card .cta-link:hover, .education-card .cta-link:hover, .community-card .cta-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+        }
+
+        .footer .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: var(--highlight-color);
+        }
+
+        .footer p {
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
-
 <body>
 
+    <header class="header">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
+            <h1>Trade X Matrix</h1>
+        </div>
+        <nav>
+            <a href="#products">Products</a>
+            <a href="#education">Education</a>
+            <a href="#community">Community</a>
+            <a href="#">Pricing</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-btn">Log In</button>
+            <button class="signup-btn">Sign Up</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <p class="tagline">“The Stock Market Is A Device For Transferring Money From The Impatient To The Patient.” – Warren Buffett</p>
+            <h2>Empower Your Trading Journey with Professional Tools & Insights.</h2>
+            <p>From advanced charting and real-time data to expert-led education, our platform provides everything you need to succeed in the market.</p>
+            <a href="#" class="cta-btn">Start Your Free Trial</a>
+        </section>
+
+        <section class="ticker-section">
+            <div class="ticker-item"><span class="symbol">AAPL</span><span class="price">175.45</span><span class="change">+1.25%</span></div>
+            <div class="ticker-item"><span class="symbol">GOOG</span><span class="price">142.10</span><span class="change">+0.88%</span></div>
+            <div class="ticker-item negative"><span class="symbol">TSLA</span><span class="price">220.78</span><span class="change">-2.10%</span></div>
+            <div class="ticker-item"><span class="symbol">AMZN</span><span class="price">135.50</span><span class="change">+0.95%</span></div>
+            <div class="ticker-item negative"><span class="symbol">MSFT</span><span class="price">325.30</span><span class="change">-0.55%</span></div>
+            <div class="ticker-item"><span class="symbol">NVDA</span><span class="price">480.15</span><span class="change">+3.40%</span></div>
+        </section>
+
+
+
+        <section id="education" class="section">
+            <h2>Empower Your Knowledge</h2>
+            <p>From foundational concepts to advanced market strategies, our education hub provides the resources you need to trade with confidence.</p>
+            
+            <div class="product-grid">
+                <div class="education-card">
+                    <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>Foundational Trading Courses</h3>
+                    <p>Perfect for those with **no prior knowledge**. We cover core concepts, market terminology, and the essentials of price action to get you started on the right foot.</p>
+                    <a href="#" class="cta-link">View Courses <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="education-card">
+                    <div class="icon"><i class="fa-solid fa-cogs"></i></div>
+                    <h3>Advanced Strategies & Skills</h3>
+                    <p>Designed for traders with some experience. This module focuses on refining your existing knowledge with advanced tools and honing your analytical skills for better decision-making.</p>
+                    <a href="#" class="cta-link">Explore Strategies <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="education-card">
+                    <div class="icon"><i class="fa-solid fa-person-chalkboard"></i></div>
+                    <h3>Practical Application & Mentorship</h3>
+                    <p>For those who know the theory but struggle with execution. We provide actionable strategies and real-world case studies to help you correctly **implement your knowledge** and achieve consistency.</p>
+                    <a href="#" class="cta-link">Get Mentorship <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section id="products" class="section" style="background-color: var(--panel-color);">
+            <h2>Core Products & Tools</h2>
+            <p>Access our suite of professional-grade tools, data, and research designed to give you a competitive edge in any market condition.</p>
+            
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Advanced Charting & Indicators</h3>
+                    <p>Utilize **live charts from top providers** and a vast library of indicators. We also allow you to add your own custom indicators to fit your personal trading style.</p>
+                    <a href="#" class="cta-link">Start Charting <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>Bespoke Indicator Development</h3>
+                    <p>Elevate your strategy with a **custom-built indicator**. Provide us with your unique strategy and we'll develop a coded indicator tailored exclusively to your needs. Priced per project.</p>
+                    <a href="#" class="cta-link">Get a Quote <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-newspaper"></i></div>
+                    <h3>Forex News & Market Reactions</h3>
+                    <p>Receive **daily forecasts for major forex events**. Our analysis goes deeper, explaining how the market can react in both positive and negative ways to a single news release.</p>
+                    <a href="#" class="cta-link">View Analysis <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="product-card">
+                    <div class="icon"><i class="fa-solid fa-coins"></i></div>
+                    <h3>Golden Long-Term Stocks</h3>
+                    <p>Access a vetted list of high-return stocks. Our selections are based on rigorous analysis of **past performance and fundamental strength** for patient, long-term investors.</p>
+                    <a href="#" class="cta-link">View Listings <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
 
 
-    <header class="header">
-
-        <div class="logo">
-
-            <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
-
-            <h1>Trade X Matrix</h1>
-
-        </div>
-
-        <nav>
-
-            <a href="#products">Products</a>
-
-            <a href="#education">Education</a>
-
-            <a href="#community">Community</a>
-
-            <a href="#">Pricing</a>
-
-        </nav>
-
-        <div class="auth-buttons">
-
-            <button class="login-btn">Log In</button>
-
-            <button class="signup-btn">Sign Up</button>
-
-        </div>
-
-    </header>
-
-
-
-    <main class="main-content">
-
-        <section class="hero-section">
-
-            <p class="tagline">“The Stock Market Is A Device For Transferring Money From The Impatient To The Patient.” – Warren Buffett</p>
-
-            <h2>Empower Your Trading Journey with Professional Tools & Insights.</h2>
-
-            <p>From advanced charting and real-time data to expert-led education, our platform provides everything you need to succeed in the market.</p>
-
-            <a href="#" class="cta-btn">Start Your Free Trial</a>
-
-        </section>
-
-
-
-        <section class="ticker-section">
-
-            <div class="ticker-item"><span class="symbol">AAPL</span><span class="price">175.45</span><span class="change">+1.25%</span></div>
-
-            <div class="ticker-item"><span class="symbol">GOOG</span><span class="price">142.10</span><span class="change">+0.88%</span></div>
-
-            <div class="ticker-item negative"><span class="symbol">TSLA</span><span class="price">220.78</span><span class="change">-2.10%</span></div>
-
-            <div class="ticker-item"><span class="symbol">AMZN</span><span class="price">135.50</span><span class="change">+0.95%</span></div>
-
-            <div class="ticker-item negative"><span class="symbol">MSFT</span><span class="price">325.30</span><span class="change">-0.55%</span></div>
-
-            <div class="ticker-item"><span class="symbol">NVDA</span><span class="price">480.15</span><span class="change">+3.40%</span></div>
-
-        </section>
-
-
-
-
-        <section id="products" class="section">
-
-            <h2>Our Professional Trading Products</h2>
-
-            <p>Access a powerful suite of tools and exclusive resources designed for traders and investors committed to mastering the markets.</p>
-
-            
-
-            <div class="product-grid">
-
-                <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-coins"></i></div>
-
-                    <h3>Golden Stocks for Long-Term</h3>
-
-                    <p>Receive exclusive, data-driven recommendations for long-term investment. Our picks are based on fundamental strength and a patient, value-oriented approach.</p>
-
-                    <a href="#" class="cta-link">View Picks <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-                
-
-                <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-chart-pie"></i></div>
-
-                    <h3>Comprehensive Chart Patterns</h3>
-
-                    <p>Identify and master the most profitable chart patterns. Our library provides detailed examples, psychological insights, and actionable strategies for each formation.</p>
-
-                    <a href="#" class="cta-link">Explore Patterns <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-
-
-                 <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-signal"></i></div>
-
-                    <h3>Premium Buy Indicators</h3>
-
-                    <p>Gain a competitive edge with our custom-built buy and sell indicators, designed for accuracy and reliable signals.</p>
-
-                    <a href="#" class="cta-link">Browse Indicators <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-                
-
-                <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-chart-column"></i></div>
-
-                    <h3>Advanced Charts</h3>
-
-                    <p>Our core charting platform provides powerful tools, customization, and real-time data to visualize the markets.</p>
-
-                    <a href="#" class="cta-link">Try Now <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-
-        <section id="education" class="section" style="background-color: var(--panel-color);">
-
-            <h2>Empower Your Knowledge</h2>
-
-            <p>From foundational concepts to advanced market strategies, our education hub provides the resources you need to trade with confidence.</p>
-
-            
-
-            <div class="product-grid">
-
-                 <div class="education-card">
-
-                    <div class="icon"><i class="fa-solid fa-graduation-cap"></i></div>
-
-                    <h3>Trade Learning Courses</h3>
-
-                    <p>Master the fundamentals of trading. Our curriculum covers technical analysis, risk management, and market psychology, built for actionable knowledge.</p>
-
-                    <a href="#" class="cta-link">View Courses <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-                
-
-                <div class="education-card">
-
-                    <div class="icon"><i class="fa-solid fa-chess-knight"></i></div>
-
-                    <h3>Advanced Strategies Library</h3>
-
-                    <p>Access a curated collection of proven trading strategies. We break down the setups, entry/exit criteria, and risk parameters to help you find your edge.</p>
-
-                    <a href="#" class="cta-link">Explore Strategies <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-
-        <section id="community" class="section">
-
-            <h2>Connect with Your Peers</h2>
-
-            <p>Join a network of serious traders. Our community offers a professional space to share insights, discuss market trends, and get feedback from experienced professionals.</p>
-
-            
-
-            <div class="product-grid">
-
-                <div class="community-card">
-
-                    <div class="icon"><i class="fa-solid fa-handshake-angle"></i></div>
-
-                    <h3>Funded Account Management</h3>
-
-                    <p>Access discussions and resources for aspiring and current funded traders. Learn how to manage capital, meet prop firm requirements, and scale your trading business.</p>
-
-                    <a href="#" class="cta-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-                
-
-                <div class="community-card">
-
-                    <div class="icon"><i class="fa-solid fa-chart-bar"></i></div>
-
-                    <h3>Indicator Buyer Forum</h3>
-
-                    <p>Interact with a community dedicated to proprietary indicators. Discuss performance, share customization tips, and get direct support from developers and power users.</p>
-
-                    <a href="#" class="cta-link">Visit Forum <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <section id="news" class="section" style="background-color: var(--panel-color);">
-
-            <h2>News & Event Reactions</h2>
-
-            <p>Stay ahead of the curve with our deep analysis of market-moving news and economic events.</p>
-
-            
-
-            <div class="product-grid">
-
-                 <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-rss"></i></div>
-
-                    <h3>Real-time Market Analytics</h3>
-
-                    <p>Don't just read the news—understand it. We provide deep analysis on how major events and economic releases impact market sentiment and price action in real-time.</p>
-
-                    <a href="#" class="cta-link">View Analysis <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-                 <div class="product-card">
-
-                    <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
-
-                    <h3>Global Economic Calendar</h3>
-
-                    <p>Plan your trades around high-impact events. Our comprehensive calendar tracks key economic indicators, central bank meetings, and earnings reports.</p>
-
-                    <a href="#" class="cta-link">See Calendar <i class="fa-solid fa-arrow-right"></i></a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-
-    <footer class="footer">
-
-        <div class="social-icons">
-
-            <a href="#"><i class="fab fa-twitter"></i></a>
-
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-
-            <a href="#"><i class="fab fa-instagram"></i></a>
-
-            <a href="#"><i class="fab fa-facebook"></i></a>
-
-        </div>
-
-        <p>&copy; 2025 Trade X Matrix. All Rights Reserved.</p>
-
-    </footer>
-
-
+        <section id="community" class="section">
+            <h2>Exclusive Community & Services</h2>
+            <p>Join a network of dedicated traders and access specialized services designed to help you build and manage your wealth.</p>
+            
+            <div class="product-grid">
+                <div class="community-card">
+                    <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <h3>Discreet Account Management</h3>
+                    <p>A service for those who want to build wealth but not trade themselves. Invest a minimum of **$500 up to $5,000** and receive monthly status documents via our support email.</p>
+                    <a href="#" class="cta-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="community-card">
+                    <div class="icon"><i class="fa-solid fa-users-gear"></i></div>
+                    <h3>Strategies & Idea Support</h3>
+                    <p>Collaborate and exchange ideas within a private, professional environment. This community provides the support needed to refine your strategies and improve your trading ideas.</p>
+                    <a href="#" class="cta-link">Visit Forum <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="section" style="background-color: var(--panel-color);">
+            <div class="testimonial-card">
+                <p>"Trade X Matrix has transformed my trading. The tools are incredibly powerful, and the insights have helped me become a more confident and profitable trader."</p>
+                <div class="testimonial-author">- Alex M., Professional Trader</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+        <p>&copy; 2025 Trade X Matrix. All Rights Reserved.</p>
+    </footer>
 
 </body>
-
 </html>
