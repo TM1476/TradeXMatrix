@@ -12,8 +12,7 @@ async function fetchStockData(symbol) {
         }
         const data = await response.json();
 
-        // Check for common API errors
-        if (data.status === 'error' || data.price === undefined) {
+        if (data.status === 'error' || data.close === undefined) {
             console.error(`API Error for ${symbol}:`, data.message);
             return {
                 price: 'N/A',
@@ -37,9 +36,9 @@ async function fetchStockData(symbol) {
         }
 
         return {
-            price: price.toFixed(3), // 3 decimal places
-            change: change.toFixed(2), // 2 decimal places for change value
-            percent_change: percentChange.toFixed(2), // 2 decimal places for percentage
+            price: price.toFixed(3),
+            change: change.toFixed(2),
+            percent_change: percentChange.toFixed(2),
             status: 'ok'
         };
 
@@ -67,7 +66,6 @@ async function updateTicker(containerId, symbols) {
         const data = await fetchStockData(symbol);
         
         if (data.status !== 'ok') {
-            // Handle error case to prevent NaN
             const errorItem = document.createElement('div');
             errorItem.classList.add('ticker-item');
             errorItem.innerHTML = `<span class="symbol">${symbol}</span> <span class="price">N/A</span>`;
@@ -78,7 +76,6 @@ async function updateTicker(containerId, symbols) {
         const tickerItem = document.createElement('div');
         tickerItem.classList.add('ticker-item');
         
-        // Determine color based on real trend
         const changeClass = data.change >= 0 ? 'positive' : 'negative';
         const changeSymbol = data.change >= 0 ? '▲' : '▼';
         
@@ -91,12 +88,10 @@ async function updateTicker(containerId, symbols) {
     }
 }
 
-// Update the two different tickers separately
 updateTicker('forex-crypto-ticker', FOREX_AND_CRYPTO_SYMBOLS);
 updateTicker('indian-stocks-ticker', INDIAN_STOCK_SYMBOLS);
 
-// Set interval for updates
 setInterval(() => {
     updateTicker('forex-crypto-ticker', FOREX_AND_CRYPTO_SYMBOLS);
     updateTicker('indian-stocks-ticker', INDIAN_STOCK_SYMBOLS);
-}, 60000); // Update every 60 seconds (1 minute)
+}, 60000);
