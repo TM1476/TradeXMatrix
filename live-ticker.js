@@ -1,7 +1,7 @@
 const API_KEY = '4981616436fa40c48c553349791ca2b3'; // Make sure your API key is here
 
 const FOREX_AND_CRYPTO_SYMBOLS = ['XAU/USD', 'XAG/USD', 'EUR/USD', 'USD/JPY', 'GBP/USD', 'INR/USD', 'AUD/USD', 'USOIL', 'USTEC', 'BTC/USD', 'ETH/USD'];
-const INDIAN_STOCK_SYMBOLS = ['NIFTY', 'SENSEX', 'BANKNIFTY', 'IREDA', 'HINDCOPPER', 'PHARMABEES'];
+const INDIAN_STOCK_SYMBOLS = ['NIFTY', 'SENSEX', 'BANKNIFTY', 'IREDA', 'HINDCOPPER', 'PHARMABEES', 'BAJFINANCE', 'ITC', 'LT', 'HCLTECH', 'NTPC'];
 
 async function fetchStockData(symbol) {
     const url = `https://api.twelvedata.com/price?symbol=${symbol}&apikey=${API_KEY}`;
