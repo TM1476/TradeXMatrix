@@ -240,8 +240,8 @@
             overflow: hidden;
             white-space: nowrap;
             gap: 30px;
+            margin-bottom: 20px;
         }
-
         .ticker-item {
             display: flex;
             align-items: center;
@@ -260,13 +260,16 @@
             color: #f4f4f4;
         }
 
-        .ticker-item .change {
-            font-weight: 500;
-            color: #4caf50;
+        /* New CSS for positive/negative values based on real data */
+        .price.positive, .change-value.positive {
+            color: #4caf50; /* Green */
         }
-
-        .ticker-item.negative .change {
-            color: #f44336;
+        .price.negative, .change-value.negative {
+            color: #f44336; /* Red */
+        }
+        
+        .ticker-item .change-value {
+            font-weight: 500;
         }
         
         @keyframes tickerScroll {
@@ -364,7 +367,6 @@
     </style>
 </head>
 <body>
-
     <header class="header">
         <div class="logo">
             <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
@@ -390,7 +392,9 @@
             <a href="#" class="cta-btn">Start Your Free Trial</a>
         </section>
 
-        <section class="ticker-section">
+        <section class="ticker-section" id="forex-crypto-ticker">
+            </section>
+        <section class="ticker-section" id="indian-stocks-ticker">
             </section>
 
         <section id="education" class="section">
@@ -489,6 +493,5 @@
     </footer>
 
     <script src="live-ticker.js"></script>
-
 </body>
 </html>
