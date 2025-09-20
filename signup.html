@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade X Matrix - Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --bg-color: #121217;
+            --panel-color: #1a1a20;
+            --text-color: #B8B8BD;
+            --highlight-color: #00A381;
+            --border-color: #2e2e3a;
+            --card-color: #21212c;
+            --btn-bg-hover: #007a61;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* New Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(13, 13, 18, 0.95), rgba(18, 18, 23, 0.9));
+            z-index: -1;
+        }
+
+        .animated-dots {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -2;
+        }
+
+        .dot {
+            position: absolute;
+            background-color: rgba(0, 163, 129, 0.2);
+            border-radius: 50%;
+            animation: moveDot 20s infinite ease-in-out;
+        }
+
+        .dot.large { width: 5px; height: 5px; opacity: 0.2; }
+        .dot.medium { width: 3px; height: 3px; opacity: 0.3; }
+        .dot.small { width: 2px; height: 2px; opacity: 0.4; }
+
+        @keyframes moveDot {
+            0% { transform: translate(var(--x-start), var(--y-start)); }
+            100% { transform: translate(var(--x-end), var(--y-end)); }
+        }
+
+        /* Signup Page Layout */
+        .signup-page {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-color);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            min-height: 550px;
+            z-index: 10;
+        }
+
+        .signup-details {
+            flex: 1;
+            padding: 40px;
+            background-color: var(--panel-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .signup-details h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .signup-details p {
+            max-width: 350px;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .signup-details ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .signup-details ul li {
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .signup-details ul li i {
+            color: var(--highlight-color);
+            margin-right: 10px;
+        }
+
+        .signup-form-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .logo img {
+            height: 200px;
+            width: 370px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        p.form-description {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .signup-form .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .signup-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .signup-form input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--panel-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .signup-form input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+        }
+
+        /* Dynamic Validation States */
+        .signup-form input:valid {
+            border-color: var(--highlight-color);
+        }
+        .signup-form input:invalid {
+            border-color: #ff6347;
+        }
+        
+        .validation-message {
+            font-size: 0.8rem;
+            color: #ff6347;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .validation-message.show {
+            display: block;
+        }
+
+        .captcha-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .captcha-code {
+            flex: 1;
+            background-color: #333;
+            color: #fff;
+            padding: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-align: center;
+            border-radius: 6px;
+            user-select: none;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+        
+        .captcha-input {
+            flex: 1;
+        }
+        
+        /* Password Toggle Styles */
+        .password-input-wrapper {
+            position: relative;
+        }
+        
+        .password-toggle-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .password-toggle-icon:hover {
+            color: white;
+        }
+
+        .signup-form button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .signup-form button:hover {
+            background-color: var(--btn-bg-hover);
+        }
+
+        /* Social Login Buttons */
+        .social-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-login .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .social-login .or-separator::before,
+        .social-login .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+            margin: 0 10px;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--panel-color);
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .social-button i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .social-button:hover {
+            background-color: #333;
+            border-color: #444;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .signup-page {
+                flex-direction: column;
+                max-width: 450px;
+            }
+            .signup-details {
+                display: none;
+            }
+            .signup-form-container {
+                padding: 30px;
+            }
+            .social-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-dots"></div>
+    <div class="signup-page">
+        <div class="signup-details">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/asset/logo.png" alt="TXM Logo">
+            </div>
+            <h2>Join the Platform</h2>
+            <p>
+                Create your free account to get immediate access to our full suite of professional trading tools, exclusive market insights, and real-time data.
+            </p>
+            <ul>
+                <li><i class="fa-solid fa-chart-line"></i> Advanced Live Charting</li>
+                <li><i class="fa-solid fa-bell"></i> Personalized Trading Alerts</li>
+                <li><i class="fa-solid fa-headset"></i> Dedicated Customer Support</li>
+                <li><i class="fa-solid fa-users"></i> Exclusive Community Access</li>
+            </ul>
+        </div>
+
+        <div class="signup-form-container">
+            <h3>Create a Free Account</h3>
+            
+            <div class="social-login">
+                <div class="social-buttons">
+                    <a href="#" class="social-button">
+                        <i class="fab fa-google"></i> Sign up with Google
+                    </a>
+                    <a href="#" class="social-button">
+                        <i class="fab fa-facebook-f"></i> Sign up with Facebook
+                    </a>
+                </div>
+                <div class="or-separator">or</div>
+            </div>
+
+            <form class="signup-form" onsubmit="event.preventDefault(); validateForm();">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required minlength="3">
+                    <span id="username-validation" class="validation-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <span id="email-validation" class="validation-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="password" name="password" required>
+                        <i class="fas fa-eye password-toggle-icon" id="toggle-password"></i>
+                    </div>
+                    <span id="password-validation" class="validation-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                        <i class="fas fa-eye password-toggle-icon" id="toggle-confirm-password"></i>
+                    </div>
+                    <span id="confirm-password-validation" class="validation-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="captcha-input">Captcha</label>
+                    <div class="captcha-group">
+                        <span id="captcha-code" class="captcha-code"></span>
+                        <input type="text" id="captcha-input" class="captcha-input" placeholder="Enter CAPTCHA" required>
+                    </div>
+                    <span id="captcha-validation" class="validation-message"></span>
+                </div>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Animated Background Script ---
+        const animatedDots = document.querySelector('.animated-dots');
+        const numberOfDots = 50;
+
+        for (let i = 0; i < numberOfDots; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.setProperty('--x-start', Math.random() * 100 + 'vw');
+            dot.style.setProperty('--y-start', Math.random() * 100 + 'vh');
+            dot.style.setProperty('--x-end', Math.random() * 100 + 'vw');
+            dot.style.setProperty('--y-end', Math.random() * 100 + 'vh');
+            dot.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            dot.style.animationDelay = (Math.random() * 5) + 's';
+            dot.style.width = dot.style.height = (Math.random() * 3 + 1) + 'px';
+            animatedDots.appendChild(dot);
+        }
+
+
+        // --- Form Validation Scripts ---
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const captchaCode = document.getElementById('captcha-code');
+        const captchaInput = document.getElementById('captcha-input');
+        
+        const usernameValidation = document.getElementById('username-validation');
+        const emailValidation = document.getElementById('email-validation');
+        const passwordValidation = document.getElementById('password-validation');
+        const confirmPasswordValidation = document.getElementById('confirm-password-validation');
+        const captchaValidation = document.getElementById('captcha-validation');
+
+        function generateCaptcha() {
+            const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            captchaCode.textContent = captcha;
+            captchaInput.value = '';
+            captchaValidation.textContent = '';
+            captchaValidation.classList.remove('show');
+        }
+        
+        function validateUsername() {
+            if (usernameInput.value.length < 3) {
+                usernameValidation.textContent = 'Username must be at least 3 characters long.';
+                usernameValidation.classList.add('show');
+                return false;
+            } else {
+                usernameValidation.classList.remove('show');
+                return true;
+            }
+        }
+        
+        function validateEmail() {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailValidation.textContent = 'Please enter a valid email address.';
+                emailValidation.classList.add('show');
+                return false;
+            } else {
+                emailValidation.classList.remove('show');
+                return true;
+            }
+        }
+        
+        function validatePassword() {
+            const password = passwordInput.value;
+            const validations = [];
+            let isValid = true;
+            
+            if (password.length < 8) {
+                validations.push("At least 8 characters");
+                isValid = false;
+            }
+            if (!/[A-Z]/.test(password)) {
+                validations.push("An uppercase letter");
+                isValid = false;
+            }
+            if (!/[a-z]/.test(password)) {
+                validations.push("A lowercase letter");
+                isValid = false;
+            }
+            if (!/[0-9]/.test(password)) {
+                validations.push("A number");
+                isValid = false;
+            }
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)) {
+                validations.push("A special character");
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                passwordValidation.textContent = 'Password must contain: ' + validations.join(', ') + '.';
+                passwordValidation.classList.add('show');
+            } else {
+                passwordValidation.classList.remove('show');
+            }
+            
+            return isValid;
+        }
+
+        function validateConfirmPassword() {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordValidation.textContent = 'Passwords do not match.';
+                confirmPasswordValidation.classList.add('show');
+                return false;
+            } else {
+                confirmPasswordValidation.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validateCaptcha() {
+            if (captchaInput.value !== captchaCode.textContent) {
+                captchaValidation.textContent = 'Invalid CAPTCHA. Please try again.';
+                captchaValidation.classList.add('show');
+                generateCaptcha();
+                return false;
+            } else {
+                captchaValidation.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validateForm() {
+            const isUsernameValid = validateUsername();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+            const isCaptchaValid = validateCaptcha();
+
+            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isCaptchaValid) {
+                alert('Success! Client-side validation passed. Now contacting the server.');
+                
+                // This is where you would call your back-end API to handle account creation and email verification.
+                // This part requires a server-side language like Node.js, Python, or PHP.
+            }
+        }
+
+        // --- Password Show/Hide Toggler ---
+        document.getElementById('toggle-password').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        document.getElementById('toggle-confirm-password').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('confirm-password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Generate CAPTCHA on page load
+        window.onload = generateCaptcha;
+        // Regenerate CAPTCHA on click
+        captchaCode.addEventListener('click', generateCaptcha);
+        
+        // Add real-time validation on input change
+        usernameInput.addEventListener('input', validateUsername);
+        emailInput.addEventListener('input', validateEmail);
+        passwordInput.addEventListener('input', validatePassword);
+        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+    </script>
+</body>
+</html>
