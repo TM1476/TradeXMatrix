@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
     <style>
         /* Base Styles */
         :root {
@@ -216,32 +219,6 @@
             display: block;
         }
 
-        .captcha-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .captcha-code {
-            flex: 1;
-            background-color: #333;
-            color: #fff;
-            padding: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.2rem;
-            letter-spacing: 5px;
-            text-align: center;
-            border-radius: 6px;
-            user-select: none;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-        }
-        
-        .captcha-input {
-            flex: 1;
-        }
-        
         /* Password Toggle Styles */
         .password-input-wrapper {
             position: relative;
@@ -414,14 +391,10 @@
                     </div>
                     <span id="confirm-password-validation" class="validation-message"></span>
                 </div>
-                <div class="input-group">
-                    <label for="captcha-input">Captcha</label>
-                    <div class="captcha-group">
-                        <span id="captcha-code" class="captcha-code"></span>
-                        <input type="text" id="captcha-input" class="captcha-input" placeholder="Enter CAPTCHA" required>
-                    </div>
-                    <span id="captcha-validation" class="validation-message"></span>
-                </div>
+                
+                <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY_HERE"></div>
+                <span id="recaptcha-validation" class="validation-message">Please complete the CAPTCHA.</span>
+                
                 <button type="submit">Create Account</button>
             </form>
         </div>
@@ -451,27 +424,13 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirm-password');
-        const captchaCode = document.getElementById('captcha-code');
-        const captchaInput = document.getElementById('captcha-input');
         
         const usernameValidation = document.getElementById('username-validation');
         const emailValidation = document.getElementById('email-validation');
         const passwordValidation = document.getElementById('password-validation');
         const confirmPasswordValidation = document.getElementById('confirm-password-validation');
-        const captchaValidation = document.getElementById('captcha-validation');
+        const recaptchaValidation = document.getElementById('recaptcha-validation');
 
-        function generateCaptcha() {
-            const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let captcha = '';
-            for (let i = 0; i < 6; i++) {
-                captcha += chars[Math.floor(Math.random() * chars.length)];
-            }
-            captchaCode.textContent = captcha;
-            captchaInput.value = '';
-            captchaValidation.textContent = '';
-            captchaValidation.classList.remove('show');
-        }
-        
         function validateUsername() {
             if (usernameInput.value.length < 3) {
                 usernameValidation.textContent = 'Username must be at least 3 characters long.';
@@ -542,14 +501,13 @@
             }
         }
 
-        function validateCaptcha() {
-            if (captchaInput.value !== captchaCode.textContent) {
-                captchaValidation.textContent = 'Invalid CAPTCHA. Please try again.';
-                captchaValidation.classList.add('show');
-                generateCaptcha();
+        function validateRecaptcha() {
+            const response = grecaptcha.getResponse();
+            if (response.length === 0) {
+                recaptchaValidation.classList.add('show');
                 return false;
             } else {
-                captchaValidation.classList.remove('show');
+                recaptchaValidation.classList.remove('show');
                 return true;
             }
         }
@@ -559,13 +517,16 @@
             const isEmailValid = validateEmail();
             const isPasswordValid = validatePassword();
             const isConfirmPasswordValid = validateConfirmPassword();
-            const isCaptchaValid = validateCaptcha();
+            const isRecaptchaValid = validateRecaptcha();
 
-            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isCaptchaValid) {
+            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isRecaptchaValid) {
                 alert('Success! Client-side validation passed. Now contacting the server.');
                 
-                // This is where you would call your back-end API to handle account creation and email verification.
-                // This part requires a server-side language like Node.js, Python, or PHP.
+                // IMPORTANT: This is where the form submission happens.
+                // In a real application, you would send this data to your backend server.
+                // The server would then verify the reCAPTCHA token using your Secret Key.
+                // Example of how to get the reCAPTCHA token for an AJAX request:
+                // const recaptchaToken = grecaptcha.getResponse();
             }
         }
 
@@ -584,11 +545,6 @@
             this.classList.toggle('fa-eye-slash');
         });
 
-        // Generate CAPTCHA on page load
-        window.onload = generateCaptcha;
-        // Regenerate CAPTCHA on click
-        captchaCode.addEventListener('click', generateCaptcha);
-        
         // Add real-time validation on input change
         usernameInput.addEventListener('input', validateUsername);
         emailInput.addEventListener('input', validateEmail);
