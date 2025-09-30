@@ -21,6 +21,7 @@
             --border-color: #2e2e3a;
             --card-color: #21212c;
             --btn-bg-hover: #007a61;
+            --modal-bg-color: #1a1a20;
         }
 
         * {
@@ -202,10 +203,10 @@
 
         /* Dynamic Validation States */
         .signup-form input:valid {
-            border-color: var(--highlight-color);
+            /* border-color: var(--highlight-color); */
         }
-        .signup-form input:invalid {
-            border-color: #ff6347;
+        .signup-form input:invalid:not(:focus) {
+            /* border-color: #ff6347; */
         }
         
         .validation-message {
@@ -253,6 +254,42 @@
         
         .signup-form button:hover {
             background-color: var(--btn-bg-hover);
+        }
+
+        /* Terms and Policy Checkbox */
+        .terms-policy-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            padding-right: 10px; /* Space for scrollbar if any */
+        }
+
+        .terms-policy-group input[type="checkbox"] {
+            margin-top: 2px;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+            accent-color: var(--highlight-color); /* Changes color of the checkmark */
+        }
+
+        .terms-policy-group a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .terms-policy-group a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        #terms-policy-validation {
+            margin-top: -15px;
+            margin-bottom: 20px;
         }
 
         /* Social Login Buttons */
@@ -311,6 +348,120 @@
             border-color: #444;
         }
 
+        /* --- Modal Styles for TOS and PP (PROFESSIONAL POPUP) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--modal-bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .modal-header h4 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--highlight-color);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            color: var(--text-color);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .modal-body h5 {
+            color: white;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .modal-body p, .modal-body ul {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .modal-body ul {
+            padding-left: 25px;
+            list-style: disc;
+        }
+
+        .modal-body ul li {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        /* Scrollbar styling for a darker, professional look */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--card-color);
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 4px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .signup-page {
@@ -326,6 +477,13 @@
             .social-buttons {
                 flex-direction: column;
                 gap: 10px;
+            }
+            .modal-content {
+                max-width: 95%;
+                padding: 20px;
+            }
+            .modal-body {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -392,14 +550,111 @@
                     <span id="confirm-password-validation" class="validation-message"></span>
                 </div>
 
-                
                 <div class="g-recaptcha" data-sitekey="6Lecd9ArAAAAAG0TRqJrmeFpjT7_og0I1eYZ7fBX"></div>
+                
+                <div class="terms-policy-group">
+                    <input type="checkbox" id="agree-terms" name="agree-terms" required>
+                    <label for="agree-terms">I agree to the <a href="#" onclick="showModal('tos-modal'); return false;">Terms of Service</a> and <a href="#" onclick="showModal('pp-modal'); return false;">Privacy Policy</a>.</label>
+                </div>
+                <span id="terms-policy-validation" class="validation-message">You must agree to the Terms of Service and Privacy Policy.</span>
                 <span id="recaptcha-validation" class="validation-message">Please complete the CAPTCHA.</span>
-
-
                 
                 <button type="submit">Create Account</button>
             </form>
+        </div>
+    </div>
+    
+    <div id="tos-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Terms of Service (TOS)</h4>
+                <button type="button" class="modal-close" onclick="closeModal('tos-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h5>1. Acceptance of Terms</h5>
+                <p>By accessing or using this app, you agree to these Terms of Service and acknowledge that all content is provided for educational and informational purposes only.</p>
+                
+                <h5>2. Educational Purpose Only</h5>
+                <p>All materials, including tutorials, indicators, charts, news, forecasts, and the Indian stock list, are for educational purposes. Nothing in this app constitutes financial, investment, or trading advice.</p>
+                
+                <h5>3. No Guarantee</h5>
+                <p>Use of indicators, charts, educational content, and stock lists does not guarantee profits. Users are responsible for any trading decisions made outside of this app.</p>
+                
+                <h5>4. Stock List Feature</h5>
+                <p>The Indian stock list provides historical performance and sector information for educational reference only. Past performance is not indicative of future results. This app does not recommend buying or selling any stock.</p>
+                
+                <h5>5. Account</h5>
+                <p>Users may create accounts for progress tracking, saving preferences, or demo learning. No real-money trading is offered.</p>
+                
+                <h5>6. Restrictions</h5>
+                <p>Users may not:</p>
+                <ul>
+                    <li>Use the app to execute real-money trades</li>
+                    <li>Claim guarantees based on app content</li>
+                    <li>Copy or redistribute app content without permission</li>
+                </ul>
+                
+                <h5>7. Data Usage</h5>
+                <p>The app may collect anonymized usage data to improve functionality. Personal information is protected under our Privacy Policy.</p>
+                
+                <h5>8. Liability</h5>
+                <p>The app and its developers are not liable for any losses resulting from use of the app or its content. All users act at their own risk.</p>
+                
+                <h5>9. Changes to Terms</h5>
+                <p>We may update these Terms at any time. Continued use of the app constitutes acceptance of the revised Terms.</p>
+                
+                <h5>10. Contact</h5>
+                <p>For questions about these Terms, contact us at <a href="mailto:support@tradexmatrix.com">support@tradexmatrix.com</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="pp-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Privacy Policy</h4>
+                <button type="button" class="modal-close" onclick="closeModal('pp-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h5>1. Information We Collect</h5>
+                <ul>
+                    <li>Account information (email, username)</li>
+                    <li>Usage data (app interactions, courses accessed)</li>
+                    <li>Analytics data (device type, app version)</li>
+                    <li>Optional preferences for personalized content</li>
+                </ul>
+                
+                <h5>2. How We Use Information</h5>
+                <ul>
+                    <li>To provide and improve app functionality</li>
+                    <li>To personalize educational content</li>
+                    <li>To analyze trends and user engagement</li>
+                </ul>
+                
+                <h5>3. Data Sharing</h5>
+                <ul>
+                    <li>We do not sell personal information</li>
+                    <li>Aggregated, anonymized data may be shared for research or analytics</li>
+                </ul>
+                
+                <h5>4. Security</h5>
+                <p>Reasonable security measures are in place to protect user data. No sensitive financial information is collected as no real-money trading is offered.</p>
+                
+                <h5>5. Cookies & Tracking</h5>
+                <p>The app may use cookies or analytics tools to improve user experience.</p>
+                
+                <h5>6. User Rights</h5>
+                <ul>
+                    <li>Users can request deletion of personal data</li>
+                    <li>Users can opt out of non-essential tracking</li>
+                </ul>
+                
+                <h5>7. Changes to Privacy Policy</h5>
+                <p>We may update this Policy. Continued use of the app indicates acceptance.</p>
+                
+                <h5>8. Contact</h5>
+                <p>For privacy questions, contact us at <a href="mailto:support@tradexmatrix.com">support@tradexmatrix.com</a>.</p>
+            </div>
         </div>
     </div>
 
@@ -427,12 +682,14 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirm-password');
+        const termsCheckbox = document.getElementById('agree-terms');
         
         const usernameValidation = document.getElementById('username-validation');
         const emailValidation = document.getElementById('email-validation');
         const passwordValidation = document.getElementById('password-validation');
         const confirmPasswordValidation = document.getElementById('confirm-password-validation');
         const recaptchaValidation = document.getElementById('recaptcha-validation');
+        const termsPolicyValidation = document.getElementById('terms-policy-validation');
 
         function validateUsername() {
             if (usernameInput.value.length < 3) {
@@ -505,12 +762,27 @@
         }
 
         function validateRecaptcha() {
-            const response = grecaptcha.getResponse();
-            if (response.length === 0) {
-                recaptchaValidation.classList.add('show');
+            // Note: grecaptcha.getResponse() only works if the reCAPTCHA script has loaded.
+            if (typeof grecaptcha !== 'undefined') {
+                const response = grecaptcha.getResponse();
+                if (response.length === 0) {
+                    recaptchaValidation.classList.add('show');
+                    return false;
+                } else {
+                    recaptchaValidation.classList.remove('show');
+                    return true;
+                }
+            }
+            // If reCAPTCHA script hasn't loaded, assume true for client-side check if you want to proceed anyway
+            return true;
+        }
+
+        function validateTermsAndPolicy() {
+            if (!termsCheckbox.checked) {
+                termsPolicyValidation.classList.add('show');
                 return false;
             } else {
-                recaptchaValidation.classList.remove('show');
+                termsPolicyValidation.classList.remove('show');
                 return true;
             }
         }
@@ -520,17 +792,15 @@
             const isEmailValid = validateEmail();
             const isPasswordValid = validatePassword();
             const isConfirmPasswordValid = validateConfirmPassword();
+            const isTermsAgreed = validateTermsAndPolicy();
             const isRecaptchaValid = validateRecaptcha();
 
-            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isRecaptchaValid) {
-                alert('Success! Client-side validation passed. Now contacting the server.');
-                
-                // IMPORTANT: This is where the form submission happens.
-                // In a real application, you would send this data to your backend server.
-                // The server would then verify the reCAPTCHA token using your Secret Key.
-                // Example of how to get the reCAPTCHA token for an AJAX request:
-                // const recaptchaToken = grecaptcha.getResponse();
+            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isTermsAgreed && isRecaptchaValid) {
+                // If all client-side validation passes, the Firebase sign-up logic will execute below.
+                // We no longer display the generic "Success!" alert here.
+                return true;
             }
+            return false;
         }
 
         // --- Password Show/Hide Toggler ---
@@ -553,41 +823,99 @@
         emailInput.addEventListener('input', validateEmail);
         passwordInput.addEventListener('input', validatePassword);
         confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+        termsCheckbox.addEventListener('change', validateTermsAndPolicy);
+
+
+        // --- Modal Functions ---
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling of the main page
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling of the main page
+        }
+
+        // Close modal when clicking outside the content
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeModal(overlay.id);
+                }
+            });
+        });
+
+        // Close modal when pressing the ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
     </script>
-     <script type="module">
-        import { app, auth, db } from './src/firebase/firebase.js';
+    <script type="module">
+        // Import must be here if the file is truly a module
+        import { app, auth, db } from './src/firebase/firebase.js'; 
         import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
         const signupForm = document.querySelector('.signup-form');
+        const termsCheckbox = document.getElementById('agree-terms');
 
         signupForm.addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const validationMessages = document.querySelectorAll('.validation-message.show');
-            if (validationMessages.length === 0) {
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+            // Run client-side validation first
+            if (!validateForm()) {
+                 return; // Stop submission if validation fails
+            }
 
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-                    await addDoc(collection(db, "users"), {
-                        uid: userCredential.user.uid,
-                        username,
-                        email,
-                        createdAt: new Date()
-                    });
+            try {
+                // 1. Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-                    alert("✅ Signup successful!");
-                    window.location.href = "login.html";
-                } catch (error) {
-                    console.error("Signup error:", error.message);
-                    alert("❌ " + error.message);
-                }
+                // 2. Firestore Data Storage
+                await addDoc(collection(db, "users"), {
+                    uid: userCredential.user.uid,
+                    username,
+                    email,
+                    createdAt: new Date()
+                });
+
+                // NO GENERIC SUCCESS POPUP
+                // Instead, a professional app redirects or shows a non-intrusive notification.
+                alert("✅ Account created! Redirecting to login..."); 
+                window.location.href = "login.html";
+
+            } catch (error) {
+                console.error("Signup error:", error.message);
+                // The alert is only for the error, maintaining a professional feel for success flow.
+                alert("❌ Signup failed. Please check your details. Error: " + error.message);
             }
         });
+
+        // NOTE: The general validateForm function is in the non-module script tag for wider accessibility.
+        // It's assumed the client-side validation logic is available globally.
+        // Re-defining a small validation check here for module scope safety
+        function validateForm() {
+            const isUsernameValid = document.getElementById('username').checkValidity();
+            const isEmailValid = document.getElementById('email').checkValidity();
+            const isPasswordValid = document.getElementById('password').checkValidity();
+            const isConfirmPasswordValid = (document.getElementById('password').value === document.getElementById('confirm-password').value);
+            const isTermsAgreed = termsCheckbox.checked;
+            
+            // Basic reCAPTCHA check for module submission logic
+            const isRecaptchaValid = (typeof grecaptcha !== 'undefined' && grecaptcha.getResponse().length > 0);
+
+            return isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isTermsAgreed && isRecaptchaValid;
+        }
+
     </script>
 </body>
 </html>
