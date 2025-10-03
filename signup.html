@@ -202,13 +202,6 @@
         }
 
         /* Dynamic Validation States */
-        .signup-form input:valid {
-            /* border-color: var(--highlight-color); */
-        }
-        .signup-form input:invalid:not(:focus) {
-            /* border-color: #ff6347; */
-        }
-        
         .validation-message {
             font-size: 0.8rem;
             color: #ff6347;
@@ -262,7 +255,7 @@
             align-items: flex-start;
             margin-bottom: 25px;
             font-size: 0.9rem;
-            padding-right: 10px; /* Space for scrollbar if any */
+            padding-right: 10px;
         }
 
         .terms-policy-group input[type="checkbox"] {
@@ -272,7 +265,7 @@
             height: 16px;
             border: 1px solid var(--border-color);
             background-color: var(--panel-color);
-            accent-color: var(--highlight-color); /* Changes color of the checkmark */
+            accent-color: var(--highlight-color);
         }
 
         .terms-policy-group a {
@@ -292,10 +285,11 @@
             margin-bottom: 20px;
         }
 
-        /* Social Login Buttons */
+        /* Social Login Styles (MODIFIED) */
         .social-login {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 0;
+            margin-bottom: 30px; 
         }
 
         .social-login .or-separator {
@@ -315,20 +309,12 @@
             margin: 0 10px;
         }
         
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        
         .social-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             padding: 10px;
-            background-color: var(--panel-color);
-            color: white;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 0.9rem;
@@ -342,13 +328,21 @@
             margin-right: 10px;
             font-size: 1.2rem;
         }
-        
-        .social-button:hover {
-            background-color: #333;
-            border-color: #444;
+
+        /* Google Specific Style */
+        .social-button.google-btn {
+            background-color: #4285F4;
+            color: white;
+            border-color: #4285F4;
         }
 
-        /* --- Modal Styles for TOS and PP (PROFESSIONAL POPUP) --- */
+        .social-button.google-btn:hover {
+            background-color: #357ae8;
+            border-color: #357ae8;
+        }
+
+
+        /* --- Modal Styles for TOS and PP --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -474,10 +468,6 @@
             .signup-form-container {
                 padding: 30px;
             }
-            .social-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
             .modal-content {
                 max-width: 95%;
                 padding: 20px;
@@ -511,14 +501,10 @@
             <h3>Create a Free Account</h3>
             
             <div class="social-login">
-                <div class="social-buttons">
-                    <a href="#" class="social-button">
-                        <i class="fab fa-google"></i> Sign up with Google
-                    </a>
-                    <a href="#" class="social-button">
-                        <i class="fab fa-facebook-f"></i> Sign up with Facebook
-                    </a>
-                </div>
+                <a href="#" class="social-button google-btn" id="google-signup">
+                    <i class="fab fa-google"></i> Sign up with Google
+                </a>
+                
                 <div class="or-separator">or</div>
             </div>
 
@@ -762,7 +748,6 @@
         }
 
         function validateRecaptcha() {
-            // Note: grecaptcha.getResponse() only works if the reCAPTCHA script has loaded.
             if (typeof grecaptcha !== 'undefined') {
                 const response = grecaptcha.getResponse();
                 if (response.length === 0) {
@@ -773,7 +758,6 @@
                     return true;
                 }
             }
-            // If reCAPTCHA script hasn't loaded, assume true for client-side check if you want to proceed anyway
             return true;
         }
 
@@ -788,6 +772,7 @@
         }
 
         function validateForm() {
+            // This is the global validator called by the form submit
             const isUsernameValid = validateUsername();
             const isEmailValid = validateEmail();
             const isPasswordValid = validatePassword();
@@ -795,12 +780,7 @@
             const isTermsAgreed = validateTermsAndPolicy();
             const isRecaptchaValid = validateRecaptcha();
 
-            if (isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isTermsAgreed && isRecaptchaValid) {
-                // If all client-side validation passes, the Firebase sign-up logic will execute below.
-                // We no longer display the generic "Success!" alert here.
-                return true;
-            }
-            return false;
+            return isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isTermsAgreed && isRecaptchaValid;
         }
 
         // --- Password Show/Hide Toggler ---
@@ -829,12 +809,12 @@
         // --- Modal Functions ---
         function showModal(modalId) {
             document.getElementById(modalId).classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling of the main page
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restore scrolling of the main page
+            document.body.style.overflow = 'auto';
         }
 
         // Close modal when clicking outside the content
@@ -856,20 +836,63 @@
         });
     </script>
     <script type="module">
-        // Import must be here if the file is truly a module
-        import { app, auth, db } from './src/firebase/firebase.js'; 
-        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        // 1. FIREBASE IMPORTS (v11 Modular SDK via CDN)
+        // NOTE: The user's original code had "import { app, auth, db } from './src/firebase/firebase.js';"
+        // which assumes a local file. For a self-contained solution, I'm using CDN imports below.
+        // If 'firebase.js' is a separate file, the user MUST ensure it's accessible.
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
+
+        // 2. FIREBASE CONFIGURATION 
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7OlOJlG6HGombrxytI4mvldAm39YZD-s",
+            authDomain: "tradexmatrix-txm.firebaseapp.com",
+            projectId: "tradexmatrix-txm",
+            storageBucket: "tradexmatrix-txm.firebasestorage.app",
+            messagingSenderId: "683396221594",
+            appId: "1:683396221594:web:db1669b666607b948d2d23",
+            measurementId: "G-RMP0BPSG2X"
+        };
+
+        // 3. INITIALIZE SERVICES
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        const googleProvider = new GoogleAuthProvider(); // INITIALIZE GOOGLE PROVIDER
+        
+        const googleSignupButton = document.getElementById('google-signup');
         const signupForm = document.querySelector('.signup-form');
         const termsCheckbox = document.getElementById('agree-terms');
 
-        signupForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
 
-            // Run client-side validation first
-            if (!validateForm()) {
-                 return; // Stop submission if validation fails
+        // 4. FIRESTORE UTILITY FUNCTION
+        async function upsertUserProfile(user) {
+            const userRef = doc(db, "users", user.uid);
+            
+            const userData = {
+                uid: user.uid,
+                email: user.email,
+                // Use display name from Google, or the form's username
+                username: user.displayName || document.getElementById('username').value, 
+                plan: "Basic Free Tier",
+                isVerified: user.emailVerified, 
+                createdAt: serverTimestamp(),
+                lastSignIn: serverTimestamp(),
+            };
+            
+            // This creates the document if it doesn't exist or updates it if it does (for linking accounts)
+            await setDoc(userRef, userData, { merge: true });
+        }
+
+
+        // 5. EMAIL/PASSWORD SIGNUP LOGIC
+        signupForm.addEventListener('submit', async function(event) {
+            // Note: validateForm is called in the HTML inline, but we run it one more time for safety
+            if (typeof window.validateForm !== 'function' || !window.validateForm()) {
+                 return;
             }
 
             const username = document.getElementById('username').value;
@@ -877,44 +900,62 @@
             const password = document.getElementById('password').value;
 
             try {
-                // 1. Firebase Authentication
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await upsertUserProfile(userCredential.user);
 
-                // 2. Firestore Data Storage
-                await addDoc(collection(db, "users"), {
-                    uid: userCredential.user.uid,
-                    username,
-                    email,
-                    createdAt: new Date()
-                });
-
-                // NO GENERIC SUCCESS POPUP
-                // Instead, a professional app redirects or shows a non-intrusive notification.
-                alert("✅ Account created! Redirecting to login..."); 
+                alert("✅ Account created successfully! Redirecting to login..."); 
                 window.location.href = "login.html";
 
             } catch (error) {
-                console.error("Signup error:", error.message);
-                // The alert is only for the error, maintaining a professional feel for success flow.
-                alert("❌ Signup failed. Please check your details. Error: " + error.message);
+                console.error("Signup error:", error.code, error.message);
+                let errorMessage = "An unknown error occurred.";
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email address is already in use.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'The email address is not valid.';
+                }
+
+                alert("❌ Signup failed: " + errorMessage);
             }
         });
 
-        // NOTE: The general validateForm function is in the non-module script tag for wider accessibility.
-        // It's assumed the client-side validation logic is available globally.
-        // Re-defining a small validation check here for module scope safety
-        function validateForm() {
-            const isUsernameValid = document.getElementById('username').checkValidity();
-            const isEmailValid = document.getElementById('email').checkValidity();
-            const isPasswordValid = document.getElementById('password').checkValidity();
-            const isConfirmPasswordValid = (document.getElementById('password').value === document.getElementById('confirm-password').value);
-            const isTermsAgreed = termsCheckbox.checked;
-            
-            // Basic reCAPTCHA check for module submission logic
-            const isRecaptchaValid = (typeof grecaptcha !== 'undefined' && grecaptcha.getResponse().length > 0);
 
-            return isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && isTermsAgreed && isRecaptchaValid;
-        }
+        // 6. GOOGLE SIGNUP LOGIC (FUNCTIONAL)
+        googleSignupButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // Enforce Terms Agreement
+            if (!termsCheckbox.checked) {
+                alert("Please agree to the Terms of Service and Privacy Policy before proceeding with Google sign-up.");
+                return;
+            }
+            
+            try {
+                // *** THIS IS THE CRITICAL LINE THAT OPENS THE GOOGLE SELECTION POPUP ***
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                // Create/Update Firestore profile 
+                await upsertUserProfile(user);
+                
+                alert("✅ Signed in successfully with Google! Redirecting...");
+                window.location.href = "login.html";
+
+            } catch (error) {
+                console.error("Google Signup Error:", error.code, error.message);
+                let errorMessage = "An unknown error occurred during Google sign-in.";
+                
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'Sign-in window was closed by the user.';
+                } else if (error.code === 'auth/cancelled-popup-request') {
+                    errorMessage = 'Please allow popups to continue Google sign-in.';
+                } else if (error.code === 'auth/account-exists-with-different-credential') {
+                    errorMessage = 'An account with this email already exists using a different sign-in method.';
+                }
+
+                alert("❌ Google Sign-in Failed: " + errorMessage);
+            }
+        });
 
     </script>
 </body>
