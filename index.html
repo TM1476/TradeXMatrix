@@ -142,9 +142,8 @@
             border-bottom: 1px solid var(--border-color);
             /* Vertical padding 12px, Horizontal padding 15px */
             padding: 12px 15px; 
-            /* NEW: Flexbox for vertical centering */
             display: flex;
-            align-items: center; /* Vertically center content */
+            align-items: center;
             height: auto;
         }
 
@@ -237,97 +236,78 @@
             line-height: 1.6;
         }
 
-        /* Cards */
+        /* Cards and Grid */
         .product-grid {
             display: grid;
-            /* Adaptive grid: 3-4 columns on desktop, max width 1200px */
+            /* Adaptive grid: 3 columns on desktop, max width 1200px */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 28px;
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        /* New Indicator Showcase Styling */
-        .indicator-showcase {
-            padding: 40px 0;
-            background-color: var(--card-color);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        .indicator-showcase h3 {
-            text-align: center;
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        .indicator-scroll-container {
-            display: flex;
-            overflow-x: scroll;
-            padding: 10px 40px;
-            gap: 20px;
-            /* Hide scrollbar for aesthetics */
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .indicator-scroll-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
-        .indicator-card {
-            min-width: 320px;
-            background: var(--panel-color);
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: 0.3s;
-            flex-shrink: 0;
-            height: 250px; /* Fixed height for uniformity */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .indicator-card:hover {
-            border-color: var(--highlight-color);
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.25);
-        }
-
-        .indicator-card h4 {
-            color: var(--highlight-color);
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-        }
-
-        .indicator-card p {
-            font-size: 0.95rem;
-            color: var(--text-color);
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-
+        
+        /* Common Card Styling for all section cards */
         .product-card,
         .education-card,
-        .community-card {
+        .community-card,
+        .indicator-card { /* Re-added indicator-card styling */
             background: var(--card-color);
             padding: 35px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             text-align: left;
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px; /* Ensure visual balance */
         }
 
+        /* Apply common hover styling to all cards */
         .product-card:hover,
         .education-card:hover,
-        .community-card:hover {
+        .community-card:hover,
+        .indicator-card:hover {
             transform: translateY(-6px);
             border-color: var(--highlight-color);
             box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
         }
+
+        /* Specific styling for the disclaimer block */
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #ff9800; /* Use a warning color for the disclaimer */
+            max-width: 1000px;
+            margin: 20px auto 40px;
+            padding: 15px;
+            border: 1px solid #ff980044;
+            border-radius: 6px;
+            background-color: #ff980011;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Styling for card content */
+        .indicator-card h3, 
+        .product-card h3,
+        .education-card h3,
+        .community-card h3 {
+             font-size: 1.3rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .indicator-card p,
+        .product-card p,
+        .education-card p,
+        .community-card p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-bottom: 15px;
+            margin-left: 0; /* Override the global section p margin */
+        }
+
 
         .icon {
             font-size: 2.5rem;
@@ -392,12 +372,10 @@
 
         /* 1. TABLET LAYOUT (Max width: 1024px) */
         @media (max-width: 1024px) {
-            /* Reduce header padding for tablets */
             .header {
                 padding: 0 20px;
             }
 
-            /* Reduce font sizes for the main hero text */
             .hero-section h2 {
                 font-size: 2.5rem;
             }
@@ -408,7 +386,6 @@
                 gap: 20px;
             }
 
-            /* Adjust padding for sections */
             .section {
                 padding: 60px 20px;
             }
@@ -418,25 +395,23 @@
         @media (max-width: 768px) {
             /* A. HEADER/NAVIGATION FIXES */
             .header {
-                /* Allow header content to wrap/stack slightly */
                 flex-wrap: wrap; 
-                height: auto; /* Allow height to expand for stacked content */
+                height: auto;
                 padding: 10px 15px;
-                justify-content: center; /* Center content when stacked */
+                justify-content: center;
             }
             
             .header .logo {
-                width: 100%; /* Make the logo take full width */
-                justify-content: center; /* Center the logo and text */
+                width: 100%;
+                justify-content: center;
                 margin-bottom: 10px;
             }
 
             .header nav {
-                /* Navigation links should stack on mobile */
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                width: 100%; /* Take full width */
+                width: 100%;
                 margin-left: 0;
                 margin-top: 10px;
                 border-top: 1px solid var(--border-color);
@@ -444,12 +419,10 @@
             }
 
             .header nav a {
-                /* Separate the stacked links */
                 margin: 5px 0; 
             }
             
             .auth-buttons {
-                /* Move buttons to center */
                 width: 100%;
                 margin-top: 10px;
                 margin-left: 0;
@@ -457,18 +430,16 @@
             }
             
             /* B. MAIN CONTENT FIXES */
-            
-            /* Adjust padding to accommodate the new stacked header height */
             .main-content {
-                padding-top: 150px; /* Increased padding-top to prevent overlap with the new taller header */
+                padding-top: 150px;
             }
 
             .hero-section h2 {
-                font-size: 2rem; /* Reduce main heading size */
+                font-size: 2rem;
             }
 
             .hero-section p {
-                font-size: 1rem; /* Reduce paragraph size */
+                font-size: 1rem;
             }
 
             /* C. CARD/GRID FIXES */
@@ -482,16 +453,6 @@
             .section {
                 padding: 40px 15px;
             }
-
-            /* Adjust fixed height card to allow content to fully fit */
-            .indicator-card {
-                min-width: 250px;
-                height: auto; /* Remove fixed height for responsiveness */
-            }
-
-            .indicator-scroll-container {
-                padding: 10px 15px;
-            }
         }
     </style>
 </head>
@@ -504,10 +465,9 @@
         </div>
         <nav>
             <a href="#products">Products</a>
-            <a href="#indicators">Indicators</a>
+            <a href="#indicator-pricing">Indicators </a>
             <a href="#education">Education</a>
             <a href="#community">Community</a>
-            <a href="#">Pricing</a>
             <a href="mailto:support@tradexmatrix.com">Support</a>
         </nav>
         <div class="auth-buttons">
@@ -521,7 +481,7 @@
             <p class="tagline">“The Stock Market Is A Device For Transferring Money From The Impatient To The Patient.” – Warren Buffett</p>
             <h2>Empower Your Trading Journey with Professional Tools & Insights.</h2>
             <p>From advanced charting and real-time data to expert-led education, our platform provides everything you need to succeed in the market.</p>
-            <a href="#" class="cta-btn">Start Your Free Trial</a>
+            <a href="login.html" class="cta-btn">Start Your Free Trial</a>
         </section>
 
         <div class="ticker-container">
@@ -573,7 +533,55 @@
                 }
                 </script>
             </div>
-            </div>
+        </div>
+        
+        <section id="indicator-pricing" class="section" data-reveal style="background: var(--panel-color);">
+            <h2>Proprietary Trading Indicators</h2>
+            
+            <div class="product-grid">
+                
+                <div class="indicator-card">
+                    <div>
+                        <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
+                        <h3>The Matrix Trend Tool</h3>
+                        <p>An indicator with a defined strategy designed for education and learning, helping users analyze the overall trend structure and potential shifts in momentum.</p>
+                        <ul style="list-style: none; padding-left: 0; font-size: 0.95rem;">
+                            <li>✅ Focuses on trend identification.</li>
+                            <li>✅ Includes strategy guide for analysis.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <div>
+                        <div class="icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <h3>Advanced Volume Logic</h3>
+                        <p>A specialized tool built for market analysis of volume anomalies. Helps in learning to identify where large-scale participation may be occurring.</p>
+                        <ul style="list-style: none; padding-left: 0; font-size: 0.95rem;">
+                            <li>✅ Uses proprietary volume algorithms.</li>
+                            <li>✅ Provides data points for learning analysis.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="indicator-card">
+                    <div>
+                        <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3>Volatility & Structure Analyzer</h3>
+                        <p>Plots key market structures with volatility context, serving as an excellent educational resource for understanding dynamic support and resistance levels.</p>
+                        <ul style="list-style: none; padding-left: 0; font-size: 0.95rem;">
+                            <li>✅ Adaptive technical analysis tool.</li>
+                            <li>✅ Great for learning price structure.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div><br><br><br>
+
+	<p class="disclaimer">
+                ⚠️ Risk Disclaimer: These indicators are provided for analysis and educational purposes only. Trade X Matrix provides no guarantee of future performance or profit. Trading involves risk, and all sales are final. Indicators are sold as-is for educational analysis.
+        </p>
+        </section>
+
         <section id="education" class="section" data-reveal>
             <h2>Empower Your Knowledge</h2>
             <p>From foundational concepts to advanced market strategies, our education hub provides the resources you need to trade with confidence.</p>
@@ -602,7 +610,7 @@
             </div>
         </section>
 
-        <section id="products" class="section" style="background: var(--panel-color);" data-reveal>
+        <section id="products" class="section" data-reveal>
             <h2>Core Products & Tools</h2>
             <p>Access our suite of professional-grade tools, data, and research designed to give you a competitive edge in any market condition.</p>
 
@@ -637,7 +645,7 @@
             </div>
         </section>
 
-        <section id="community" class="section" data-reveal>
+        <section id="community" class="section" data-reveal style="background: var(--panel-color);">
             <h2>Exclusive Community & Services</h2>
             <p>Join a network of dedicated traders and access specialized services designed to help you build and manage your wealth.</p>
 
