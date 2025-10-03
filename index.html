@@ -211,6 +211,12 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(13, 110, 253, 0.35);
         }
+        
+        /* Ensure images scale correctly */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
 
         /* Sections */
         .section {
@@ -234,6 +240,7 @@
         /* Cards */
         .product-grid {
             display: grid;
+            /* Adaptive grid: 3-4 columns on desktop, max width 1200px */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 28px;
             max-width: 1200px;
@@ -377,33 +384,117 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+
+        /* ------------------------------------------------------------------- */
+        /* RESPONSIVE DESIGN FIXES (TABLET & MOBILE)                           */
+        /* ------------------------------------------------------------------- */
+
+        /* 1. TABLET LAYOUT (Max width: 1024px) */
+        @media (max-width: 1024px) {
+            /* Reduce header padding for tablets */
+            .header {
+                padding: 0 20px;
+            }
+
+            /* Reduce font sizes for the main hero text */
+            .hero-section h2 {
+                font-size: 2.5rem;
+            }
+
+            /* Allow the grid to reduce to 2 columns on most tablets */
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            /* Adjust padding for sections */
+            .section {
+                padding: 60px 20px;
+            }
+        }
+
+        /* 2. MOBILE LAYOUT (Max width: 768px) */
+        @media (max-width: 768px) {
+            /* A. HEADER/NAVIGATION FIXES */
+            .header {
+                /* Allow header content to wrap/stack slightly */
+                flex-wrap: wrap; 
+                height: auto; /* Allow height to expand for stacked content */
+                padding: 10px 15px;
+                justify-content: center; /* Center content when stacked */
+            }
+            
+            .header .logo {
+                width: 100%; /* Make the logo take full width */
+                justify-content: center; /* Center the logo and text */
+                margin-bottom: 10px;
+            }
+
+            .header nav {
+                /* Navigation links should stack on mobile */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%; /* Take full width */
+                margin-left: 0;
+                margin-top: 10px;
+                border-top: 1px solid var(--border-color);
+                padding-top: 10px;
+            }
+
+            .header nav a {
+                /* Separate the stacked links */
+                margin: 5px 0; 
+            }
+            
+            .auth-buttons {
+                /* Move buttons to center */
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            /* B. MAIN CONTENT FIXES */
+            
+            /* Adjust padding to accommodate the new stacked header height */
+            .main-content {
+                padding-top: 150px; /* Increased padding-top to prevent overlap with the new taller header */
+            }
+
+            .hero-section h2 {
+                font-size: 2rem; /* Reduce main heading size */
+            }
+
+            .hero-section p {
+                font-size: 1rem; /* Reduce paragraph size */
+            }
+
+            /* C. CARD/GRID FIXES */
+            .product-grid {
+                /* Force the grid to a single column stack on mobile */
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            /* Adjust section padding */
+            .section {
+                padding: 40px 15px;
+            }
+
+            /* Adjust fixed height card to allow content to fully fit */
+            .indicator-card {
+                min-width: 250px;
+                height: auto; /* Remove fixed height for responsiveness */
+            }
+
+            .indicator-scroll-container {
+                padding: 10px 15px;
+            }
+        }
     </style>
 </head>
-    <script type="module">
-  // Import Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-
-  // Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyC7OlOJlG6HGombrxytI4mvldAm39YZD-s",
-    authDomain: "tradexmatrix-txm.firebaseapp.com",
-    projectId: "tradexmatrix-txm",
-    storageBucket: "tradexmatrix-txm.firebasestorage.app",
-    messagingSenderId: "683396221594",
-    appId: "1:683396221594:web:db1669b666607b948d2d23",
-    measurementId: "G-RMP0BPSG2X"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  // Example: track button click
-  document.querySelector(".cta-btn").addEventListener("click", () => {
-    console.log("CTA clicked - track this in analytics if needed");
-  });
-</script>
 
 <body>
     <header class="header">
