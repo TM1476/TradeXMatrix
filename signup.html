@@ -868,24 +868,38 @@
         const termsCheckbox = document.getElementById('agree-terms');
 
 
-        // 4. FIRESTORE UTILITY FUNCTION
-        async function upsertUserProfile(user) {
-            const userRef = doc(db, "users", user.uid);
-            
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                // Use display name from Google, or the form's username
-                username: user.displayName || document.getElementById('username').value, 
-                plan: "Basic Free Tier",
-                isVerified: user.emailVerified, 
-                createdAt: serverTimestamp(),
-                lastSignIn: serverTimestamp(),
-            };
-            
-            // This creates the document if it doesn't exist or updates it if it does (for linking accounts)
-            await setDoc(userRef, userData, { merge: true });
-        }
+        // 4. FIRESTORE UTILITY FUNCTION - UPDATED
+    async function upsertUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+    
+        const userData = {
+        // --- CORE IDENTITY ---
+            uid: user.uid,
+            email: user.email,
+        // Uses Google's display name if signing up with Google, or the form username
+            username: user.displayName || document.getElementById('username').value,
+        
+        // --- SECURITY & MANAGEMENT ---
+            role: 'user',                                
+            accountTier: 'Free',                 // Current status for feature management
+            emailVerified: user.emailVerified,           
+        
+        // --- UX & PERSONALIZATION ---
+            onboardingStep: 0,                           
+            preferredTimezone: 'Asia/Kolkata',           
+            defaultMarket: 'NSE',                        
+        
+        // --- TRADING FEATURE (Demo Trading) ---
+            demoBalance: 500000.00, // Starting virtual balance
+        
+        // --- TIMESTAMPS ---
+            createdAt: serverTimestamp(),
+            lastSignIn: serverTimestamp(),
+        };
+    
+    // This merges the new data with any existing data (important for Google sign-in)
+    await setDoc(userRef, userData, { merge: true });
+}
 
 
         // 5. EMAIL/PASSWORD SIGNUP LOGIC
