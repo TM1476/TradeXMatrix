@@ -168,7 +168,7 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 alert("✅ Login successful!");
                 // Redirect to dashboard or home page
-                window.location.href = "index.html";
+                window.location.href = "home.html";
             } catch (error) {
                 console.error("Login error:", error.message);
                 if(error.code === "auth/user-not-found" || error.code === "auth/wrong-password"){
