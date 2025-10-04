@@ -879,8 +879,7 @@
         // Uses Google's display name if signing up with Google, or the form username
             username: user.displayName || document.getElementById('username').value,
         
-        // --- SECURITY & MANAGEMENT ---
-            role: 'user',                                
+        // --- SECURITY & MANAGEMENT ---                              
             accountTier: 'Free',                 // Current status for feature management
             emailVerified: user.emailVerified,           
         
@@ -890,7 +889,7 @@
             defaultMarket: 'NSE',                        
         
         // --- TRADING FEATURE (Demo Trading) ---
-            demoBalance: 500000.00, // Starting virtual balance
+            demoBalance: 100000.00, // Starting virtual balance
         
         // --- TIMESTAMPS ---
             createdAt: serverTimestamp(),
