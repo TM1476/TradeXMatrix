@@ -11,12 +11,12 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
-        /* Theme from index and signup pages */
+        /* Theme based on samplesignup.html (GREEN THEME) */
         :root {
             --bg-color: #121217;
             --panel-color: #1a1a20;
             --text-color: #B8B8BD;
-            --highlight-color: #00A381;
+            --highlight-color: #00A381; /* Green highlight */
             --border-color: #2e2e3a;
             --card-color: #21212c;
             --btn-bg-hover: #007a61;
@@ -34,11 +34,9 @@
             z-index:-1;
         }
 
+        /* Dot animation styles */
         .animated-dots {position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-2;}
         .dot {position:absolute; background-color: rgba(0, 163, 129, 0.2); border-radius:50%; animation: moveDot 20s infinite ease-in-out;}
-        .dot.large { width:5px; height:5px; opacity:0.2;}
-        .dot.medium{ width:3px; height:3px; opacity:0.3;}
-        .dot.small{ width:2px; height:2px; opacity:0.4;}
         @keyframes moveDot {0%{transform:translate(var(--x-start),var(--y-start));}100%{transform:translate(var(--x-end),var(--y-end));}}
 
         .login-page {
@@ -65,9 +63,7 @@
         .login-form label {display:block; margin-bottom:8px; font-size:0.9rem; color:white; font-weight:500;}
         .login-form input {width:100%; padding:12px; background-color:var(--panel-color); border:1px solid var(--border-color); border-radius:6px; color:white; font-size:1rem; transition:border-color 0.3s ease;}
         .login-form input:focus {outline:none; border-color:var(--highlight-color);}
-        .login-form input:valid{border-color:var(--highlight-color);}
-        .login-form input:invalid{border-color:#ff6347;}
-
+        
         .validation-message {font-size:0.8rem; color:#ff6347; margin-top:5px; display:none;}
         .validation-message.show {display:block;}
 
@@ -81,7 +77,6 @@
         .signup-link {text-align:center; margin-top:15px; font-size:0.9rem; color:var(--text-color);}
         .signup-link a {color:var(--highlight-color); text-decoration:none; font-weight:500;}
         .signup-link a:hover {text-decoration:underline;}
-
     </style>
 </head>
 <body>
@@ -110,7 +105,7 @@
 
             <div class="g-recaptcha" data-sitekey="6Lecd9ArAAAAAG0TRqJrmeFpjT7_og0I1eYZ7fBX"></div>
             <span id="recaptcha-validation" class="validation-message">Please complete the CAPTCHA.</span>
-
+            
             <button type="submit">Login</button>
         </form>
 
@@ -120,7 +115,7 @@
     </div>
 
     <script>
-        // Password show/hide
+        // Password show/hide and dot animation logic
         const passwordInput = document.getElementById('password');
         document.getElementById('toggle-password').addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -128,7 +123,6 @@
             this.classList.toggle('fa-eye-slash');
         });
 
-        // Animated dots
         const animatedDots = document.querySelector('.animated-dots');
         const numberOfDots = 50;
         for (let i=0;i<numberOfDots;i++){
@@ -144,17 +138,22 @@
             animatedDots.appendChild(dot);
         }
     </script>
-        <!-- Firebase login script -->
+    
     <script type="module">
-        import { app, auth } from './src/firebase/firebase.js';
+        // IMPORTANT: Ensure './src/firebase/firebase.js' is the correct path to your config file
+        import { app, auth } from './src/firebase/firebase.js'; 
         import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
         async function loginUser() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const recaptchaValidation = document.getElementById('recaptcha-validation');
-
-            // --- reCAPTCHA Check ---
+            
+            // reCAPTCHA Check
+            if (typeof grecaptcha === 'undefined') {
+                alert("reCAPTCHA script not loaded. Cannot proceed with login.");
+                return;
+            }
             const response = grecaptcha.getResponse();
             if(response.length === 0){
                 recaptchaValidation.classList.add('show');
@@ -164,20 +163,26 @@
             }
 
             try {
-                // Sign in user with Firebase
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                alert("✅ Login successful!");
-                // Redirect to dashboard or home page
-                window.location.href = "home.html";
+                // 1. Firebase Sign-In Attempt
+                await signInWithEmailAndPassword(auth, email, password);
+                
+                // 2. SUCCESSFUL REDIRECTION to the home page (dashboard)
+                console.log("Login successful. Redirecting to home.html");
+                window.location.href = "home.html"; 
             } catch (error) {
                 console.error("Login error:", error.message);
-                if(error.code === "auth/user-not-found" || error.code === "auth/wrong-password"){
-                    alert("❌ Credentials not found. Please check your email and password or sign up.");
+                grecaptcha.reset(); 
+                
+                if(error.code === "auth/user-not-found" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential"){
+                    alert("❌ Invalid credentials. Please check your email and password.");
                 } else {
-                    alert("❌ " + error.message);
+                    alert("❌ Login Failed: " + error.message);
                 }
             }
         }
+        
+        // Expose the function globally for the form's onsubmit to work
+        window.loginUser = loginUser;
     </script>
 </body>
 </html>
