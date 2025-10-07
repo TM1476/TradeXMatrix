@@ -11,7 +11,7 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
-        /* Theme based on samplesignup.html (GREEN THEME) */
+        /* Base Styles - GREEN THEME */
         :root {
             --bg-color: #121217;
             --panel-color: #1a1a20;
@@ -38,42 +38,31 @@
         .animated-dots {position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-2;}
         .dot {position:absolute; background-color: rgba(0, 163, 129, 0.2); border-radius:50%; animation: moveDot 20s infinite ease-in-out;}
         @keyframes moveDot {0%{transform:translate(var(--x-start),var(--y-start));}100%{transform:translate(var(--x-end),var(--y-end));}}
-
+        
+        /* Form and card styles */
         .login-page {
-            display:flex;
-            flex-direction:column;
-            width:100%;
-            max-width:400px;
-            background-color: var(--card-color);
-            border-radius:12px;
-            border:1px solid var(--border-color);
-            box-shadow:0 4px 20px rgba(0,0,0,0.4);
-            overflow:hidden;
-            padding:40px;
-            z-index:10;
+            display:flex; flex-direction:column; width:100%; max-width:400px; background-color: var(--card-color);
+            border-radius:12px; border:1px solid var(--border-color); box-shadow:0 4px 20px rgba(0,0,0,0.4);
+            overflow:hidden; padding:40px; z-index:10;
         }
-
         .logo {margin-bottom:20px; display:flex; align-items:center; justify-content:center;}
         .logo img {height:100px; width:200px;}
-
         h3 {font-size:1.8rem; color:white; margin-bottom:10px; text-align:center;}
         p.form-description {font-size:0.9rem; color:var(--text-color); margin-bottom:20px; text-align:center;}
-
         .login-form .input-group {margin-bottom:20px; position:relative;}
         .login-form label {display:block; margin-bottom:8px; font-size:0.9rem; color:white; font-weight:500;}
         .login-form input {width:100%; padding:12px; background-color:var(--panel-color); border:1px solid var(--border-color); border-radius:6px; color:white; font-size:1rem; transition:border-color 0.3s ease;}
         .login-form input:focus {outline:none; border-color:var(--highlight-color);}
-        
         .validation-message {font-size:0.8rem; color:#ff6347; margin-top:5px; display:none;}
         .validation-message.show {display:block;}
-
         .password-input-wrapper {position:relative;}
         .password-toggle-icon {position:absolute; right:15px; top:50%; transform:translateY(-50%); color:var(--text-color); cursor:pointer; transition:color 0.2s ease;}
-        .password-toggle-icon:hover{color:white;}
-
-        .login-form button {width:100%; padding:15px; background-color:var(--highlight-color); color:white; border:none; border-radius:6px; font-size:1rem; font-weight:600; cursor:pointer; transition:background-color 0.3s ease;}
+        .password-form button {
+            width:100%; padding:15px; background-color:var(--highlight-color); 
+            color:white; border:none; border-radius:6px; font-size:1rem; font-weight:600; 
+            cursor:pointer; transition:background-color 0.3s ease;
+        }
         .login-form button:hover {background-color: var(--btn-bg-hover);}
-
         .signup-link {text-align:center; margin-top:15px; font-size:0.9rem; color:var(--text-color);}
         .signup-link a {color:var(--highlight-color); text-decoration:none; font-weight:500;}
         .signup-link a:hover {text-decoration:underline;}
@@ -92,7 +81,6 @@
             <div class="input-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
-                <span id="email-validation" class="validation-message"></span>
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
@@ -100,13 +88,12 @@
                     <input type="password" id="password" name="password" required>
                     <i class="fas fa-eye password-toggle-icon" id="toggle-password"></i>
                 </div>
-                <span id="password-validation" class="validation-message"></span>
             </div>
 
             <div class="g-recaptcha" data-sitekey="6Lecd9ArAAAAAG0TRqJrmeFpjT7_og0I1eYZ7fBX"></div>
             <span id="recaptcha-validation" class="validation-message">Please complete the CAPTCHA.</span>
             
-            <button type="submit" >Login<a href="home.html"></a></button>
+            <button type="submit">Login</button>
         </form>
 
         <div class="signup-link">
@@ -115,7 +102,7 @@
     </div>
 
     <script>
-        // Password show/hide and dot animation logic
+        // Password show/hide logic
         const passwordInput = document.getElementById('password');
         document.getElementById('toggle-password').addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -123,6 +110,7 @@
             this.classList.toggle('fa-eye-slash');
         });
 
+        // Dot animation logic
         const animatedDots = document.querySelector('.animated-dots');
         const numberOfDots = 50;
         for (let i=0;i<numberOfDots;i++){
@@ -140,7 +128,7 @@
     </script>
     
     <script type="module">
-        // IMPORTANT: Ensure './src/firebase/firebase.js' is the correct path to your config file
+        // Ensure the path is correct for your hosted files
         import { app, auth } from './src/firebase/firebase.js'; 
         import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
@@ -149,13 +137,8 @@
             const password = document.getElementById('password').value;
             const recaptchaValidation = document.getElementById('recaptcha-validation');
             
-            // reCAPTCHA Check
-            if (typeof grecaptcha === 'undefined') {
-                alert("reCAPTCHA script not loaded. Cannot proceed with login.");
-                return;
-            }
-            const response = grecaptcha.getResponse();
-            if(response.length === 0){
+            // Validate reCAPTCHA response
+            if (typeof grecaptcha === 'undefined' || grecaptcha.getResponse().length === 0) {
                 recaptchaValidation.classList.add('show');
                 return;
             } else {
@@ -163,11 +146,11 @@
             }
 
             try {
-                // 1. Firebase Sign-In Attempt
+                // 1. Authenticate user with Firebase
                 await signInWithEmailAndPassword(auth, email, password);
                 
-                // 2. SUCCESSFUL REDIRECTION to the home page (dashboard)
-                console.log("Login successful. Redirecting to home.html");
+                // 2. Redirect to dashboard (home.html)
+                console.log("Login successful. Redirecting securely.");
                 window.location.href = "home.html"; 
             } catch (error) {
                 console.error("Login error:", error.message);
@@ -181,7 +164,6 @@
             }
         }
         
-        // Expose the function globally for the form's onsubmit to work
         window.loginUser = loginUser;
     </script>
 </body>
