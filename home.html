@@ -3,130 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trade X Matrix - Professional Dashboard</title>
+<title>Trade X Matrix - Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-:root {
-    --bg-color: #121217; --sidebar-color: #1a1a20; --panel-color: #21212c;
-    --text-color: #B8B8BD; --highlight-color: #00A381; --border-color: #2e2e3a;
-    --btn-hover: #007a61; --social-color: #1DA1F2;
-}
-* {margin:0; padding:0; box-sizing:border-box;}
-body {font-family:'Inter',sans-serif; color:var(--text-color); background:var(--bg-color); display:flex; min-height:100vh; overflow-x:hidden;}
-a {text-decoration:none; color:inherit;}
+  :root {
+    --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
+    --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
+    --btn-bg-hover: #007a61; --btn-green: #00A381; --btn-shadow: rgba(0, 163, 129, 0.4);
+  }
 
-/* Sidebar */
-.sidebar {width:250px; background: var(--sidebar-color); height:100vh; position:fixed; top:0; left:0; display:flex; flex-direction:column; padding:20px; transition: width 0.3s ease;}
-.sidebar.collapsed {width:80px;}
-.sidebar .logo {margin-bottom:40px; text-align:center;}
-.sidebar .logo img {width:150px; border-radius:8px; transition: width 0.3s ease;}
-.sidebar.collapsed .logo img {width:50px;}
-.sidebar ul {list-style:none; flex:1;}
-.sidebar ul li {margin-bottom:20px;}
-.sidebar ul li a {display:flex; align-items:center; gap:15px; padding:10px; border-radius:6px; transition:0.2s; color: var(--text-color);}
-.sidebar ul li a:hover {background: var(--panel-color);}
-.sidebar ul li a i {min-width:20px; text-align:center;}
-.sidebar.collapsed ul li a span {display:none;}
-.sidebar .footer {margin-top:auto; text-align:center; font-size:0.85rem; color:#888;}
-.sidebar .toggle-btn {cursor:pointer; padding:10px; background:var(--highlight-color); border:none; border-radius:6px; margin-bottom:20px; color:#fff; font-weight:600; transition: all 0.2s ease;}
-.sidebar .toggle-btn:hover {background:var(--btn-hover);}
+  *{margin:0; padding:0; box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif; background:var(--bg-color); color:var(--text-color); display:flex; min-height:100vh;}
 
-/* Main Content */
-.main-content {margin-left:250px; flex:1; padding:30px; transition: margin-left 0.3s ease;}
-.sidebar.collapsed ~ .main-content {margin-left:80px;}
-.dashboard-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
-.dashboard-header .profile {display:flex; align-items:center; gap:15px;}
-.dashboard-header .profile img {width:50px; height:50px; border-radius:50%; border:2px solid var(--highlight-color);}
-.dashboard-header .profile div {display:flex; flex-direction:column;}
-.dashboard-header .profile div span:first-child {font-weight:600; font-size:1.1rem;}
-.dashboard-header .profile div span:last-child {font-size:0.85rem; color:#aaa;}
-.signout-button {padding:12px 20px; background-color:var(--highlight-color); color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer; transition: all 0.2s ease;}
-.signout-button:hover {background-color:var(--btn-hover); transform:translateY(-1px); box-shadow:0 4px 15px rgba(0,163,129,0.4);}
+  /* Sidebar */
+  .sidebar{
+    width:260px; background:var(--panel-color); border-right:1px solid var(--border-color);
+    transition: width 0.3s; display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .sidebar.collapsed{width:70px;}
+  .sidebar-header{display:flex; align-items:center; justify-content:space-between; padding:20px; font-size:1.2rem; font-weight:600;}
+  .toggle-btn{cursor:pointer; color:var(--highlight-color);}
+  .sidebar-menu{flex:1;}
+  .sidebar-menu a{
+    display:flex; align-items:center; padding:15px 20px; text-decoration:none; color:var(--text-color); font-weight:500;
+    transition:0.2s; border-left:3px solid transparent;
+  }
+  .sidebar-menu a:hover{background:#1f1f28; border-left:3px solid var(--highlight-color);}
+  .sidebar-menu i{margin-right:15px;}
+  .sidebar.collapsed .sidebar-menu span{display:none;}
+  .sidebar.collapsed .sidebar-menu i{margin-right:0; text-align:center; width:100%;}
 
-/* Cards & Grid */
-.cards-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
-.card {background:var(--panel-color); padding:25px; border-radius:12px; border:1px solid var(--border-color); transition:0.2s;}
-.card:hover {border-color:var(--highlight-color); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
-.card h3 {font-size:1.25rem; margin-bottom:10px;}
-.card p {font-size:0.9rem; color:#aaa;}
+  /* Main content */
+  .main-content{flex:1; padding:30px; display:flex; flex-direction:column;}
+  .header{display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
+  .user-info{display:flex; align-items:center; gap:15px;}
+  .user-info img{width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--highlight-color);}
+  .user-info div{display:flex; flex-direction:column;}
+  .btn-green{padding:10px 20px; background:var(--btn-green); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; box-shadow:0 4px 12px var(--btn-shadow);}
+  .btn-green:hover{background:var(--btn-bg-hover);}
 
-/* Performance Circle */
-.performance-chart {width:150px; height:150px; margin:auto; position:relative;}
-.performance-chart canvas {position:absolute; top:0; left:0;}
-.performance-chart span {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:600; color:white; font-size:1.2rem;}
+  /* Dashboard widgets */
+  .dashboard-widgets{display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
+  .card{background:var(--card-color); padding:20px; border-radius:12px; border:1px solid var(--border-color); transition:0.3s;}
+  .card:hover{transform:translateY(-5px); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
+  .card h3{margin-bottom:15px; color:white;}
+  .events-list{list-style:none; padding-left:0;}
+  .events-list li{padding:8px 0; border-bottom:1px solid var(--border-color);}
 
-/* Live Charts */
-.live-chart {height:400px; margin-bottom:40px; border:1px solid var(--border-color); border-radius:12px; overflow:hidden;}
-
-/* Events */
-.events {background:var(--panel-color); padding:20px; border-radius:12px; border:1px solid var(--border-color);}
-.events h3 {margin-bottom:15px;}
-.events ul {list-style:none;}
-.events ul li {padding:10px 0; border-bottom:1px solid var(--border-color); font-size:0.9rem;}
-.events ul li:last-child {border:none;}
-
-/* Footer */
-.footer {text-align:center; margin-top:40px; font-size:0.85rem; color:#aaa;}
-.footer a {margin:0 10px; color:var(--highlight-color); transition:0.2s;}
-.footer a:hover {color:var(--social-color);}
+  /* Performance circle */
+  .performance-container{display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  canvas{max-width:200px; max-height:200px;}
+  
+  /* Footer social links */
+  .social-links{margin-top:auto; display:flex; gap:15px; padding:20px; justify-content:center;}
+  .social-links a{color:var(--highlight-color); font-size:1.5rem;}
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-    <div class="logo"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="Logo"></div>
-    <ul>
-        <li><a href="#"><i class="fas fa-gauge-high"></i> <span>Dashboard</span></a></li>
-        <li><a href="#"><i class="fas fa-chart-line"></i> <span>Live Charts</span></a></li>
-        <li><a href="#"><i class="fas fa-layer-group"></i> <span>Indicators</span></a></li>
-        <li><a href="#"><i class="fas fa-graduation-cap"></i> <span>Education</span></a></li>
-        <li><a href="#"><i class="fas fa-globe"></i> <span>News & Events</span></a></li>
-        <li><a href="#"><i class="fas fa-tags"></i> <span>Pricing</span></a></li>
-        <li><a href="#"><i class="fas fa-gear"></i> <span>Settings</span></a></li>
-    </ul>
-    <div class="footer">
-        <a href="mailto:support@tradexmatrix.com"><i class="fas fa-envelope"></i></a>
-        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-        <p>Support</p>
-    </div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span id="sidebar-title">Menu</span>
+    <i class="fas fa-bars toggle-btn" id="sidebar-toggle"></i>
+  </div>
+  <div class="sidebar-menu">
+    <a href="#"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+    <a href="#"><i class="fa-solid fa-chart-line"></i> <span>Live Charts</span></a>
+    <a href="#"><i class="fa-solid fa-layer-group"></i> <span>Indicators</span></a>
+    <a href="#"><i class="fa-solid fa-arrow-trend-up"></i> <span>Stock Updates</span></a>
+    <a href="#"><i class="fa-solid fa-globe"></i> <span>News & Events</span></a>
+    <a href="#"><i class="fa-solid fa-graduation-cap"></i> <span>Education</span></a>
+    <a href="#"><i class="fa-solid fa-tags"></i> <span>Pricing</span></a>
+    <a href="#"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
+  </div>
+  <div class="social-links">
+    <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
+    <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
+    <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i></a>
+  </div>
 </div>
 
 <div class="main-content">
-    <div class="dashboard-header">
-        <div class="profile">
-            <img src="https://i.pravatar.cc/150?img=32" alt="User Avatar" id="user-avatar">
-            <div>
-                <span id="username">Username</span>
-                <span id="user-plan">Loading Plan...</span>
-            </div>
-        </div>
-        <button id="signoutBtn" class="signout-button">Sign Out</button>
+  <div class="header">
+    <h1>Trade X Matrix Dashboard</h1>
+    <div class="user-info">
+      <img id="user-avatar" src="" alt="avatar">
+      <div>
+        <span id="username">Loading...</span>
+        <span id="user-plan">Loading...</span>
+      </div>
+      <button class="btn-green" id="signout-btn">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dashboard-widgets">
+    <div class="card performance-card">
+      <h3>Performance</h3>
+      <div class="performance-container">
+        <canvas id="performanceChart"></canvas>
+        <span id="performanceText">0%</span>
+      </div>
     </div>
 
-    <div class="cards-grid">
-        <div class="card">
-            <h3>User Performance</h3>
-            <div class="performance-chart">
-                <canvas id="performanceCanvas" width="150" height="150"></canvas>
-                <span id="performanceText">0%</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>Live Market Chart</h3>
-            <div class="live-chart" id="tradingview-widget"></div>
-        </div>
-
-        <div class="card events">
-            <h3>Daily Events & Updates</h3>
-            <ul id="eventsList"></ul>
-        </div>
+    <div class="card events-card">
+      <h3>Daily Events</h3>
+      <ul class="events-list" id="eventsList"></ul>
     </div>
+
+    <div class="card charts-card">
+      <h3>Live Charts & Indicators</h3>
+      <p>Charts and indicators will appear here dynamically.</p>
+    </div>
+  </div>
 </div>
 
 <script type="module">
@@ -135,87 +126,81 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 import { doc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // Sidebar toggle
-const toggleBtn = document.getElementById('toggleSidebar');
-const sidebar = document.querySelector('.sidebar');
-const mainContent = document.querySelector('.main-content');
-toggleBtn.addEventListener('click',()=>{
-    sidebar.classList.toggle('collapsed');
+const sidebar = document.getElementById('sidebar');
+document.getElementById('sidebar-toggle').addEventListener('click', ()=>{
+  sidebar.classList.toggle('collapsed');
 });
 
-// Auth check & fetch user data
-onAuthStateChanged(auth, async (user)=>{
-    if(user){
-        const uid = user.uid;
-        const userRef = doc(db,"users",uid);
-        const userSnap = await getDoc(userRef);
-
-        if(userSnap.exists()){
-            const data = userSnap.data();
-            document.getElementById('username').innerText = data.username || "Trader";
-            document.getElementById('user-plan').innerText = data.plan || "Professional Plan";
-            if(data.avatar) document.getElementById('user-avatar').src = data.avatar;
-
-            // Performance chart
-            const percent = data.performance || 0;
-            document.getElementById('performanceText').innerText = percent + "%";
-            drawPerformanceChart(percent);
-
-            // Daily events
-            const eventsList = document.getElementById('eventsList');
-            const eventsQuery = query(collection(db,"events"), orderBy("timestamp","desc"), limit(5));
-            const eventsSnap = await getDocs(eventsQuery);
-            eventsSnap.forEach(docSnap=>{
-                const li = document.createElement('li');
-                li.textContent = docSnap.data().title;
-                eventsList.appendChild(li);
-            });
-        }
-    } else {
-        window.location.href="login.html";
-    }
+// Signout
+document.getElementById('signout-btn').addEventListener('click', async ()=>{
+  await signOut(auth);
+  window.location.href = "login.html";
 });
 
-// Sign out button
-document.getElementById('signoutBtn').addEventListener('click', async ()=>{
-    await signOut(auth);
-    window.location.href = "login.html";
-});
-
-// Performance circle chart
-const canvas = document.getElementById('performanceCanvas');
-const ctx = canvas.getContext('2d');
+// Performance chart
 function drawPerformanceChart(percent){
-    const radius=70;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.beginPath();
-    ctx.arc(75,75,radius,0,2*Math.PI);
-    ctx.strokeStyle="#333";
-    ctx.lineWidth=15;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(75,75,radius,-Math.PI/2,-Math.PI/2 + 2*Math.PI*percent/100);
-    ctx.strokeStyle="#00A381";
-    ctx.lineWidth=15;
-    ctx.stroke();
+  const ctx = document.getElementById('performanceChart').getContext('2d');
+  const circle = new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      datasets:[{
+        data:[percent,100-percent],
+        backgroundColor:['var(--highlight-color)', '#2e2e3a'],
+        borderWidth:0
+      }]
+    },
+    options:{cutout:'75%', responsive:true, plugins:{legend:{display:false}}}
+  });
 }
 
-// TradingView Widget
-const script = document.createElement('script');
-script.src="https://s3.tradingview.com/tv.js";
-script.onload = ()=>{
-    new TradingView.widget({
-        "width": "100%",
-        "height": 400,
-        "symbol": "NASDAQ:AAPL",
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "container_id": "tradingview-widget"
-    });
-};
-document.body.appendChild(script);
+// Fetch user data
+onAuthStateChanged(auth, async (user)=>{
+  if(user){
+    const uid = user.uid;
+    const userRef = doc(db,"users",uid);
+    const userSnap = await getDoc(userRef);
+    if(userSnap.exists()){
+      const data = userSnap.data();
+      document.getElementById('username').innerText = data.username || "Trader";
+      document.getElementById('user-plan').innerText = data.plan || "Professional Plan";
+
+      // Avatar
+      const avatarElement = document.getElementById('user-avatar');
+      if(data.avatar && data.avatar.trim()!==""){
+        avatarElement.src = data.avatar;
+      } else {
+        const emoji = '😊';
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="40">${emoji}</text>
+        </svg>`;
+        avatarElement.src = `data:image/svg+xml;base64,${btoa(svg)}`;
+      }
+
+      // Performance
+      const percent = data.performance || 0;
+      document.getElementById('performanceText').innerText = percent + "%";
+      drawPerformanceChart(percent);
+
+      // Daily events
+      const eventsList = document.getElementById('eventsList');
+      const eventsQuery = query(collection(db,"events"), orderBy("timestamp","desc"), limit(5));
+      const eventsSnap = await getDocs(eventsQuery);
+      eventsSnap.forEach(docSnap=>{
+        const li = document.createElement('li');
+        li.textContent = docSnap.data().title;
+        eventsList.appendChild(li);
+      });
+    }
+  } else {
+    window.location.href="login.html";
+  }
+});
+
+// Load Chart.js dynamically
+const chartScript = document.createElement('script');
+chartScript.src = "https://cdn.jsdelivr.net/npm/chart.js";
+chartScript.onload = ()=>{console.log("Chart.js loaded");};
+document.body.appendChild(chartScript);
 </script>
 </body>
 </html>
