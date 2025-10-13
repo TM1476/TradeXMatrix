@@ -3,131 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trade X Matrix - Dashboard</title>
+<title>Trade X Matrix - Professional Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
 :root {
-    --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
-    --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
-    --btn-bg-hover: #007a61; --btn-shadow: rgba(0, 163, 129, 0.4);
+    --bg-color: #121217; --sidebar-color: #1a1a20; --panel-color: #21212c;
+    --text-color: #B8B8BD; --highlight-color: #00A381; --border-color: #2e2e3a;
+    --btn-hover: #007a61; --social-color: #1DA1F2;
 }
 * {margin:0; padding:0; box-sizing:border-box;}
-body {min-height:100vh; font-family:'Inter',sans-serif; color:var(--text-color); background-color:var(--bg-color); display:flex; flex-direction: column; align-items: center; padding: 20px;}
+body {font-family:'Inter',sans-serif; color:var(--text-color); background:var(--bg-color); display:flex; min-height:100vh; overflow-x:hidden;}
 a {text-decoration:none; color:inherit;}
 
-/* Loader */
-#page-loader {position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-color);display:flex;justify-content:center;align-items:center;color:white;font-size:1.2rem; z-index:999;}
+/* Sidebar */
+.sidebar {width:250px; background: var(--sidebar-color); height:100vh; position:fixed; top:0; left:0; display:flex; flex-direction:column; padding:20px; transition: width 0.3s ease;}
+.sidebar.collapsed {width:80px;}
+.sidebar .logo {margin-bottom:40px; text-align:center;}
+.sidebar .logo img {width:150px; border-radius:8px;}
+.sidebar ul {list-style:none; flex:1;}
+.sidebar ul li {margin-bottom:20px;}
+.sidebar ul li a {display:flex; align-items:center; gap:15px; padding:10px; border-radius:6px; transition:0.2s; color: var(--text-color);}
+.sidebar ul li a:hover {background: var(--panel-color);}
+.sidebar ul li a i {min-width:20px; text-align:center;}
+.sidebar .footer {margin-top:auto; text-align:center; font-size:0.85rem; color:#888;}
+.sidebar .toggle-btn {cursor:pointer; padding:10px; background:var(--highlight-color); border:none; border-radius:6px; margin-bottom:20px; color:#fff; font-weight:600;}
 
-/* Dashboard Layout */
-.dashboard-container {width:100%; max-width:1200px; padding:30px; background-color:var(--card-color); border-radius:12px; border:1px solid var(--border-color); margin-top:50px; opacity:0; transition:opacity 0.5s ease; z-index:10;}
-.dashboard-header {display:flex; justify-content:space-between; align-items:center; padding-bottom:20px; margin-bottom:30px; border-bottom:1px solid var(--border-color);}
-.dashboard-header h1 {font-size:1.8rem; color:white; display:flex; align-items:center;}
-.dashboard-header h1 i {color:var(--highlight-color); margin-right:15px;}
-.user-profile {display:flex; align-items:center; gap:20px;}
-.signout-button {padding:10px 15px; background:transparent; color:var(--text-color); border:1px solid var(--border-color); border-radius:6px; cursor:pointer; transition:all 0.2s;}
-.signout-button:hover {background:var(--highlight-color); border-color:var(--highlight-color); color:white;}
+/* Main Content */
+.main-content {margin-left:250px; flex:1; padding:30px; transition: margin-left 0.3s ease;}
+.sidebar.collapsed ~ .main-content {margin-left:80px;}
+.dashboard-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
+.dashboard-header .profile {display:flex; align-items:center; gap:15px;}
+.dashboard-header .profile img {width:50px; height:50px; border-radius:50%; border:2px solid var(--highlight-color);}
+.dashboard-header .profile div {display:flex; flex-direction:column;}
+.dashboard-header .profile div span:first-child {font-weight:600; font-size:1.1rem;}
+.dashboard-header .profile div span:last-child {font-size:0.85rem; color:#aaa;}
 
-/* Grid Cards */
-.content-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
-.dashboard-card {background-color:var(--panel-color); padding:25px; border-radius:8px; border:1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.3s; display:block; height:100%;}
-.dashboard-card:hover {transform:translateY(-5px); border-color:var(--highlight-color); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
-.dashboard-card h3 {color:white; font-size:1.25rem; margin-bottom:15px;}
-.dashboard-card i {color:var(--highlight-color); margin-right:10px;}
+/* Cards & Grid */
+.cards-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
+.card {background:var(--panel-color); padding:25px; border-radius:12px; border:1px solid var(--border-color); transition:0.2s;}
+.card:hover {border-color:var(--highlight-color); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
+.card h3 {font-size:1.25rem; margin-bottom:10px;}
+.card p {font-size:0.9rem; color:#aaa;}
 
-/* Disclaimer */
-.disclaimer {background-color:#2e2e3a; padding:20px; border-radius:8px; text-align:center; font-size:0.9rem; color:#ffcc00; border-left:5px solid #ffcc00;}
-.disclaimer strong {color:white; display:block; margin-bottom:5px;}
+/* Performance Circle */
+.performance-chart {width:150px; height:150px; margin:auto; position:relative;}
+.performance-chart canvas {position:absolute; top:0; left:0;}
+
+/* Live Charts */
+.live-chart {height:400px; margin-bottom:40px; border:1px solid var(--border-color); border-radius:12px; overflow:hidden;}
+
+/* Events */
+.events {background:var(--panel-color); padding:20px; border-radius:12px; border:1px solid var(--border-color);}
+.events h3 {margin-bottom:15px;}
+.events ul {list-style:none;}
+.events ul li {padding:10px 0; border-bottom:1px solid var(--border-color); font-size:0.9rem;}
+.events ul li:last-child {border:none;}
+
+/* Footer */
+.footer {text-align:center; margin-top:40px; font-size:0.85rem; color:#aaa;}
+.footer a {margin:0 10px; color:var(--highlight-color); transition:0.2s;}
+.footer a:hover {color:var(--social-color);}
 </style>
 </head>
 <body>
 
-<div id="page-loader">Loading dashboard...</div>
+<div class="sidebar">
+    <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+    <div class="logo"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="Logo"></div>
+    <ul>
+        <li><a href="#"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fas fa-chart-line"></i> Live Charts</a></li>
+        <li><a href="#"><i class="fas fa-layer-group"></i> Indicators</a></li>
+        <li><a href="#"><i class="fas fa-graduation-cap"></i> Education</a></li>
+        <li><a href="#"><i class="fas fa-globe"></i> News & Events</a></li>
+        <li><a href="#"><i class="fas fa-tags"></i> Pricing</a></li>
+        <li><a href="#"><i class="fas fa-gear"></i> Settings</a></li>
+    </ul>
+    <div class="footer">
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <p>support@tradexmatrix.com</p>
+    </div>
+</div>
 
-<div class="dashboard-container" id="main-dashboard">
+<div class="main-content">
     <div class="dashboard-header">
-        <h1><i class="fa-solid fa-gauge-high"></i> Trade X Matrix Professional Dashboard</h1>
-        <div class="user-profile">
-            <div class="user-info">
-                <p id="dashboard-username">Loading...</p>
-                <p id="dashboard-plan">Loading...</p>
+        <div class="profile">
+            <img src="https://i.pravatar.cc/150?img=32" alt="User Avatar" id="user-avatar">
+            <div>
+                <span id="username">Username</span>
+                <span id="user-plan">Loading Plan...</span>
             </div>
-            <a href="pages/settings.html" class="signout-button" style="border-color:#5a5a6a; color:white;">
-                <i class="fa-solid fa-gear"></i> Settings
-            </a>
-            <button class="signout-button" id="signout-btn"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
         </div>
+        <button id="signoutBtn" class="signout-button">Sign Out</button>
     </div>
 
-    <div class="content-grid">
-        <a href="pages/charts.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-chart-line"></i> Advanced Live Charts</h3>
-            <p>Full-featured charting with drawing tools, multi-market access (Forex/Indian), and real-time data integration.</p>
-        </a>
-        <a href="pages/indicators.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-layer-group"></i> Custom Indicators & Strategies</h3>
-            <p>Manage, backtest, and deploy your proprietary strategy indicators with historical data analysis.</p>
-        </a>
-        <a href="pages/stock_updates.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-arrow-trend-up"></i> Stock & Market Updates</h3>
-            <p>Curated stock watchlists, suggestion lists, and real-time market movers for Indian and global equities.</p>
-        </a>
-        <a href="pages/news_events.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-globe"></i> News & Economic Calendar</h3>
-            <p>Track high-impact financial news and events globally that influence forex and equity markets.</p>
-        </a>
-        <a href="pages/education.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-graduation-cap"></i> Professional Education</h3>
-            <p>Exclusive modules covering advanced technical analysis, risk modeling, and proprietary trade execution.</p>
-        </a>
-        <a href="pages/pricing.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-tags"></i> Indicators & Pricing</h3>
-            <p>Manage your active subscription, explore professional indicator packages, and upgrade your plan.</p>
-        </a>
-        <a href="pages/settings.html" class="dashboard-card">
-            <h3><i class="fa-solid fa-user-gear"></i> Settings & Performance</h3>
-            <p>Manage profile, review trading journal performance metrics, and customize application tools.</p>
-        </a>
-    </div>
+    <div class="cards-grid">
+        <div class="card">
+            <h3>User Performance</h3>
+            <div class="performance-chart">
+                <canvas id="performanceCanvas" width="150" height="150"></canvas>
+                <span id="performanceText" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;color:white;">0%</span>
+            </div>
+        </div>
 
-    <div class="disclaimer">
-        <strong>Disclaimer: Educational and Informational Purpose Only.</strong>
-        <p>Trading in financial markets carries a high level of risk. The information provided by Trade X Matrix is for educational and informational purposes only and does not constitute financial advice. Please consult a licensed financial professional before making any investment decisions.</p>
+        <div class="card">
+            <h3>Live Market Chart</h3>
+            <div class="live-chart" id="tradingview-widget"></div>
+        </div>
+
+        <div class="card events">
+            <h3>Daily Events & Updates</h3>
+            <ul id="eventsList"></ul>
+        </div>
     </div>
 </div>
 
 <script type="module">
-import { auth } from './src/firebase/firebase.js';
+import { auth, db } from './src/firebase/firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { doc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const mainDashboard = document.getElementById('main-dashboard');
-const pageLoader = document.getElementById('page-loader');
-const usernameEl = document.getElementById('dashboard-username');
-const planEl = document.getElementById('dashboard-plan');
-const signoutBtn = document.getElementById('signout-btn');
+// Sidebar toggle
+document.getElementById('toggleSidebar').addEventListener('click',()=>document.querySelector('.sidebar').classList.toggle('collapsed'));
 
-// Check if user is logged in
-onAuthStateChanged(auth, user => {
-    if (user) {
-        usernameEl.textContent = `User: ${user.email}`;
-        planEl.textContent = `Plan: Professional`;
-        pageLoader.style.display = 'none';
-        mainDashboard.style.opacity = 1;
+// Auth check and fetch user data
+onAuthStateChanged(auth, async (user)=>{
+    if(user){
+        const uid = user.uid;
+        const userRef = doc(db,"users",uid);
+        const userSnap = await getDoc(userRef);
+
+        if(userSnap.exists()){
+            const data = userSnap.data();
+            document.getElementById('username').innerText = data.username || "Trader";
+            document.getElementById('user-plan').innerText = data.plan || "Professional Plan";
+            if(data.avatar) document.getElementById('user-avatar').src = data.avatar;
+
+            // Performance chart
+            const percent = data.performance || 0;
+            document.getElementById('performanceText').innerText = percent + "%";
+            drawPerformanceChart(percent);
+
+            // Daily events
+            const eventsList = document.getElementById('eventsList');
+            const eventsQuery = query(collection(db,"events"), orderBy("timestamp","desc"), limit(5));
+            const eventsSnap = await getDocs(eventsQuery);
+            eventsSnap.forEach(docSnap=>{
+                const li = document.createElement('li');
+                li.textContent = docSnap.data().title;
+                eventsList.appendChild(li);
+            });
+        }
     } else {
-        // Redirect to login if not logged in
-        window.location.href = 'login.html';
+        window.location.href="login.html";
     }
 });
 
-// Sign out logic
-signoutBtn.addEventListener('click', async () => {
+// Sign out
+document.getElementById('signoutBtn').addEventListener('click', async ()=>{
     await signOut(auth);
-    window.location.href = 'login.html';
+    window.location.href = "login.html";
 });
-</script>
 
+// Performance chart
+const canvas = document.getElementById('performanceCanvas');
+const ctx = canvas.getContext('2d');
+function drawPerformanceChart(percent){
+    const radius=70;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.beginPath();
+    ctx.arc(75,75,radius,0,2*Math.PI);
+    ctx.strokeStyle="#333";
+    ctx.lineWidth=15;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(75,75,radius,-Math.PI/2,-Math.PI/2 + 2*Math.PI*percent/100);
+    ctx.strokeStyle="#00A381";
+    ctx.lineWidth=15;
+    ctx.stroke();
+}
+
+// TradingView Widget
+const script = document.createElement('script');
+script.src="https://s3.tradingview.com/tv.js";
+script.onload = ()=>{
+    new TradingView.widget({
+        "width": "100%",
+        "height": 400,
+        "symbol": "NASDAQ:AAPL",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "container_id": "tradingview-widget"
+    });
+};
+document.body.appendChild(script);
+</script>
 </body>
 </html>
