@@ -1,136 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade X Matrix - Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* (Shared GREEN THEME Styles Omitted for brevity - Assume standard dark theme) */
-        :root {
-            --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
-            --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
-            --btn-bg-hover: #007a61;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade X Matrix - Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        /* Essential Layout Styles */
-        * {margin:0; padding:0; box-sizing:border-box;}
-        body {min-height: 100vh; font-family: 'Inter', sans-serif; color: var(--text-color); background-color: var(--bg-color); display: flex; flex-direction: column; align-items: center; padding: 20px;}
-        .dashboard-container {width: 100%; max-width: 1200px; padding: 30px; background-color: var(--card-color); border-radius: 12px; border: 1px solid var(--border-color); margin-top: 50px; opacity: 0; transition: opacity 0.5s ease; z-index: 10;}
-        .dashboard-header {display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color);}
-        .dashboard-header h1 {font-size: 1.8rem; color: white; display: flex; align-items: center;}
-        .dashboard-header h1 i {color: var(--highlight-color); margin-right: 15px;}
-        .user-profile {display: flex; align-items: center; gap: 20px;}
-        .signout-button {padding: 10px 15px; background-color: transparent; color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;}
-        
-        /* New Styles for Grid and Card Links */
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
+<style>
+:root {
+    --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
+    --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
+    --btn-bg-hover: #007a61; --btn-shadow: rgba(0, 163, 129, 0.4);
+}
+* {margin:0; padding:0; box-sizing:border-box;}
+body {min-height:100vh; font-family:'Inter',sans-serif; color:var(--text-color); background-color:var(--bg-color); display:flex; flex-direction: column; align-items: center; padding: 20px;}
+a {text-decoration:none; color:inherit;}
 
-        .dashboard-card {
-            background-color: var(--panel-color); padding: 25px; border-radius: 8px; 
-            border: 1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.3s;
-            text-decoration: none; color: inherit; display: block; height: 100%;
-        }
-        .dashboard-card:hover {transform: translateY(-5px); border-color: var(--highlight-color); box-shadow: 0 5px 20px rgba(0, 163, 129, 0.3);}
-        .dashboard-card h3 {color: white; font-size: 1.25rem; margin-bottom: 15px;}
-        .dashboard-card i {color: var(--highlight-color); margin-right: 10px;}
+/* Loader */
+#page-loader {position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-color);display:flex;justify-content:center;align-items:center;color:white;font-size:1.2rem; z-index:999;}
 
-        /* Disclaimer Section */
-        .disclaimer {
-            background-color: #2e2e3a;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #ffcc00; /* Warning color */
-            border-left: 5px solid #ffcc00;
-        }
-        .disclaimer strong {
-            color: white;
-            font-size: 1rem;
-            display: block;
-            margin-bottom: 5px;
-        }
+/* Dashboard Layout */
+.dashboard-container {width:100%; max-width:1200px; padding:30px; background-color:var(--card-color); border-radius:12px; border:1px solid var(--border-color); margin-top:50px; opacity:0; transition:opacity 0.5s ease; z-index:10;}
+.dashboard-header {display:flex; justify-content:space-between; align-items:center; padding-bottom:20px; margin-bottom:30px; border-bottom:1px solid var(--border-color);}
+.dashboard-header h1 {font-size:1.8rem; color:white; display:flex; align-items:center;}
+.dashboard-header h1 i {color:var(--highlight-color); margin-right:15px;}
+.user-profile {display:flex; align-items:center; gap:20px;}
+.signout-button {padding:10px 15px; background:transparent; color:var(--text-color); border:1px solid var(--border-color); border-radius:6px; cursor:pointer; transition:all 0.2s;}
+.signout-button:hover {background:var(--highlight-color); border-color:var(--highlight-color); color:white;}
 
-    </style>
+/* Grid Cards */
+.content-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
+.dashboard-card {background-color:var(--panel-color); padding:25px; border-radius:8px; border:1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.3s; display:block; height:100%;}
+.dashboard-card:hover {transform:translateY(-5px); border-color:var(--highlight-color); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
+.dashboard-card h3 {color:white; font-size:1.25rem; margin-bottom:15px;}
+.dashboard-card i {color:var(--highlight-color); margin-right:10px;}
+
+/* Disclaimer */
+.disclaimer {background-color:#2e2e3a; padding:20px; border-radius:8px; text-align:center; font-size:0.9rem; color:#ffcc00; border-left:5px solid #ffcc00;}
+.disclaimer strong {color:white; display:block; margin-bottom:5px;}
+</style>
 </head>
 <body>
-    <div id="page-loader"></div>
-    
-    <div class="dashboard-container" id="main-dashboard">
-        <div class="dashboard-header">
-            <h1><i class="fa-solid fa-gauge-high"></i> Trade X Matrix Professional Dashboard</h1>
-            <div class="user-profile">
-                <div class="user-info">
-                    <p id="dashboard-username">Loading...</p>
-                    <p id="dashboard-plan">Loading...</p>
-                </div>
-                <a href="pages/settings.html" class="signout-button" style="border-color:#5a5a6a; color:white;">
-                    <i class="fa-solid fa-gear"></i> Settings
-                </a>
-                <button class="signout-button" id="signout-btn">Sign Out</button>
+
+<div id="page-loader">Loading dashboard...</div>
+
+<div class="dashboard-container" id="main-dashboard">
+    <div class="dashboard-header">
+        <h1><i class="fa-solid fa-gauge-high"></i> Trade X Matrix Professional Dashboard</h1>
+        <div class="user-profile">
+            <div class="user-info">
+                <p id="dashboard-username">Loading...</p>
+                <p id="dashboard-plan">Loading...</p>
             </div>
-        </div>
-
-        <div class="trading-status"></div>
-        
-        <div id="dashboard-content" class="content-grid">
-            
-            <a href="pages/charts.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-chart-line"></i> Advanced Live Charts</h3>
-                <p>Full-featured charting with drawing tools, multi-market access (Forex/Indian), and real-time data integration.</p>
+            <a href="pages/settings.html" class="signout-button" style="border-color:#5a5a6a; color:white;">
+                <i class="fa-solid fa-gear"></i> Settings
             </a>
-            
-            <a href="pages/indicators.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-layer-group"></i> Custom Indicators & Strategies</h3>
-                <p>Manage, backtest, and deploy your proprietary strategy indicators with historical data analysis.</p>
-            </a>
-
-            <a href="pages/stock_updates.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-arrow-trend-up"></i> Stock & Market Updates</h3>
-                <p>Curated stock watchlists, suggestion lists, and real-time market movers for Indian and global equities.</p>
-            </a>
-            
-            <a href="pages/news_events.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-globe"></i> News & Economic Calendar</h3>
-                <p>Track high-impact financial news and events globally that influence forex and equity markets.</p>
-            </a>
-
-            <a href="pages/education.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-graduation-cap"></i> Professional Education</h3>
-                <p>Exclusive modules covering advanced technical analysis, risk modeling, and proprietary trade execution.</p>
-            </a>
-
-            <a href="pages/pricing.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-tags"></i> Indicators & Pricing</h3>
-                <p>Manage your active subscription, explore professional indicator packages, and upgrade your plan.</p>
-            </a>
-
-            <a href="pages/settings.html" class="dashboard-card">
-                <h3><i class="fa-solid fa-user-gear"></i> Settings & Performance</h3>
-                <p>Manage profile, review trading journal performance metrics, and customize application tools.</p>
-            </a>
-
-        </div>
-
-        <div class="disclaimer">
-            <strong>Disclaimer: Educational and Informational Purpose Only.</strong>
-            <p>Trading in financial markets carries a high level of risk. The information provided by Trade X Matrix is for educational and informational purposes only and does not constitute financial advice. **Future market performance cannot be defined or guaranteed by past performance.** Please consult a licensed financial professional before making any investment decisions.</p>
+            <button class="signout-button" id="signout-btn"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
         </div>
     </div>
-    
-    <script type="module">
-        // ... ALL FIREBASE AUTHENTICATION AND PAGE GUARD LOGIC MUST BE HERE ...
-        // ... (Ensuring user data is loaded and redirection to login.html occurs if signed out) ...
-    </script>
+
+    <div class="content-grid">
+        <a href="pages/charts.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-chart-line"></i> Advanced Live Charts</h3>
+            <p>Full-featured charting with drawing tools, multi-market access (Forex/Indian), and real-time data integration.</p>
+        </a>
+        <a href="pages/indicators.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-layer-group"></i> Custom Indicators & Strategies</h3>
+            <p>Manage, backtest, and deploy your proprietary strategy indicators with historical data analysis.</p>
+        </a>
+        <a href="pages/stock_updates.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-arrow-trend-up"></i> Stock & Market Updates</h3>
+            <p>Curated stock watchlists, suggestion lists, and real-time market movers for Indian and global equities.</p>
+        </a>
+        <a href="pages/news_events.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-globe"></i> News & Economic Calendar</h3>
+            <p>Track high-impact financial news and events globally that influence forex and equity markets.</p>
+        </a>
+        <a href="pages/education.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Professional Education</h3>
+            <p>Exclusive modules covering advanced technical analysis, risk modeling, and proprietary trade execution.</p>
+        </a>
+        <a href="pages/pricing.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-tags"></i> Indicators & Pricing</h3>
+            <p>Manage your active subscription, explore professional indicator packages, and upgrade your plan.</p>
+        </a>
+        <a href="pages/settings.html" class="dashboard-card">
+            <h3><i class="fa-solid fa-user-gear"></i> Settings & Performance</h3>
+            <p>Manage profile, review trading journal performance metrics, and customize application tools.</p>
+        </a>
+    </div>
+
+    <div class="disclaimer">
+        <strong>Disclaimer: Educational and Informational Purpose Only.</strong>
+        <p>Trading in financial markets carries a high level of risk. The information provided by Trade X Matrix is for educational and informational purposes only and does not constitute financial advice. Please consult a licensed financial professional before making any investment decisions.</p>
+    </div>
+</div>
+
+<script type="module">
+import { auth } from './src/firebase/firebase.js';
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+const mainDashboard = document.getElementById('main-dashboard');
+const pageLoader = document.getElementById('page-loader');
+const usernameEl = document.getElementById('dashboard-username');
+const planEl = document.getElementById('dashboard-plan');
+const signoutBtn = document.getElementById('signout-btn');
+
+// Check if user is logged in
+onAuthStateChanged(auth, user => {
+    if (user) {
+        usernameEl.textContent = `User: ${user.email}`;
+        planEl.textContent = `Plan: Professional`;
+        pageLoader.style.display = 'none';
+        mainDashboard.style.opacity = 1;
+    } else {
+        // Redirect to login if not logged in
+        window.location.href = 'login.html';
+    }
+});
+
+// Sign out logic
+signoutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.href = 'login.html';
+});
+</script>
+
 </body>
 </html>
