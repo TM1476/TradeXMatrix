@@ -3,64 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trade X Matrix - Dashboard</title>
+<title>TradeXMatrix.com - Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root {
-    --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
-    --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
-    --btn-bg-hover: #007a61; --btn-green: #00A381; --btn-shadow: rgba(0, 163, 129, 0.4);
-  }
+:root {
+  --bg-color: #121217; --panel-color: #1a1a20; --text-color: #B8B8BD;
+  --highlight-color: #00A381; --border-color: #2e2e3a; --card-color: #21212c;
+  --btn-bg-hover: #007a61; --btn-green: #00A381; --btn-shadow: rgba(0, 163, 129, 0.4);
+}
 
-  *{margin:0; padding:0; box-sizing:border-box;}
-  body{font-family:'Inter',sans-serif; background:var(--bg-color); color:var(--text-color); display:flex; min-height:100vh;}
+*{margin:0; padding:0; box-sizing:border-box;}
+body{font-family:'Inter',sans-serif; background:var(--bg-color); color:var(--text-color); display:flex; min-height:100vh;}
 
-  /* Sidebar */
-  .sidebar{
-    width:260px; background:var(--panel-color); border-right:1px solid var(--border-color);
-    transition: width 0.3s; display:flex; flex-direction:column; justify-content:space-between;
-  }
-  .sidebar.collapsed{width:70px;}
-  .sidebar-header{display:flex; align-items:center; justify-content:space-between; padding:20px; font-size:1.2rem; font-weight:600;}
-  .toggle-btn{cursor:pointer; color:var(--highlight-color);}
-  .sidebar-menu{flex:1;}
-  .sidebar-menu a{
-    display:flex; align-items:center; padding:15px 20px; text-decoration:none; color:var(--text-color); font-weight:500;
-    transition:0.2s; border-left:3px solid transparent;
-  }
-  .sidebar-menu a:hover{background:#1f1f28; border-left:3px solid var(--highlight-color);}
-  .sidebar-menu i{margin-right:15px; width:20px; text-align:center;}
-  .sidebar.collapsed .sidebar-menu span{display:none;}
-  .sidebar.collapsed .sidebar-menu i{margin-right:0; text-align:center; width:100%;}
+/* Sidebar */
+.sidebar{
+  width:260px; background:var(--panel-color); border-right:1px solid var(--border-color);
+  transition: width 0.3s; display:flex; flex-direction:column; justify-content:space-between;
+}
+.sidebar.collapsed{width:70px;}
+.sidebar-header{display:flex; align-items:center; justify-content:space-between; padding:20px; font-size:1.2rem; font-weight:600;}
+.toggle-btn{cursor:pointer; color:var(--highlight-color);}
+.sidebar-menu{flex:1;}
+.sidebar-menu a{
+  display:flex; align-items:center; padding:15px 20px; text-decoration:none; color:var(--text-color); font-weight:500;
+  transition:0.2s; border-left:3px solid transparent;
+}
+.sidebar-menu a:hover{background:#1f1f28; border-left:3px solid var(--highlight-color);}
+.sidebar-menu i{margin-right:15px; width:20px; text-align:center;}
+.sidebar.collapsed .sidebar-menu span{display:none;}
+.sidebar.collapsed .sidebar-menu i{margin-right:0; text-align:center; width:100%;}
 
-  /* Social icons adapt */
-  .social-links{margin-top:auto; display:flex; gap:15px; padding:20px; justify-content:center; transition:all 0.3s;}
-  .sidebar.collapsed .social-links a span{display:none;}
-  .social-links a{color:var(--highlight-color); font-size:1.5rem;}
+/* Social icons & feedback adapt */
+.sidebar-footer {
+  display:flex; flex-direction:column; align-items:center; gap:15px; padding:20px; transition:all 0.3s;
+}
+.sidebar-footer a{color:var(--highlight-color); font-size:1.5rem; text-decoration:none;}
+.sidebar-footer span{font-size:0.85rem; color:var(--text-color);}
+.sidebar.collapsed .sidebar-footer span{display:none;}
 
-  /* Main content */
-  .main-content{flex:1; padding:30px; display:flex; flex-direction:column;}
-  .header{display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
-  .user-info{display:flex; align-items:center; gap:15px;}
-  .user-info img{width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--highlight-color);}
-  .user-info div{display:flex; flex-direction:column;}
-  .btn-green{padding:10px 20px; background:var(--btn-green); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; box-shadow:0 4px 12px var(--btn-shadow);}
-  .btn-green:hover{background:var(--btn-bg-hover);}
+/* Main content */
+.main-content{flex:1; padding:30px; display:flex; flex-direction:column;}
+.header{display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
+.user-info{display:flex; align-items:center; gap:15px;}
+.user-info img{width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--highlight-color);}
+.user-info div{display:flex; flex-direction:column;}
+.btn-green{padding:10px 20px; background:var(--btn-green); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; box-shadow:0 4px 12px var(--btn-shadow);}
+.btn-green:hover{background:var(--btn-bg-hover);}
 
-  /* Dashboard widgets */
-  .dashboard-widgets{display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
-  .card{background:var(--card-color); padding:20px; border-radius:12px; border:1px solid var(--border-color); transition:0.3s;}
-  .card:hover{transform:translateY(-5px); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
-  .card h3{margin-bottom:15px; color:white;}
-  .events-list{list-style:none; padding-left:0;}
-  .events-list li{padding:8px 0; border-bottom:1px solid var(--border-color);}
+/* Dashboard widgets */
+.dashboard-widgets{display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-bottom:40px;}
+.card{background:var(--card-color); padding:20px; border-radius:12px; border:1px solid var(--border-color); transition:0.3s;}
+.card:hover{transform:translateY(-5px); box-shadow:0 5px 20px rgba(0,163,129,0.3);}
+.card h3{margin-bottom:15px; color:white;}
+.events-list{list-style:none; padding-left:0;}
+.events-list li{padding:8px 0; border-bottom:1px solid var(--border-color);}
 
-  /* Performance circle */
-  .performance-container{display:flex; flex-direction:column; align-items:center; justify-content:center;}
-  canvas{max-width:200px; max-height:200px;}
+/* Performance circle */
+.performance-container{display:flex; flex-direction:column; align-items:center; justify-content:center;}
+canvas{max-width:200px; max-height:200px;}
 </style>
 </head>
 <body>
@@ -79,11 +82,12 @@
     <a href="#"><i class="fa-solid fa-graduation-cap"></i> <span>Education</span></a>
     <a href="#"><i class="fa-solid fa-tags"></i> <span>Pricing</span></a>
     <a href="#"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
+    <a href="#"><i class="fa-solid fa-comment-dots"></i> <span>Feedback</span></a>
   </div>
-  <div class="social-links">
-    <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
-    <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
-    <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i></a>
+  <div class="sidebar-footer">
+    <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i> <span>Twitter</span></a>
+    <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i> <span>Instagram</span></a>
+    <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i> <span>Support</span></a>
   </div>
 </div>
 
@@ -91,7 +95,6 @@
   <div class="header">
     <h1>Trade X Matrix Dashboard</h1>
     <div class="user-info">
-      <!-- Default avatar -->
       <img id="user-avatar" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="avatar">
       <div>
         <span id="username">Trader</span>
@@ -105,18 +108,14 @@
       <h3>Performance</h3>
       <div class="performance-container">
         <canvas id="performanceChart"></canvas>
-        <span id="performanceText">75%</span>
+        <span id="performanceText">0%</span>
       </div>
     </div>
 
     <div class="card events-card">
       <h3>Daily Events</h3>
       <ul class="events-list" id="eventsList">
-        <li>Market opens at 9:00 AM</li>
-        <li>Economic news at 11:30 AM</li>
-        <li>Forex update 1:00 PM</li>
-        <li>Chart analysis 3:00 PM</li>
-        <li>Closing summary 6:00 PM</li>
+        <li>No events yet.</li>
       </ul>
     </div>
 
@@ -143,10 +142,10 @@ document.getElementById('signout-btn').addEventListener('click', async ()=>{
   window.location.href = "login.html";
 });
 
-// Draw performance chart
-function drawPerformanceChart(percent){
+// Performance chart empty initially
+function drawPerformanceChart(percent=0){
   const ctx = document.getElementById('performanceChart').getContext('2d');
-  const circle = new Chart(ctx,{
+  new Chart(ctx,{
     type:'doughnut',
     data:{
       datasets:[{
@@ -158,9 +157,9 @@ function drawPerformanceChart(percent){
     options:{cutout:'75%', responsive:true, plugins:{legend:{display:false}}}
   });
 }
-drawPerformanceChart(75);
+drawPerformanceChart();
 
-// Check user auth
+// Auth check
 onAuthStateChanged(auth, (user)=>{
   if(!user) window.location.href="login.html";
 });
