@@ -35,10 +35,8 @@ body{font-family:'Inter',sans-serif; background:var(--bg-color); color:var(--tex
 .sidebar.collapsed .sidebar-menu span{display:none;}
 .sidebar.collapsed .sidebar-menu i{margin-right:0; text-align:center; width:100%;}
 
-/* Sidebar footer (social links & feedback) */
-.sidebar-footer {
-  display:flex; flex-direction:column; align-items:center; gap:15px; padding:20px; transition:all 0.3s;
-}
+/* Sidebar footer */
+.sidebar-footer {display:flex; flex-direction:column; align-items:center; gap:15px; padding:20px; transition:all 0.3s;}
 .sidebar-footer a{color:var(--highlight-color); font-size:1.5rem; text-decoration:none;}
 .sidebar-footer span{font-size:0.85rem; color:var(--text-color);}
 .sidebar.collapsed .sidebar-footer span{display:none;}
@@ -84,8 +82,8 @@ canvas{max-width:200px; max-height:200px;}
     <a href="#"><i class="fa-solid fa-comment-dots"></i> <span>Feedback</span></a>
   </div>
   <div class="sidebar-footer">
-    <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i> <span>Twitter</span></a>
-    <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i> <span>Instagram</span></a>
+    <a href="https://x.com/Trade_X_Matrix"><i class="fab fa-twitter"></i> <span>Twitter</span></a>
+    <a href="https://www.instagram.com/trade_x_matrix"><i class="fab fa-instagram"></i> <span>Instagram</span></a>
     <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i> <span>Support</span></a>
   </div>
 </div>
@@ -132,8 +130,7 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-
 
 // Sidebar toggle (expand/collapse)
 const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('sidebar-toggle');
-toggleBtn.addEventListener('click', () => {
+document.getElementById('sidebar-toggle').addEventListener('click', () => {
   sidebar.classList.toggle('collapsed');
 });
 
