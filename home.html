@@ -42,31 +42,26 @@ body {
   transition: width .25s ease, transform .25s ease;
   z-index: 999;
 }
-.sidebar.collapsed {
-  width: 70px;
-}
-.sidebar.mobile-hidden {
-  transform: translateX(-100%);
-}
+.sidebar.collapsed { width: 70px; }
+.sidebar.mobile-hidden { transform: translateX(-100%); }
+
 .sidebar .top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 16px;
   border-bottom: 1px solid var(--border);
 }
-.brand { display: flex; gap: 10px; align-items: center; }
+
+/* LOGO AS TOGGLE */
+.brand { 
+  display: flex; 
+  gap: 10px; 
+  align-items: center; 
+  cursor: pointer; 
+}
 .brand img { height: 36px; width: auto; }
 .brand .title { font-weight: 700; font-size: 1rem; white-space: nowrap; }
 .sidebar.collapsed .brand .title { display: none; }
-
-#sidebar-toggle {
-  width: 36px; height: 36px; border-radius: 8px;
-  background: transparent; color: var(--accent);
-  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background .2s, transform .2s;
-}
-#sidebar-toggle:hover { background: rgba(255,255,255,0.05); transform: rotate(90deg); }
 
 /* MENU */
 .menu {
@@ -112,9 +107,7 @@ body {
   margin-left: 260px;
   padding: 24px;
 }
-.sidebar.collapsed ~ .main {
-  margin-left: 70px;
-}
+.sidebar.collapsed ~ .main { margin-left: 70px; }
 
 /* Overlay for mobile */
 .overlay {
@@ -126,10 +119,7 @@ body {
   transition: opacity .25s ease;
   z-index: 998;
 }
-.overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
+.overlay.active { opacity: 1; visibility: visible; }
 
 /* HEADER */
 .header {
@@ -138,11 +128,7 @@ body {
   align-items: center;
   margin-bottom: 20px;
 }
-.h-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: white;
-}
+.h-title { font-size: 1.2rem; font-weight: 700; color: white; }
 .user-row { display: flex; align-items: center; gap: 10px; }
 .avatar {
   width: 48px; height: 48px; border-radius: 50%;
@@ -194,13 +180,8 @@ body {
     top: 0; bottom: 0; left: 0;
     transform: translateX(-100%);
   }
-  .sidebar.mobile-visible {
-    transform: translateX(0);
-  }
-  .main {
-    margin-left: 0;
-    padding: 16px;
-  }
+  .sidebar.mobile-visible { transform: translateX(0); }
+  .main { margin-left: 0; padding: 16px; }
 }
 </style>
 </head>
@@ -210,11 +191,10 @@ body {
 
   <aside class="sidebar" id="sidebar">
     <div class="top">
-      <div class="brand">
+      <div class="brand" id="logoToggle">
         <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo" />
         <span class="title">TradeXMatrix</span>
       </div>
-      <button id="sidebar-toggle" aria-label="Toggle Sidebar"><i class="fa-solid fa-bars"></i></button>
     </div>
 
     <nav class="menu">
@@ -229,7 +209,7 @@ body {
       <div class="socials">
         <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
         <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
-        <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></a>
+        <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i></a>
       </div>
     </div>
   </aside>
@@ -264,12 +244,12 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('sidebar-toggle');
 const overlay = document.getElementById('overlay');
+const logoToggle = document.getElementById('logoToggle');
 
-/* Responsive Sidebar Toggle */
-toggleBtn.addEventListener('click', () => {
-  if (window.innerWidth <= 900) {
+/* LOGO TOGGLE SIDEBAR */
+logoToggle.addEventListener('click', () => {
+  if(window.innerWidth <= 900){
     sidebar.classList.toggle('mobile-visible');
     overlay.classList.toggle('active');
   } else {
@@ -277,11 +257,15 @@ toggleBtn.addEventListener('click', () => {
     localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
   }
 });
+
+/* Overlay click to close on mobile */
 overlay.addEventListener('click', () => {
   sidebar.classList.remove('mobile-visible');
   overlay.classList.remove('active');
 });
-if (localStorage.getItem('sidebar-collapsed') === '1') sidebar.classList.add('collapsed');
+
+/* Restore sidebar state on desktop */
+if(localStorage.getItem('sidebar-collapsed') === '1') sidebar.classList.add('collapsed');
 
 /* Sign Out */
 document.getElementById('signoutBtn').addEventListener('click', async () => {
@@ -289,18 +273,18 @@ document.getElementById('signoutBtn').addEventListener('click', async () => {
   window.location.href = 'login.html';
 });
 
-/* Dynamic Username */
+/* Fetch username */
 onAuthStateChanged(auth, async (user) => {
-  if (!user) return window.location.href = 'login.html';
+  if(!user) return window.location.href='login.html';
   try {
-    const ref = doc(db, 'users', user.uid);
+    const ref = doc(db,'users',user.uid);
     const snap = await getDoc(ref);
-    if (snap.exists()) {
+    if(snap.exists()){
       document.getElementById('username').innerText = snap.data().username || 'Trader';
     } else {
       document.getElementById('username').innerText = user.displayName || 'Trader';
     }
-  } catch (e) { console.error(e); }
+  } catch(e){ console.error(e); }
 });
 </script>
 </body>
