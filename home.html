@@ -21,6 +21,7 @@
   --green-hover: #007a61;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
   background: var(--bg);
@@ -38,23 +39,29 @@ body {
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  transition: width .25s ease;
+  transition: width .25s ease, transform .25s ease;
   z-index: 999;
 }
-.sidebar.collapsed {
-  width: 70px;
-}
+.sidebar.collapsed { width: 70px; }
+.sidebar.mobile-hidden { transform: translateX(-100%); }
+
 .sidebar .top {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   padding: 16px;
-  gap: 10px;
-  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+/* LOGO AS TOGGLE */
+.brand { 
+  display: flex; 
+  gap: 10px; 
+  align-items: center; 
+  cursor: pointer; 
 }
 .brand img { height: 36px; width: auto; }
-.brand .title { font-weight: 700; font-size: 1rem; white-space: nowrap; transition: opacity .25s; }
-.sidebar.collapsed .brand .title { opacity: 0; pointer-events: none; }
+.brand .title { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.sidebar.collapsed .brand .title { display: none; }
 
 /* MENU */
 .menu {
@@ -71,7 +78,10 @@ body {
   transition: background .2s;
 }
 .menu a i { width: 20px; text-align: center; }
-.menu a:hover { background: rgba(255,255,255,0.05); color: white; }
+.menu a:hover {
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
 .sidebar.collapsed .menu a .label { display: none; }
 
 /* FOOTER */
@@ -79,10 +89,13 @@ body {
   padding: 12px 14px;
   border-top: 1px solid var(--border);
   text-align: center;
-  display: flex; flex-direction: column; gap: 8px; align-items: center;
 }
 .socials { display: flex; justify-content: center; gap: 10px; }
-.socials a { color: var(--accent); font-size: 1.1rem; transition: color .2s; }
+.socials a {
+  color: var(--accent);
+  font-size: 1.1rem;
+  transition: color .2s;
+}
 .socials a:hover { color: white; }
 
 /* MAIN */
@@ -106,10 +119,7 @@ body {
   transition: opacity .25s ease;
   z-index: 998;
 }
-.overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
+.overlay.active { opacity: 1; visibility: visible; }
 
 /* HEADER */
 .header {
@@ -118,18 +128,14 @@ body {
   align-items: center;
   margin-bottom: 20px;
 }
-.h-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: white;
-}
+.h-title { font-size: 1.2rem; font-weight: 700; color: white; }
 .user-row { display: flex; align-items: center; gap: 10px; }
 .avatar {
   width: 48px; height: 48px; border-radius: 50%;
   overflow: hidden; border: 2px solid var(--accent);
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
-.username { font-weight: 700; color: white; }
+.username { font-weight: 700; }
 .signout {
   padding: 8px 14px;
   background: var(--green);
@@ -138,7 +144,6 @@ body {
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
-  transition: background .2s;
 }
 .signout:hover { background: var(--green-hover); }
 
@@ -153,32 +158,30 @@ body {
   border-radius: 12px;
   padding: 16px;
   border: 1px solid var(--border);
-  transition: transform .15s, box-shadow .2s;
+  transition: transform .15s;
 }
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+.card:hover { transform: translateY(-5px); }
 .events-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 300px;
-  overflow-y: auto;
-  padding-right: 4px;
 }
 .events-list li {
   padding: 10px;
   border-radius: 8px;
   background: rgba(255,255,255,0.03);
-  font-size: 0.95rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-  .sidebar { position: fixed; top:0; bottom:0; left:0; transform: translateX(-100%); }
+  .sidebar {
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+  }
   .sidebar.mobile-visible { transform: translateX(0); }
-  .main { margin-left:0; padding:16px; }
+  .main { margin-left: 0; padding: 16px; }
 }
 </style>
 </head>
@@ -187,10 +190,10 @@ body {
   <div class="overlay" id="overlay"></div>
 
   <aside class="sidebar" id="sidebar">
-    <div class="top" id="logoToggle">
-      <div class="brand">
-        <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo" />
-        <span class="title">TradeXMatrix</span>
+    <div class="top">
+      <div class="brand" id="logoToggle">
+      <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo" />
+      <span class="title">TradeXMatrix</span>
       </div>
     </div>
 
@@ -200,13 +203,12 @@ body {
       <a href="#"><i class="fa-solid fa-layer-group"></i><span class="label">Indicators</span></a>
       <a href="#"><i class="fa-solid fa-globe"></i><span class="label">News & Events</span></a>
       <a href="#"><i class="fa-solid fa-user-gear"></i><span class="label">Settings</span></a>
-      <a href="#"><i class="fa-solid fa-comment-dots"></i><span class="label">Feedback</span></a>
     </nav>
 
     <div class="bottom">
       <div class="socials">
         <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
-        <a href="https://www.instagram.com/trade_x_matrix"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
         <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i></a>
       </div>
     </div>
@@ -225,20 +227,13 @@ body {
     <section class="grid">
       <article class="card">
         <h3>Performance</h3>
-        <canvas id="performanceChart" style="width:100%;height:180px;"></canvas>
-        <div id="performanceText" style="font-weight:700;font-size:1.1rem;color:white;margin-top:8px;">Tracking usage...</div>
+        <div id="performanceText" style="font-weight:700;font-size:1.1rem;color:white;">Tracking usage...</div>
       </article>
-
       <article class="card">
         <h3>News & Daily Events</h3>
         <ul class="events-list" id="eventsList">
           <li>Loading events...</li>
         </ul>
-      </article>
-
-      <article class="card">
-        <h3>Live Charts & Indicators</h3>
-        <div style="height:320px; border-radius:8px; background: rgba(255,255,255,0.02); margin-top:8px;"></div>
       </article>
     </section>
   </main>
@@ -246,24 +241,30 @@ body {
 <script type="module">
 import { auth, db } from './src/firebase/firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { doc, getDoc, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-/* Sidebar toggle via logo */
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
-document.getElementById('logoToggle').addEventListener('click', () => {
+const logoToggle = document.getElementById('logoToggle');
+
+/* LOGO TOGGLE SIDEBAR */
+logoToggle.addEventListener('click', () => {
   if(window.innerWidth <= 900){
     sidebar.classList.toggle('mobile-visible');
     overlay.classList.toggle('active');
   } else {
     sidebar.classList.toggle('collapsed');
-    localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed') ? '1':'0');
+    localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
   }
 });
+
+/* Overlay click to close on mobile */
 overlay.addEventListener('click', () => {
   sidebar.classList.remove('mobile-visible');
   overlay.classList.remove('active');
 });
+
+/* Restore sidebar state on desktop */
 if(localStorage.getItem('sidebar-collapsed') === '1') sidebar.classList.add('collapsed');
 
 /* Sign Out */
@@ -272,58 +273,19 @@ document.getElementById('signoutBtn').addEventListener('click', async () => {
   window.location.href = 'login.html';
 });
 
-/* Dynamic Username & Performance */
-onAuthStateChanged(auth, async (user)=>{
+/* Fetch username */
+onAuthStateChanged(auth, async (user) => {
   if(!user) return window.location.href='login.html';
   try {
     const ref = doc(db,'users',user.uid);
     const snap = await getDoc(ref);
     if(snap.exists()){
-      const data = snap.data();
-      document.getElementById('username').innerText = data.username || 'Trader';
-      drawPerformance(data.performance || 0);
+      document.getElementById('username').innerText = snap.data().username || 'Trader';
     } else {
       document.getElementById('username').innerText = user.displayName || 'Trader';
-      drawPerformance(0);
     }
-  } catch(e){ console.error(e); drawPerformance(0); }
+  } catch(e){ console.error(e); }
 });
-
-/* Real-time Events */
-const eventsListEl = document.getElementById('eventsList');
-const eventsCol = collection(db,'events');
-const q = query(eventsCol, orderBy('timestamp','desc'), limit(20));
-onSnapshot(q, (snapshot)=>{
-  eventsListEl.innerHTML = '';
-  if(snapshot.empty){ eventsListEl.innerHTML='<li>No events.</li>'; return; }
-  snapshot.forEach(docSnap=>{
-    const ev = docSnap.data();
-    const time = ev.timestamp && ev.timestamp.toDate ? ev.timestamp.toDate() : null;
-    const li = document.createElement('li');
-    li.textContent = ev.title + (time ? ' — ' + time.toLocaleString() : '');
-    eventsListEl.appendChild(li);
-  });
-});
-
-/* Load Chart.js & Draw Performance */
-function loadChartJs(){ return new Promise((res,rej)=>{ 
-  if(window.Chart) return res(window.Chart);
-  const s=document.createElement('script');
-  s.src="https://cdn.jsdelivr.net/npm/chart.js";
-  s.onload=()=>res(window.Chart); s.onerror=rej; document.head.appendChild(s);
-});}
-let perfChart=null;
-async function drawPerformance(percent=0){
-  const ChartLib = await loadChartJs();
-  const ctx = document.getElementById('performanceChart').getContext('2d');
-  if(perfChart){ try{ perfChart.destroy(); } catch(e){} }
-  perfChart=new ChartLib(ctx,{
-    type:'doughnut',
-    data:{ datasets:[{ data:[percent,100-percent], backgroundColor:['var(--accent)','var(--border)'], borderWidth:0 }] },
-    options:{ cutout:'75%', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
-  });
-  document.getElementById('performanceText').innerText=percent+'%';
-}
 </script>
 </body>
 </html>
