@@ -12,180 +12,77 @@
 
 <style>
 :root{
-  --bg-color:#121217; --panel-color:#1a1a20; --card-color:#21212c;
-  --text-color:#B8B8BD; --highlight:#00A381; --muted:#8b8b90; --border:#2e2e3a;
-  --btn-green:#00A381; --btn-green-hover:#007a61;
+  --bg:#121217; --panel:#1a1a20; --card:#21212c; --muted:#8b8b90;
+  --text:#B8B8BD; --accent:#00A381; --border:#2e2e3a; --green:#00A381; --green-hover:#007a61;
 }
-
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;
-  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--text-color);
-  background:var(--bg-color);
-  display:flex;
-  min-height:100vh;
-  overflow:hidden;
+  margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto; background:var(--bg); color:var(--text);
+  display:flex; min-height:100vh; overflow:hidden;
 }
 
-/* ---------- SIDEBAR ---------- */
+/* SIDEBAR */
 .sidebar{
-  width:260px;
-  min-width:70px;
-  max-width:260px;
-  background:var(--panel-color);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  transition:width .22s ease, transform .18s ease;
-  will-change: width;
+  width:260px; min-width:70px; background:var(--panel); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; transition:width .22s ease; will-change:width;
 }
 .sidebar.collapsed{width:70px}
+.sidebar .top{display:flex; align-items:center; justify-content:space-between; padding:16px 14px; border-bottom:1px solid var(--border)}
+.brand{display:flex; gap:12px; align-items:center}
+.brand img{height:36px; width:auto;}
+.brand .title{font-weight:700; font-size:1rem}
+.sidebar.collapsed .brand .title{display:none}
 
-/* header area inside sidebar */
-.sidebar .top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:18px 16px;
-  gap:12px;
-  border-bottom:1px solid var(--border);
-}
-.brand {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.brand img{height:34px; width:auto; display:block;}
-.sidebar.collapsed .brand span{display:none}
-.brand span{font-weight:700; font-size:1rem; color:white}
-
-/* toggle button (large hit area) */
-#sidebar-toggle{
-  display:inline-grid;
-  place-items:center;
-  width:36px;
-  height:36px;
-  border-radius:8px;
-  background:transparent;
-  color:var(--highlight);
-  border:1px solid transparent;
-  cursor:pointer;
-}
-#sidebar-toggle:hover{background:rgba(0,0,0,0.07);}
+/* toggle */
+#sidebar-toggle{width:36px;height:36px;border-radius:8px;background:transparent;border:1px solid transparent;color:var(--accent);cursor:pointer;display:grid;place-items:center}
+#sidebar-toggle:hover{background:rgba(255,255,255,0.03)}
 
 /* menu */
-.menu{
-  flex:1;
-  overflow:auto;
-  padding:10px 6px;
-}
-.menu a{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px 14px;
-  margin:6px 6px;
-  border-radius:8px;
-  color:var(--text-color);
-  text-decoration:none;
-  transition:background .12s, border-left .12s;
-  border-left:3px solid transparent;
-}
-.menu a i{width:20px; text-align:center; font-size:1.05rem}
-.menu a .label{white-space:nowrap; font-weight:600}
-.menu a:hover{background:rgba(255,255,255,0.02); border-left:3px solid var(--highlight)}
+.menu{flex:1; overflow:auto;padding:10px}
+.menu a{display:flex; gap:12px; align-items:center; padding:10px 14px; border-radius:8px; color:var(--text); text-decoration:none; margin:6px 6px; transition:background .12s, border-left .12s; border-left:3px solid transparent}
+.menu a i{width:20px;text-align:center}
+.menu a .label{font-weight:600; white-space:nowrap}
+.menu a:hover{background:rgba(255,255,255,0.02); border-left:3px solid var(--accent)}
+.sidebar.collapsed .menu a .label{display:none}
 
-/* footer area inside sidebar (social + feedback) */
-.sidebar .bottom{
-  padding:12px 10px;
-  border-top:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:center;
-}
-.socials{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.socials a{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  padding:8px;
-  border-radius:8px;
-  color:var(--highlight);
-  text-decoration:none;
-  transition:all .12s;
-}
+/* footer (social + feedback) */
+.bottom{padding:12px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;align-items:center}
+.socials{display:flex;gap:10px}
+.socials a{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;color:var(--accent);text-decoration:none}
 .socials a:hover{background:rgba(255,255,255,0.02); color:white}
-.socials a .text{font-size:.85rem; color:var(--muted)}
+.socials a .text{font-size:.85rem;color:var(--muted)}
 .sidebar.collapsed .socials a .text{display:none}
 
-/* ---------- MAIN ---------- */
-.main{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  overflow:auto;
-  padding:28px;
-}
-
-/* header top bar */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:22px;
-}
-.h-title{font-size:1.25rem; font-weight:700; color:white}
-.user-row{display:flex; align-items:center; gap:14px}
-.avatar{
-  width:52px; height:52px; border-radius:50%; overflow:hidden; border:2px solid var(--highlight);
-  display:inline-block; background:#222; flex-shrink:0;
-}
-.avatar img{width:100%; height:100%; object-fit:cover; display:block}
+/* MAIN */
+.main{flex:1; display:flex; flex-direction:column; overflow:auto; padding:24px}
+.header{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px}
+.h-title{font-size:1.15rem; font-weight:700; color:white}
+.user-row{display:flex; align-items:center; gap:12px}
+.avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--accent); background:#222}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .username{font-weight:700}
-.signout{
-  padding:10px 16px; background:var(--btn-green); border:none; color:white; border-radius:8px; cursor:pointer;
-  font-weight:700; box-shadow:0 6px 18px rgba(0,163,129,0.14);
-}
-.signout:hover{background:var(--btn-green-hover)}
+.signout{padding:10px 14px;background:var(--green);border:none;color:white;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(0,163,129,0.12)}
+.signout:hover{background:var(--green-hover)}
 
-/* content grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
-}
+/* GRID of cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 
 /* cards */
-.card{
-  background:var(--card-color);
-  border-radius:12px;
-  padding:18px;
-  border:1px solid var(--border);
-  transition:transform .14s, box-shadow .14s;
-}
-.card:hover{transform:translateY(-6px); box-shadow:0 14px 36px rgba(0,0,0,0.5)}
+.card{background:var(--card); border-radius:12px; padding:16px; border:1px solid var(--border); transition:transform .12s}
+.card:hover{transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.5)}
 
-/* performance area */
-.performance {
-  display:flex; flex-direction:column; align-items:center; gap:14px;
-}
+/* performance card specifics */
+.performance-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;height:100%}
+.canvas-holder{width:190px;height:190px;}
 
-/* event list */
-.events-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
-.events-list li{padding:8px 10px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02)}
+/* events list */
+.events-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.events-list li{padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);font-size:0.95rem;color:var(--text)}
 
-/* small screens */
-@media (max-width:880px){
-  .sidebar{position:fixed; z-index:50; height:100vh; transform:translateX(0)}
-  .sidebar.collapsed{width:70px}
+/* responsive */
+@media (max-width:900px){
+  .sidebar{position:fixed;z-index:40;left:0;top:0;bottom:0;transform:translateX(0)}
   .main{padding:16px}
 }
 </style>
@@ -193,15 +90,10 @@ body{
 <body>
 
 <!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar" aria-expanded="true">
+<aside id="sidebar" class="sidebar" aria-expanded="true">
   <div class="top">
-    <div class="brand">
-      <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="TXM logo" />
-      <span>TradeXMatrix</span>
-    </div>
-    <button id="sidebar-toggle" aria-label="Toggle menu" title="Toggle menu">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+    <div class="brand"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo"><span class="title">TradeXMatrix</span></div>
+    <button id="sidebar-toggle" aria-label="Toggle menu" title="Toggle menu"><i class="fa-solid fa-bars"></i></button>
   </div>
 
   <nav class="menu" id="menu">
@@ -216,17 +108,11 @@ body{
     <a href="#" data-key="feedback"><i class="fa-solid fa-comment-dots"></i><span class="label">Feedback</span></a>
   </nav>
 
-  <div class="bottom sidebar-footer" id="sidebar-footer">
+  <div class="bottom">
     <div class="socials">
-      <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08" target="_blank" rel="noopener">
-        <i class="fab fa-twitter"></i><span class="text">Twitter</span>
-      </a>
-      <a href="https://www.instagram.com/trade_x_matrix" target="_blank" rel="noopener">
-        <i class="fab fa-instagram"></i><span class="text">Instagram</span>
-      </a>
-      <a href="mailto:support@tradexmatrix.com">
-        <i class="fa-solid fa-envelope"></i><span class="text">Support</span>
-      </a>
+      <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08" target="_blank" rel="noopener"><i class="fab fa-x-twitter"></i><span class="text">Twitter</span></a>
+      <a href="https://www.instagram.com/trade_x_matrix" target="_blank" rel="noopener"><i class="fab fa-instagram"></i><span class="text">Instagram</span></a>
+      <a href="mailto:support@tradexmatrix.com"><i class="fa-solid fa-envelope"></i><span class="text">Support</span></a>
     </div>
   </div>
 </aside>
@@ -236,60 +122,58 @@ body{
   <header class="header">
     <div class="h-title">TradeXMatrix.com - Dashboard</div>
     <div class="user-row">
-      <div class="avatar" id="avatar"><img alt="avatar" src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" /></div>
+      <div class="avatar" id="avatar"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="avatar"></div>
       <div class="username" id="username">Loading...</div>
-      <button class="signout" id="signoutBtn">Sign Out</button>
+      <button id="signoutBtn" class="signout">Sign Out</button>
     </div>
   </header>
 
   <section class="grid">
     <article class="card performance-card">
       <h3>Performance</h3>
-      <div class="performance">
-        <canvas id="performanceChart" width="200" height="200" aria-hidden="false"></canvas>
-        <div id="performanceText" style="font-weight:700;font-size:1.1rem;color:white">0%</div>
+      <div class="performance-wrap">
+        <div class="canvas-holder"><canvas id="performanceChart" aria-hidden="false"></canvas></div>
+        <div id="performanceText" style="font-weight:700;font-size:1.05rem;color:white">0%</div>
       </div>
     </article>
 
     <article class="card events-card">
-      <h3>Daily Events</h3>
+      <h3>News & Daily Events</h3>
       <ul class="events-list" id="eventsList">
-        <li>No events yet.</li>
+        <li>Loading events...</li>
       </ul>
     </article>
 
     <article class="card charts-card">
       <h3>Live Charts & Indicators</h3>
-      <p style="color:var(--muted)">Trading widgets will be embedded here (TradingView / custom charts).</p>
+      <p style="color:var(--muted)">Embed TradingView or your custom chart widgets here. Responsive container is ready.</p>
+      <div id="tradingview-container" style="height:320px; margin-top:12px; border-radius:8px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));"></div>
     </article>
   </section>
 </main>
 
 <script type="module">
-/*
-  Key improvements in this script:
-  - Robust repeated toggle (add/remove .collapsed reliably and update aria-expanded)
-  - Username fetch from Firebase Firestore (users collection, field: username)
-  - Chart.js loaded before drawing the chart (draw happens only once Chart.js is available)
-  - Performance defaults to 0% until you set it (you can update later from Firestore)
+/* Dashboard script:
+ - Robust repeated toggle saved to localStorage
+ - Fetch username from Firestore (users/<uid>.username)
+ - Real-time events feed from collection 'events' using onSnapshot (ordered by timestamp desc)
+ - Chart.js loaded dynamically and chart drawn with user performance (0 default)
+ - Responsive layout; performance updates real-time if you update the user doc
 */
 
 import { auth, db } from './src/firebase/firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { doc, getDoc, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-/* ---------- toggle logic ---------- */
+/* Sidebar toggle (reliable) */
 const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('sidebar-toggle');
-toggleBtn.addEventListener('click', () => {
-  // Toggle collapsed class and update aria-expanded for accessibility
-  const isCollapsed = sidebar.classList.toggle('collapsed');
-  sidebar.setAttribute('aria-expanded', String(!isCollapsed));
-  // store state so repeated clicks and navigation preserve user's preference
-  try { localStorage.setItem('txm_sidebar_collapsed', isCollapsed ? '1' : '0'); } catch(e){}
+const toggle = document.getElementById('sidebar-toggle');
+toggle.addEventListener('click', () => {
+  const collapsed = sidebar.classList.toggle('collapsed');
+  sidebar.setAttribute('aria-expanded', String(!collapsed));
+  try { localStorage.setItem('txm_sidebar_collapsed','' + (collapsed ? '1' : '0')); } catch(e){}
 });
-
-// restore preference on load (if available)
+// restore
 try {
   const saved = localStorage.getItem('txm_sidebar_collapsed');
   if (saved === '1') sidebar.classList.add('collapsed');
@@ -297,103 +181,99 @@ try {
   sidebar.setAttribute('aria-expanded', String(!sidebar.classList.contains('collapsed')));
 } catch(e){}
 
-/* ---------- Sign out ---------- */
-const signoutBtn = document.getElementById('signoutBtn');
-signoutBtn.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-  } catch(e){
-    console.error('Sign out failed', e);
-  } finally {
-    window.location.href = 'login.html';
-  }
+/* Sign out */
+document.getElementById('signoutBtn').addEventListener('click', async ()=> {
+  try { await signOut(auth); } catch(e){ console.error(e); }
+  window.location.href = 'login.html';
 });
 
-/* ---------- Chart.js loader + draw ---------- */
-let chartReady = false;
-let performanceChartInstance = null;
-
-function loadChartJs() {
-  return new Promise((resolve, reject) => {
-    if (window.Chart) { chartReady = true; resolve(window.Chart); return; }
+/* Load Chart.js dynamically once */
+function loadChartJs(){
+  return new Promise((resolve,reject)=>{
+    if(window.Chart) resolve(window.Chart);
     const s = document.createElement('script');
     s.src = "https://cdn.jsdelivr.net/npm/chart.js";
-    s.onload = () => { chartReady = true; resolve(window.Chart); };
+    s.onload = ()=> resolve(window.Chart);
     s.onerror = reject;
     document.head.appendChild(s);
   });
 }
 
-function drawPerformance(percent = 0) {
-  const ctx = document.getElementById('performanceChart').getContext('2d');
-  // destroy previous if exists
-  if (performanceChartInstance) performanceChartInstance.destroy();
-
-  performanceChartInstance = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      datasets: [{
-        data: [percent, 100 - percent],
-        backgroundColor: [getComputedStyle(document.documentElement).getPropertyValue('--highlight').trim() || '#00A381', '#2e2e3a'],
-        borderWidth: 0,
-      }]
-    },
-    options: {
-      cutout: '75%',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
+/* Draw performance doughnut and return instance */
+let perfChart = null;
+async function drawPerformance(percent = 0){
+  const ChartLib = await loadChartJs();
+  const canvas = document.getElementById('performanceChart');
+  if(perfChart){ try { perfChart.destroy(); } catch(e){} }
+  perfChart = new ChartLib(canvas.getContext('2d'), {
+    type:'doughnut',
+    data: { datasets: [{ data:[percent, 100-percent], backgroundColor:[getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#00A381','#2e2e3a'], borderWidth:0 }] },
+    options: { cutout: '75%', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
   });
-
   document.getElementById('performanceText').innerText = `${percent}%`;
 }
 
-/* ---------- Firebase: fetch username & optionally performance/events ---------- */
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = 'login.html';
-    return;
-  }
-
-  // load Chart.js first so we can draw when we have data
-  try { await loadChartJs(); } catch(e) { console.warn('Chart.js failed to load', e); }
-
-  // fetch user doc
+/* Real-time events (collection: 'events') */
+function listenEvents(){
   try {
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists()) {
-      const u = userSnap.data();
-      // username
-      const usernameEl = document.getElementById('username');
-      usernameEl.textContent = u.username && u.username.trim() ? u.username : (user.displayName || user.email || 'Trader');
+    const eventsListEl = document.getElementById('eventsList');
+    const eventsCol = collection(db,'events');
+    const q = query(eventsCol, orderBy('timestamp','desc'), limit(20));
+    // unsubscribe old if any by returning closure? For simplicity, use onSnapshot directly
+    onSnapshot(q, (snapshot)=>{
+      eventsListEl.innerHTML = '';
+      if(snapshot.empty){ eventsListEl.innerHTML = '<li>No events yet.</li>'; return; }
+      snapshot.forEach(docSnap=>{
+        const ev = docSnap.data();
+        const li = document.createElement('li');
+        // nice format: title (time)
+        const time = ev.timestamp && ev.timestamp.toDate ? ev.timestamp.toDate() : (ev.timestamp ? new Date(ev.timestamp) : null);
+        li.textContent = ev.title + (time ? ' — ' + time.toLocaleString() : '');
+        eventsListEl.appendChild(li);
+      });
+    }, (err)=> {
+      console.error('events onSnapshot error', err);
+      document.getElementById('eventsList').innerHTML = '<li>Unable to load events.</li>';
+    });
+  } catch(e){
+    console.error('listenEvents failed', e);
+  }
+}
 
-      // avatar: we do NOT fetch/override avatar from Firestore per your last instructions
-      // performance value (optional)
-      const percent = (typeof u.performance === 'number') ? Math.max(0, Math.min(100, u.performance)) : 0;
-      drawPerformance(percent);
+/* Auth: get username and performance; draw chart with performance */
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){ window.location.href = 'login.html'; return; }
 
-      // daily events if you store them per-user inside the user doc (array)
-      const eventsList = document.getElementById('eventsList');
-      eventsList.innerHTML = '';
-      if (Array.isArray(u.dailyEvents) && u.dailyEvents.length) {
-        u.dailyEvents.slice(0, 10).forEach(ev => {
-          const li = document.createElement('li'); li.textContent = ev; eventsList.appendChild(li);
-        });
-      } else {
-        // If you keep global events somewhere else, update this code to fetch them.
-        const li = document.createElement('li'); li.textContent = 'No events yet.'; eventsList.appendChild(li);
-      }
+  // Start listening for site-wide events
+  listenEvents();
+
+  // Load Chart.js as soon as possible
+  await loadChartJs().catch(err=>console.warn('Chart.js failed to load',err));
+
+  // Fetch user document
+  try {
+    const userRef = doc(db,'users', user.uid);
+    const snap = await getDoc(userRef);
+    if(snap.exists()){
+      const data = snap.data();
+      const name = (data && data.username && data.username.trim()) ? data.username : (user.displayName || user.email || 'Trader');
+      document.getElementById('username').innerText = name;
+
+      // use performance if provided (0-100)
+      const perf = (typeof data.performance === 'number') ? Math.max(0, Math.min(100, data.performance)) : 0;
+      await drawPerformance(perf);
+
+      // If you want to listen to changes in the user's document in real-time, you can replace getDoc with onSnapshot.
+      // Example: onSnapshot(doc(db,'users',user.uid), doc => { ... update chart/update username ... })
     } else {
-      // No user doc found — show fallback username
-      document.getElementById('username').textContent = user.displayName || user.email || 'Trader';
-      drawPerformance(0);
+      // fallback: use firebase auth displayName/email
+      document.getElementById('username').innerText = user.displayName || user.email || 'Trader';
+      await drawPerformance(0);
     }
-  } catch (err) {
+  } catch(err){
     console.error('Failed to load user data', err);
-    document.getElementById('username').textContent = user.displayName || user.email || 'Trader';
-    drawPerformance(0);
+    document.getElementById('username').innerText = user.displayName || user.email || 'Trader';
+    await drawPerformance(0);
   }
 });
 </script>
