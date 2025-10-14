@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 <style>
 :root {
   --bg: #121217;
@@ -33,7 +34,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 240px;
+  width: 230px;
   min-width: 70px;
   background: var(--panel);
   border-right: 1px solid var(--border);
@@ -61,7 +62,7 @@ body {
   gap: 10px;
   cursor: pointer;
 }
-.brand img { height: 34px; width: auto; }
+.brand img { height: 32px; width: auto; }
 .brand .title { font-weight: 700; color: white; font-size: 1rem; }
 .sidebar.collapsed .brand .title { display: none; }
 
@@ -110,13 +111,13 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  transition: margin-left .25s ease;
-  margin-left: 240px;
-  padding: 16px 22px;
+  transition: margin-left .25s ease, padding .25s ease;
+  margin-left: 230px;
+  padding: 16px 18px;
 }
 .sidebar.collapsed ~ .main {
   margin-left: 70px;
-  padding: 16px;
+  padding: 16px 18px;
 }
 
 /* Overlay (mobile) */
@@ -131,12 +132,12 @@ body {
 }
 .overlay.active { opacity: 1; visibility: visible; }
 
-/* Header (clean layout) */
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 .user-inline {
   display: flex;
@@ -144,8 +145,8 @@ body {
   gap: 12px;
 }
 .user-inline .avatar {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid var(--accent);
@@ -168,7 +169,7 @@ body {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-  gap: 16px;
+  gap: 14px;
 }
 .card {
   background: var(--card);
@@ -177,7 +178,7 @@ body {
   border: 1px solid var(--border);
   transition: transform .15s ease;
 }
-.card:hover { transform: translateY(-4px); }
+.card:hover { transform: translateY(-3px); }
 
 /* Events list */
 .events-list {
@@ -271,7 +272,6 @@ const overlay = document.getElementById('overlay');
 const logoToggle = document.getElementById('logoToggle');
 const socialSection = document.getElementById('socialSection');
 
-/* Toggle sidebar using logo */
 logoToggle.addEventListener('click', () => {
   if (window.innerWidth <= 900) {
     sidebar.classList.toggle('mobile-visible');
@@ -279,30 +279,26 @@ logoToggle.addEventListener('click', () => {
   } else {
     sidebar.classList.toggle('collapsed');
     const collapsed = sidebar.classList.contains('collapsed');
-    socialSection.style.display = collapsed ? 'none' : 'block'; // Hide socials when collapsed
+    socialSection.style.display = collapsed ? 'none' : 'block';
     localStorage.setItem('sidebar-collapsed', collapsed ? '1' : '0');
   }
 });
 
-/* Restore sidebar state */
 if (localStorage.getItem('sidebar-collapsed') === '1') {
   sidebar.classList.add('collapsed');
   socialSection.style.display = 'none';
 }
 
-/* Overlay click close (mobile) */
 overlay.addEventListener('click', () => {
   sidebar.classList.remove('mobile-visible');
   overlay.classList.remove('active');
 });
 
-/* Sign Out */
 document.getElementById('signoutBtn').addEventListener('click', async () => {
   await signOut(auth);
   window.location.href = 'login.html';
 });
 
-/* Fetch username */
 onAuthStateChanged(auth, async (user) => {
   if(!user) return window.location.href='login.html';
   try {
