@@ -34,7 +34,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 200px;
+  width: 190px;
   min-width: 70px;
   background: var(--panel);
   border-right: 1px solid var(--border);
@@ -112,12 +112,12 @@ body {
   display: flex;
   flex-direction: column;
   transition: margin-left .25s ease, padding .25s ease;
-  margin-left: 230px;
-  padding: 16px 18px;
+  margin-left: 190px;
+  padding: 14px 16px;
 }
 .sidebar.collapsed ~ .main {
   margin-left: 70px;
-  padding: 16px 18px;
+  padding: 14px 16px;
 }
 
 /* Overlay (mobile) */
@@ -168,40 +168,69 @@ body {
 /* Grid Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 14px;
 }
+
+/* Card styling */
 .card {
   background: var(--card);
   border-radius: 12px;
   padding: 16px;
   border: 1px solid var(--border);
-  transition: transform .15s ease;
+  transition: transform .15s ease, box-shadow .15s ease;
+  display: flex;
+  flex-direction: column;
 }
-.card:hover { transform: translateY(-3px); }
+.card:hover { 
+  transform: translateY(-3px); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
 
-/* Events list */
-.events-list {
+/* Card headings */
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: white;
+}
+
+/* Lists inside cards */
+.events-list,
+.news-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0;
+  padding: 0;
 }
-.events-list li {
+.events-list li,
+.news-list li {
   padding: 10px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.95rem;
+}
+
+/* TradingView chart inside card */
+#tradingview-widget {
+  width: 100%;
+  height: 350px;
+  border-radius: 8px;
+  margin-top: 8px;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
+  #tradingview-widget { height: 250px; }
   .sidebar {
     position: fixed;
     top: 0; bottom: 0; left: 0;
     transform: translateX(-100%);
   }
   .sidebar.mobile-visible { transform: translateX(0); }
-  .main { margin-left: 0; padding: 16px; }
+  .main { margin-left: 0; padding: 12px; }
 }
 </style>
 </head>
@@ -248,16 +277,24 @@ body {
     </header>
 
     <section class="grid">
+      
       <article class="card">
-        <h3>Performance</h3>
-        <div id="performanceText" style="font-weight:700;font-size:1.1rem;color:white;">Tracking usage...</div>
+        <h3>Forex News</h3>
+        <ul class="news-list" id="newsList">
+          <li>Loading news...</li>
+        </ul>
       </article>
 
       <article class="card">
-        <h3>News & Daily Events</h3>
+        <h3>Daily Events</h3>
         <ul class="events-list" id="eventsList">
           <li>Loading events...</li>
         </ul>
+      </article>
+
+      <article class="card">
+        <h3>Charts</h3>
+        <div id="tradingview-widget"></div>
       </article>
     </section>
   </main>
