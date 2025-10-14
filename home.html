@@ -3,203 +3,309 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trade X Matrix - Dashboard</title>
+  <title>Trade X Matrix - Professional Trading Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<style>
-:root {
-  --bg: #121217;
-  --panel: #1a1a20;
-  --card: #21212c;
-  --muted: #8b8b90;
-  --text: #B8B8BD;
-  --accent: #00A381;
-  --border: #2e2e3a;
-  --green: #00A381;
-  --green-hover: #007a61;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  <style>
+  :root {
+    --bg: #121217;
+    --panel: #1a1a20;
+    --card: #21212c;
+    --muted: #8b8b90;
+    --text: #b8b8bd;
+    --accent: #00a381;
+    --border: #2e2e3a;
+    --green: #00a381;
+    --green-hover: #007a61;
+  }
 
-/* SIDEBAR */
-.sidebar {
-  width: 250px;
-  min-width: 70px;
-  background: var(--panel);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  transition: width .25s ease, transform .25s ease;
-  z-index: 999;
-}
-.sidebar.collapsed { width: 70px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Top area */
-.sidebar .top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
-}
-.sidebar.collapsed .top { justify-content: center; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* Logo toggle */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-.brand img { height: 34px; width: auto; }
-.brand .title { font-weight: 700; color: white; font-size: 1rem; }
-.sidebar.collapsed .brand .title { display: none; }
-
-/* Menu */
-.menu {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.menu a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  color: var(--text);
-  text-decoration: none;
-  transition: background .2s;
-}
-.menu a:hover { background: rgba(255,255,255,0.06); color: white; }
-.menu a i { width: 20px; text-align: center; font-size: 16px; }
-.sidebar.collapsed .menu a { justify-content: center; padding: 10px 0; }
-.sidebar.collapsed .menu a .label { display: none; }
-
-/* Footer */
-.bottom {
-  padding: 10px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  transition: opacity .25s ease;
-}
-.socials { display: flex; justify-content: center; gap: 12px; }
-.socials a {
-  color: var(--accent);
-  font-size: 1.1rem;
-  transition: color .2s;
-}
-.socials a:hover { color: white; }
-.sidebar.collapsed .bottom { opacity: 0; pointer-events: none; }
-
-/* MAIN */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  transition: margin-left .25s ease;
-  margin-left: 250px;
-  padding: 20px 28px;
-}
-.sidebar.collapsed ~ .main { margin-left: 70px; padding: 20px; }
-
-/* Overlay (mobile) */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .25s ease;
-  z-index: 998;
-}
-.overlay.active { opacity: 1; visibility: visible; }
-
-/* Header (clean layout) */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.user-inline {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.user-inline .avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--accent);
-}
-.user-inline .avatar img { width: 100%; height: 100%; object-fit: cover; }
-.username { font-weight: 600; color: white; font-size: 1rem; }
-
-.signout {
-  padding: 8px 14px;
-  background: var(--green);
-  border: none;
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.signout:hover { background: var(--green-hover); }
-
-/* Grid Cards */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-  gap: 16px;
-}
-.card {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  transition: transform .15s ease;
-}
-.card:hover { transform: translateY(-4px); }
-
-/* Events list */
-.events-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.events-list li {
-  padding: 10px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.03);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
+  /* SIDEBAR */
   .sidebar {
-    position: fixed;
-    top: 0; bottom: 0; left: 0;
+    width: 260px;
+    min-width: 70px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.25s ease, transform 0.25s ease;
+    z-index: 999;
+  }
+
+  .sidebar.collapsed {
+    width: 70px;
+  }
+
+  .sidebar.mobile-hidden {
     transform: translateX(-100%);
   }
-  .sidebar.mobile-visible { transform: translateX(0); }
-  .main { margin-left: 0; padding: 16px; }
-}
-</style>
+
+  .sidebar .top {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* LOGO AS TOGGLE */
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .brand img {
+    height: 36px;
+    width: auto;
+  }
+
+  .brand .title {
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+
+  .sidebar.collapsed .brand .title {
+    display: none;
+  }
+
+  /* MENU */
+  .menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .menu a i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  .menu a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+
+  .sidebar.collapsed .menu a .label {
+    display: none;
+  }
+
+  /* Tooltip */
+  .menu a .tooltip {
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--card);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+
+  .sidebar.collapsed .menu a:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* FOOTER */
+  .bottom {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    transition: opacity 0.25s ease;
+  }
+
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .socials a {
+    color: var(--accent);
+    font-size: 1.1rem;
+    transition: color 0.2s;
+  }
+
+  .socials a:hover {
+    color: white;
+  }
+
+  .sidebar.collapsed .bottom {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.25s ease;
+    margin-left: 260px;
+    padding: 20px 24px;
+  }
+
+  .sidebar.collapsed ~ .main {
+    margin-left: 70px;
+  }
+
+  /* Overlay for mobile */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+    z-index: 998;
+  }
+
+  .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .username {
+    font-weight: 600;
+    color: white;
+  }
+
+  .signout {
+    margin-left: 20px;
+    padding: 8px 14px;
+    background: var(--green);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .signout:hover {
+    background: var(--green-hover);
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    transition: transform 0.15s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card h3 {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .events-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .events-list li {
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+    }
+
+    .sidebar.mobile-visible {
+      transform: translateX(0);
+    }
+
+    .main {
+      margin-left: 0;
+      padding: 16px;
+    }
+  }
+  </style>
 </head>
 
 <body>
@@ -214,17 +320,17 @@ body {
     </div>
 
     <nav class="menu">
-      <a href="#"><i class="fa-solid fa-gauge-high"></i><span class="label">Dashboard</span></a>
-      <a href="#"><i class="fa-solid fa-graduation-cap"></i><span class="label">Education</span></a>
-      <a href="#"><i class="fa-solid fa-layer-group"></i><span class="label">Indicators</span></a>
-      <a href="#"><i class="fa-solid fa-chart-line"></i><span class="label">Live Charts</span></a>
-      <a href="#"><i class="fa-solid fa-globe"></i><span class="label">News & Events</span></a>
-      <a href="#"><i class="fa-solid fa-list"></i><span class="label">Stock Lists</span></a>
-      <a href="#"><i class="fa-solid fa-comment-dots"></i><span class="label">Feedback</span></a>
-      <a href="#"><i class="fa-solid fa-user-gear"></i><span class="label">Settings</span></a>
+      <a href="#"><i class="fa-solid fa-graduation-cap"></i><span class="label">Education</span><span class="tooltip">Education</span></a>
+      <a href="#"><i class="fa-solid fa-chart-line"></i><span class="label">Live Charts</span><span class="tooltip">Live Charts</span></a>
+      <a href="#"><i class="fa-solid fa-layer-group"></i><span class="label">Indicators</span><span class="tooltip">Indicators</span></a>
+      <a href="#"><i class="fa-solid fa-globe"></i><span class="label">News & Events</span><span class="tooltip">News & Events</span></a>
+      <a href="#"><i class="fa-solid fa-list"></i><span class="label">Stock Lists</span><span class="tooltip">Stock Lists</span></a>
+      <a href="#"><i class="fa-solid fa-comments"></i><span class="label">Feedback</span><span class="tooltip">Feedback</span></a>
+      <a href="#"><i class="fa-solid fa-envelope"></i><span class="label">Support Mail</span><span class="tooltip">Support Mail</span></a>
+      <a href="#"><i class="fa-solid fa-user-gear"></i><span class="label">Settings</span><span class="tooltip">Settings</span></a>
     </nav>
 
-    <div class="bottom" id="socialSection">
+    <div class="bottom">
       <div class="socials">
         <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
         <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
@@ -234,7 +340,7 @@ body {
 
   <main class="main">
     <header class="header">
-      <div class="user-inline">
+      <div class="user-profile">
         <div class="avatar"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="avatar"></div>
         <div class="username" id="username">Loading...</div>
       </div>
@@ -256,60 +362,49 @@ body {
     </section>
   </main>
 
-<script type="module">
-import { auth, db } from './src/firebase/firebase.js';
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <script type="module">
+    import { auth, db } from './src/firebase/firebase.js';
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const logoToggle = document.getElementById('logoToggle');
-const socialSection = document.getElementById('socialSection');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const logoToggle = document.getElementById('logoToggle');
 
-/* Toggle sidebar using logo */
-logoToggle.addEventListener('click', () => {
-  if (window.innerWidth <= 900) {
-    sidebar.classList.toggle('mobile-visible');
-    overlay.classList.toggle('active');
-  } else {
-    sidebar.classList.toggle('collapsed');
-    const collapsed = sidebar.classList.contains('collapsed');
-    socialSection.style.display = collapsed ? 'none' : 'block'; // hide socials when collapsed
-    localStorage.setItem('sidebar-collapsed', collapsed ? '1' : '0');
-  }
-});
+    logoToggle.addEventListener('click', () => {
+      if (window.innerWidth <= 900) {
+        sidebar.classList.toggle('mobile-visible');
+        overlay.classList.toggle('active');
+      } else {
+        sidebar.classList.toggle('collapsed');
+        localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
+      }
+    });
 
-/* Restore sidebar state */
-if (localStorage.getItem('sidebar-collapsed') === '1') {
-  sidebar.classList.add('collapsed');
-  socialSection.style.display = 'none';
-}
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('mobile-visible');
+      overlay.classList.remove('active');
+    });
 
-/* Overlay click close (mobile) */
-overlay.addEventListener('click', () => {
-  sidebar.classList.remove('mobile-visible');
-  overlay.classList.remove('active');
-});
+    if (localStorage.getItem('sidebar-collapsed') === '1') sidebar.classList.add('collapsed');
 
-/* Sign Out */
-document.getElementById('signoutBtn').addEventListener('click', async () => {
-  await signOut(auth);
-  window.location.href = 'login.html';
-});
+    document.getElementById('signoutBtn').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    });
 
-/* Fetch username */
-onAuthStateChanged(auth, async (user) => {
-  if(!user) return window.location.href='login.html';
-  try {
-    const ref = doc(db,'users',user.uid);
-    const snap = await getDoc(ref);
-    if(snap.exists()){
-      document.getElementById('username').innerText = snap.data().username || 'Trader';
-    } else {
-      document.getElementById('username').innerText = user.displayName || 'Trader';
-    }
-  } catch(e){ console.error(e); }
-});
-</script>
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return window.location.href = 'login.html';
+      try {
+        const ref = doc(db, 'users', user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          document.getElementById('username').innerText = snap.data().username || 'Trader';
+        } else {
+          document.getElementById('username').innerText = user.displayName || 'Trader';
+        }
+      } catch (e) { console.error(e); }
+    });
+  </script>
 </body>
 </html>
