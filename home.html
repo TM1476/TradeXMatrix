@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trade X Matrix - Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade X Matrix - Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 :root {
   --bg: #121217;
   --panel: #1a1a20;
-  --card: #21212c;
+  --card: #1f1f28;
   --muted: #8b8b90;
   --text: #B8B8BD;
   --accent: #00A381;
   --border: #2e2e3a;
   --green: #00A381;
   --green-hover: #007a61;
+  --shadow: rgba(0,0,0,0.3);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
+* { box-sizing: border-box; margin:0; padding:0; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
@@ -34,7 +36,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 210px;
+  width: 220px;
   min-width: 70px;
   background: var(--panel);
   border-right: 1px solid var(--border);
@@ -50,7 +52,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 12px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border);
 }
 .sidebar.collapsed .top { justify-content: center; }
@@ -59,12 +61,12 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
 }
 .brand img { height: 36px; width: auto; }
-.brand .title { font-weight: 700; color: white; font-size: 1rem; }
-.sidebar.collapsed .brand .title { display: none; }
+.brand .title { font-weight: 700; color: white; font-size: 1rem; transition: opacity .25s; }
+.sidebar.collapsed .brand .title { opacity: 0; pointer-events: none; }
 
 /* Menu */
 .menu {
@@ -73,36 +75,49 @@ body {
   padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 .menu a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 9px 14px;
+  padding: 10px 14px;
   border-radius: 8px;
   color: var(--text);
   text-decoration: none;
-  transition: background .2s;
+  position: relative;
+  transition: background .2s, color .2s;
 }
-.menu a:hover { background: rgba(255,255,255,0.06); color: white; }
+.menu a:hover { background: rgba(255,255,255,0.08); color: white; }
 .menu a i { width: 20px; text-align: center; font-size: 16px; }
-.sidebar.collapsed .menu a { justify-content: center; padding: 10px 0; }
-.sidebar.collapsed .menu a .label { display: none; }
+
+/* Tooltip for collapsed */
+.sidebar.collapsed .menu a::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 60px;
+  white-space: nowrap;
+  background: var(--panel);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px var(--shadow);
+}
+.sidebar.collapsed .menu a:hover::after { opacity: 1; }
 
 /* Footer */
 .bottom {
-  padding: 10px;
+  padding: 12px;
   border-top: 1px solid var(--border);
   text-align: center;
   transition: opacity .25s ease;
 }
 .socials { display: flex; justify-content: center; gap: 12px; }
-.socials a {
-  color: var(--accent);
-  font-size: 1.1rem;
-  transition: color .2s;
-}
+.socials a { color: var(--accent); font-size: 1.1rem; transition: color .2s; }
 .socials a:hover { color: white; }
 .sidebar.collapsed .bottom { opacity: 0; pointer-events: none; }
 
@@ -112,15 +127,15 @@ body {
   display: flex;
   flex-direction: column;
   transition: margin-left .25s ease, padding .25s ease;
-  margin-left: 120px;
-  padding: 10px 12px;
+  margin-left: 220px;
+  padding: 16px 20px;
 }
 .sidebar.collapsed ~ .main {
   margin-left: 70px;
-  padding: 14px 16px;
+  padding: 16px 20px;
 }
 
-/* Overlay (mobile) */
+/* Overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -137,7 +152,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 .user-inline {
   display: flex;
@@ -162,46 +177,45 @@ body {
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  transition: background .2s;
 }
 .signout:hover { background: var(--green-hover); }
 
-/* Grid Cards */
+/* Cards grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 16px;
 }
 
 /* Card styling */
 .card {
   background: var(--card);
   border-radius: 12px;
-  padding: 16px;
+  padding: 18px;
   border: 1px solid var(--border);
-  transition: transform .15s ease, box-shadow .15s ease;
+  transition: transform .15s ease, box-shadow .2s ease;
   display: flex;
   flex-direction: column;
 }
-.card:hover { 
-  transform: translateY(-3px); 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
-
-/* Card headings */
 .card h3 {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: white;
 }
 
-/* Lists inside cards */
+/* Lists in cards */
 .events-list,
 .news-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin: 0;
   padding: 0;
 }
@@ -209,95 +223,89 @@ body {
 .news-list li {
   padding: 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255,255,255,0.03);
   font-size: 0.95rem;
 }
 
-/* TradingView chart inside card */
+/* TradingView chart */
 #tradingview-widget {
   width: 100%;
   height: 350px;
   border-radius: 8px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  #tradingview-widget { height: 250px; }
-  .sidebar {
-    position: fixed;
-    top: 0; bottom: 0; left: 0;
-    transform: translateX(-100%);
-  }
+  .sidebar { position: fixed; top:0; left:0; bottom:0; transform: translateX(-100%); }
   .sidebar.mobile-visible { transform: translateX(0); }
   .main { margin-left: 0; padding: 12px; }
+  #tradingview-widget { height: 250px; }
 }
 </style>
 </head>
 
 <body>
-  <div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay"></div>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="top">
-      <div class="brand" id="logoToggle">
-        <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo" />
-        <span class="title">TradeXMatrix</span>
-      </div>
+<aside class="sidebar" id="sidebar">
+  <div class="top">
+    <div class="brand" id="logoToggle">
+      <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo">
+      <span class="title">TradeXMatrix</span>
     </div>
+  </div>
 
-    <nav class="menu">
-      <a href="#"><i class="fa-solid fa-gauge-high"></i><span class="label">Profile</span></a>
-      <a href="#"><i class="fa-solid fa-graduation-cap"></i><span class="label">Education</span></a>
-      <a href="#"><i class="fa-solid fa-layer-group"></i><span class="label">Indicators</span></a>
-      <a href="#"><i class="fa-solid fa-chart-line"></i><span class="label">Live Charts</span></a>
-      <a href="#"><i class="fa-solid fa-globe"></i><span class="label">News & Events</span></a>
-      <a href="#"><i class="fa-solid fa-list"></i><span class="label">Stock Lists</span></a>
-      <a href="#"><i class="fa-solid fa-comment-dots"></i><span class="label">Feedback</span></a>
-      <a href="#"><i class="fa-solid fa-user-gear"></i><span class="label">Settings</span></a>
-    </nav>
+  <nav class="menu">
+    <a href="#" data-label="Profile"><i class="fa-solid fa-gauge-high"></i><span class="label">Profile</span></a>
+    <a href="#" data-label="Education"><i class="fa-solid fa-graduation-cap"></i><span class="label">Education</span></a>
+    <a href="#" data-label="Indicators"><i class="fa-solid fa-layer-group"></i><span class="label">Indicators</span></a>
+    <a href="#" data-label="Live Charts"><i class="fa-solid fa-chart-line"></i><span class="label">Live Charts</span></a>
+    <a href="#" data-label="News & Events"><i class="fa-solid fa-globe"></i><span class="label">News & Events</span></a>
+    <a href="#" data-label="Stock Lists"><i class="fa-solid fa-list"></i><span class="label">Stock Lists</span></a>
+    <a href="#" data-label="Feedback"><i class="fa-solid fa-comment-dots"></i><span class="label">Feedback</span></a>
+    <a href="#" data-label="Settings"><i class="fa-solid fa-user-gear"></i><span class="label">Settings</span></a>
+  </nav>
 
-    <div class="bottom" id="socialSection">
-      <div class="socials">
-        <a href="https://x.com/Trade_X_Matrix?t=ErdQ5uh34oKHrueT47HNqQ&s=08"><i class="fab fa-twitter"></i></a>
-        <a href="https://www.instagram.com/trade_x_matrix?igsh=MXNlNDBuZGcxczNwMw=="><i class="fab fa-instagram"></i></a>
-      </div>
+  <div class="bottom" id="socialSection">
+    <div class="socials">
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
     </div>
-  </aside>
+  </div>
+</aside>
 
-  <main class="main">
-    <header class="header">
-      <div class="user-inline">
-        <div class="avatar">
-          <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="avatar">
-        </div>
-        <div class="username" id="username">Loading...</div>
-      </div>
-      <button class="signout" id="signoutBtn">Sign Out</button>
-    </header>
+<main class="main">
+  <header class="header">
+    <div class="user-inline">
+      <div class="avatar"><img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="avatar"></div>
+      <h1><div class="username" id="username">Loading...</div></h1>
+    </div>
+    <button class="signout" id="signoutBtn">Sign Out</button>
+  </header>
 
-    <section class="grid">
-      
-      <article class="card">
-        <h3>Forex News</h3>
-        <ul class="news-list" id="newsList">
-          <li>Loading news...</li>
-        </ul>
-      </article>
+  <section class="grid">
+    
+    <article class="card">
+      <h3>Forex News</h3>
+      <ul class="news-list" id="newsList">
+        <li>Loading news...</li>
+      </ul>
+    </article>
 
-      <article class="card">
-        <h3>Daily Events</h3>
-        <ul class="events-list" id="eventsList">
-          <li>Loading events...</li>
-        </ul>
-      </article>
+    <article class="card">
+      <h3>Daily Events</h3>
+      <ul class="events-list" id="eventsList">
+        <li>Loading events...</li>
+      </ul>
+    </article>
 
-      <article class="card">
-        <h3>Charts</h3>
-        <div id="tradingview-widget"></div>
-      </article>
-    </section>
-  </main>
+    <article class="card">
+      <h3>Charts</h3>
+      <div id="tradingview-widget"></div>
+    </article>
+  </section>
+</main>
 
 <script type="module">
 import { auth, db } from './src/firebase/firebase.js';
@@ -309,8 +317,9 @@ const overlay = document.getElementById('overlay');
 const logoToggle = document.getElementById('logoToggle');
 const socialSection = document.getElementById('socialSection');
 
+/* Sidebar toggle */
 logoToggle.addEventListener('click', () => {
-  if (window.innerWidth <= 900) {
+  if(window.innerWidth <= 900){
     sidebar.classList.toggle('mobile-visible');
     overlay.classList.toggle('active');
   } else {
@@ -321,9 +330,9 @@ logoToggle.addEventListener('click', () => {
   }
 });
 
-if (localStorage.getItem('sidebar-collapsed') === '1') {
+if(localStorage.getItem('sidebar-collapsed')==='1'){
   sidebar.classList.add('collapsed');
-  socialSection.style.display = 'none';
+  socialSection.style.display='none';
 }
 
 overlay.addEventListener('click', () => {
@@ -331,22 +340,20 @@ overlay.addEventListener('click', () => {
   overlay.classList.remove('active');
 });
 
+/* Sign Out */
 document.getElementById('signoutBtn').addEventListener('click', async () => {
   await signOut(auth);
   window.location.href = 'login.html';
 });
 
-onAuthStateChanged(auth, async (user) => {
+/* Fetch username */
+onAuthStateChanged(auth, async (user)=>{
   if(!user) return window.location.href='login.html';
-  try {
+  try{
     const ref = doc(db,'users',user.uid);
     const snap = await getDoc(ref);
-    if(snap.exists()){
-      document.getElementById('username').innerText = snap.data().username || 'Trader';
-    } else {
-      document.getElementById('username').innerText = user.displayName || 'Trader';
-    }
-  } catch(e){ console.error(e); }
+    document.getElementById('username').innerText = snap.exists()? snap.data().username || 'Trader' : user.displayName || 'Trader';
+  } catch(e){ console.error(e);}
 });
 </script>
 </body>
