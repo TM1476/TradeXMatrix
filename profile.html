@@ -146,11 +146,17 @@ const emailInput = document.getElementById('email');
 const emailStatusInput = document.getElementById('emailStatus');
 const verifyEmailBtn = document.getElementById('verifyEmailBtn');
 const demoBalanceInput = document.getElementById('demoBalance');
-const marketInput = document.getElementById('market');
 const featuresInput = document.getElementById('features');
 const saveBtn = document.getElementById('saveBtn');
 const resetPasswordBtn = document.getElementById('resetPasswordBtn');
 
+async function updateEmailStatus(user) {
+  await user.reload();
+  emailStatusInput.value = user.emailVerified ? '✅ Email Verified' : '⚠️ Email Not Verified';
+  verifyEmailBtn.style.display = user.emailVerified ? 'none' : 'inline-block';
+}
+
+// Load profile
 onAuthStateChanged(auth, async (user) => {
   if(!user) return window.location.href='login.html';
 
@@ -161,15 +167,13 @@ onAuthStateChanged(auth, async (user) => {
     usernameInput.value = data.username || user.displayName || '';
     emailInput.value = user.email;
     demoBalanceInput.value = data.demoBalance || '0';
-    marketInput.value = data.market || '';
     featuresInput.value = data.features || '';
-    emailStatusInput.value = user.emailVerified ? '✅ Email Verified' : '⚠️ Email Not Verified';
-    if(!user.emailVerified) verifyEmailBtn.style.display = 'inline-block';
+    updateEmailStatus(user);
   }
 });
 
 // Save username
-saveBtn.addEventListener('click', async ()=>{
+saveBtn.addEventListener('click', async () => {
   const newUsername = usernameInput.value.trim();
   if(newUsername===''){ alert('Username cannot be empty'); return; }
   const user = auth.currentUser;
@@ -180,19 +184,24 @@ saveBtn.addEventListener('click', async ()=>{
 });
 
 // Reset password
-resetPasswordBtn.addEventListener('click', async ()=>{
+resetPasswordBtn.addEventListener('click', async () => {
   const user = auth.currentUser;
   await sendPasswordResetEmail(auth,user.email);
   alert('Password reset email sent to ' + user.email);
 });
 
-// Send email verification
-verifyEmailBtn.addEventListener('click', async ()=>{
+// Verify email
+verifyEmailBtn.addEventListener('click', async () => {
   const user = auth.currentUser;
   await sendEmailVerification(user);
   alert('Verification email sent to ' + user.email);
-  verifyEmailBtn.style.display='none';
+  // Automatically refresh status every 10 seconds
+  const interval = setInterval(async () => {
+    await updateEmailStatus(user);
+    if(user.emailVerified) clearInterval(interval);
+  }, 10000);
 });
 </script>
+
 </body>
 </html>
