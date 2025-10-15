@@ -835,141 +835,127 @@
             }
         });
     </script>
-    <script type="module">
-        // 1. FIREBASE IMPORTS (v11 Modular SDK via CDN)
-        // NOTE: The user's original code had "import { app, auth, db } from './src/firebase/firebase.js';"
-        // which assumes a local file. For a self-contained solution, I'm using CDN imports below.
-        // If 'firebase.js' is a separate file, the user MUST ensure it's accessible.
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  <script type="module">
+    // 1. FIREBASE IMPORTS
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
+    // 2. FIREBASE CONFIGURATION 
+    const firebaseConfig = {
+        apiKey: "AIzaSyC7OlOJlG6HGombrxytI4mvldAm39YZD-s",
+        authDomain: "tradexmatrix-txm.firebaseapp.com",
+        projectId: "tradexmatrix-txm",
+        storageBucket: "tradexmatrix-txm.firebasestorage.app",
+        messagingSenderId: "683396221594",
+        appId: "1:683396221594:web:db1669b666607b948d2d23",
+        measurementId: "G-RMP0BPSG2X"
+    };
 
-        // 2. FIREBASE CONFIGURATION 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC7OlOJlG6HGombrxytI4mvldAm39YZD-s",
-            authDomain: "tradexmatrix-txm.firebaseapp.com",
-            projectId: "tradexmatrix-txm",
-            storageBucket: "tradexmatrix-txm.firebasestorage.app",
-            messagingSenderId: "683396221594",
-            appId: "1:683396221594:web:db1669b666607b948d2d23",
-            measurementId: "G-RMP0BPSG2X"
-        };
+    // 3. INITIALIZE SERVICES
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    
+    const googleProvider = new GoogleAuthProvider(); // INITIALIZE GOOGLE PROVIDER
+    
+    const googleSignupButton = document.getElementById('google-signup');
+    const signupForm = document.querySelector('.signup-form');
+    const termsCheckbox = document.getElementById('agree-terms');
 
-        // 3. INITIALIZE SERVICES
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        
-        const googleProvider = new GoogleAuthProvider(); // INITIALIZE GOOGLE PROVIDER
-        
-        const googleSignupButton = document.getElementById('google-signup');
-        const signupForm = document.querySelector('.signup-form');
-        const termsCheckbox = document.getElementById('agree-terms');
-
-
-        // 4. FIRESTORE UTILITY FUNCTION - UPDATED
+    // 4. FIRESTORE UTILITY FUNCTION
     async function upsertUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
-    
+
         const userData = {
-        // --- CORE IDENTITY ---
             uid: user.uid,
             email: user.email,
-        // Uses Google's display name if signing up with Google, or the form username
             username: user.displayName || document.getElementById('username').value,
-        
-        // --- SECURITY & MANAGEMENT ---                              
-            accountTier: 'Free',                 // Current status for feature management
-            emailVerified: user.emailVerified,           
-        
-        // --- UX & PERSONALIZATION ---
-            onboardingStep: 0,                           
-            preferredTimezone: 'Asia/Kolkata',           
-            defaultMarket: 'NSE',                        
-        
-        // --- TRADING FEATURE (Demo Trading) ---
-            demoBalance: 100000.00, // Starting virtual balance
-        
-        // --- TIMESTAMPS ---
+            accountTier: 'Free',
+            emailVerified: user.emailVerified,
+            onboardingStep: 0,
+            preferredTimezone: 'Asia/Kolkata',
+            defaultMarket: 'NSE',
+            demoBalance: 100000.00,
             createdAt: serverTimestamp(),
             lastSignIn: serverTimestamp(),
         };
-    
-    // This merges the new data with any existing data (important for Google sign-in)
-    await setDoc(userRef, userData, { merge: true });
-}
 
+        await setDoc(userRef, userData, { merge: true });
+    }
 
-        // 5. EMAIL/PASSWORD SIGNUP LOGIC
-        signupForm.addEventListener('submit', async function(event) {
-            // Note: validateForm is called in the HTML inline, but we run it one more time for safety
-            if (typeof window.validateForm !== 'function' || !window.validateForm()) {
-                 return;
+    // 5. EMAIL/PASSWORD SIGNUP LOGIC WITH EMAIL VERIFICATION
+    signupForm.addEventListener('submit', async function(event) {
+        // Validate the form
+        if (typeof window.validateForm !== 'function' || !window.validateForm()) {
+            return;
+        }
+
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Send email verification
+            await sendEmailVerification(user);
+
+            // Create/Update Firestore profile
+            await upsertUserProfile(user);
+
+            alert("✅ Account created successfully! Please verify your email before logging in.");
+            window.location.href = "login.html";
+
+        } catch (error) {
+            console.error("Signup error:", error.code, error.message);
+            let errorMessage = "An unknown error occurred.";
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = 'This email address is already in use.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = 'The email address is not valid.';
             }
 
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            alert("❌ Signup failed: " + errorMessage);
+        }
+    });
 
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await upsertUserProfile(userCredential.user);
+    // 6. GOOGLE SIGNUP LOGIC
+    googleSignupButton.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-                alert("✅ Account created successfully! Redirecting to login..."); 
-                window.location.href = "login.html";
+        if (!termsCheckbox.checked) {
+            alert("Please agree to the Terms of Service and Privacy Policy before proceeding with Google sign-up.");
+            return;
+        }
+        
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
 
-            } catch (error) {
-                console.error("Signup error:", error.code, error.message);
-                let errorMessage = "An unknown error occurred.";
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'This email address is already in use.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'The email address is not valid.';
-                }
+            await upsertUserProfile(user);
 
-                alert("❌ Signup failed: " + errorMessage);
-            }
-        });
+            alert("✅ Signed in successfully with Google! Redirecting...");
+            window.location.href = "login.html";
 
-
-        // 6. GOOGLE SIGNUP LOGIC (FUNCTIONAL)
-        googleSignupButton.addEventListener('click', async (event) => {
-            event.preventDefault();
-
-            // Enforce Terms Agreement
-            if (!termsCheckbox.checked) {
-                alert("Please agree to the Terms of Service and Privacy Policy before proceeding with Google sign-up.");
-                return;
-            }
+        } catch (error) {
+            console.error("Google Signup Error:", error.code, error.message);
+            let errorMessage = "An unknown error occurred during Google sign-in.";
             
-            try {
-                // *** THIS IS THE CRITICAL LINE THAT OPENS THE GOOGLE SELECTION POPUP ***
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-
-                // Create/Update Firestore profile 
-                await upsertUserProfile(user);
-                
-                alert("✅ Signed in successfully with Google! Redirecting...");
-                window.location.href = "login.html";
-
-            } catch (error) {
-                console.error("Google Signup Error:", error.code, error.message);
-                let errorMessage = "An unknown error occurred during Google sign-in.";
-                
-                if (error.code === 'auth/popup-closed-by-user') {
-                    errorMessage = 'Sign-in window was closed by the user.';
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    errorMessage = 'Please allow popups to continue Google sign-in.';
-                } else if (error.code === 'auth/account-exists-with-different-credential') {
-                    errorMessage = 'An account with this email already exists using a different sign-in method.';
-                }
-
-                alert("❌ Google Sign-in Failed: " + errorMessage);
+            if (error.code === 'auth/popup-closed-by-user') {
+                errorMessage = 'Sign-in window was closed by the user.';
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                errorMessage = 'Please allow popups to continue Google sign-in.';
+            } else if (error.code === 'auth/account-exists-with-different-credential') {
+                errorMessage = 'An account with this email already exists using a different sign-in method.';
             }
-        });
 
-    </script>
+            alert("❌ Google Sign-in Failed: " + errorMessage);
+        }
+    });
+
+</script>
+
 </body>
 </html>
