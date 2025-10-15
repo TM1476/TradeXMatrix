@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade X Matrix - Profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #121217;
+  --panel: #1a1a20;
+  --card: #21212c;
+  --muted: #8b8b90;
+  --text: #B8B8BD;
+  --accent: #00A381;
+  --accent-hover: #007a61;
+  --border: #2e2e3a;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 40px 20px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 30px 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  margin-bottom: 30px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+
+h2 {
+  color: white;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.label { 
+  display: block; 
+  font-weight: 600; 
+  margin-bottom: 6px; 
+  color: white; 
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #1e1e28;
+  color: white;
+  font-size: 1rem;
+}
+
+.input-field[readonly] {
+  background: rgba(255,255,255,0.05);
+  cursor: not-allowed;
+}
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-right: 12px;
+}
+button:hover { background: var(--accent-hover); }
+
+.status {
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.success-msg { color: #00ff9f; margin-top: 10px; font-weight: 500; }
+.error-msg { color: #ff5a5a; margin-top: 10px; font-weight: 500; }
+
+@media(max-width: 650px) {
+  .profile-container { margin: 20px 10px; }
+  .card { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="profile-container">
+  <h2>User Profile</h2>
+  <div class="card">
+    <div class="status" id="emailStatus"></div>
+
+    <label for="usernameInput" class="label">Username</label>
+    <input type="text" id="usernameInput" class="input-field" placeholder="Username">
+
+    <label for="emailInput" class="label">Email</label>
+    <input type="email" id="emailInput" class="input-field" readonly>
+
+    <label for="demoBalance" class="label">Demo Account Balance</label>
+    <input type="text" id="demoBalance" class="input-field" readonly>
+
+    <label for="market" class="label">Market</label>
+    <input type="text" id="market" class="input-field" readonly>
+
+    <label for="features" class="label">Features</label>
+    <input type="text" id="features" class="input-field" readonly>
+
+    <div style="margin-top:10px;">
+      <button id="updateUsernameBtn"><i class="fa-solid fa-pen"></i> Update Username</button>
+      <button id="resetPasswordBtn"><i class="fa-solid fa-key"></i> Reset Password</button>
+    </div>
+
+    <div class="success-msg" id="successMsg"></div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+</div>
+
+<script type="module">
+import { auth, db } from './src/firebase/firebase.js';
+import { onAuthStateChanged, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const usernameInput = document.getElementById('usernameInput');
+const emailInput = document.getElementById('emailInput');
+const demoBalance = document.getElementById('demoBalance');
+const marketInput = document.getElementById('market');
+const featuresInput = document.getElementById('features');
+const emailStatus = document.getElementById('emailStatus');
+const successMsg = document.getElementById('successMsg');
+const errorMsg = document.getElementById('errorMsg');
+
+const updateBtn = document.getElementById('updateUsernameBtn');
+const resetBtn = document.getElementById('resetPasswordBtn');
+
+let originalUsername = '';
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return window.location.href='login.html';
+  try {
+    const ref = doc(db,'users',user.uid);
+    const snap = await getDoc(ref);
+
+    if(snap.exists()){
+      const data = snap.data();
+      originalUsername = data.username || user.displayName || '';
+      usernameInput.value = originalUsername;
+      emailInput.value = user.email;
+      demoBalance.value = data.demoBalance || '0';
+      marketInput.value = data.market || 'N/A';
+      featuresInput.value = data.features ? data.features.join(', ') : 'None';
+      emailStatus.innerHTML = user.emailVerified 
+        ? '✅ Email Verified' 
+        : '⚠️ Email Not Verified - Please verify your email';
+    } else {
+      usernameInput.value = user.displayName || '';
+      emailInput.value = user.email;
+    }
+  } catch(e){ console.error(e); errorMsg.innerText = e.message; }
+});
+
+// Update username
+updateBtn.addEventListener('click', async () => {
+  successMsg.innerText = '';
+  errorMsg.innerText = '';
+
+  const newUsername = usernameInput.value.trim();
+  if(newUsername === '') return errorMsg.innerText = "Username cannot be empty";
+  if(newUsername === originalUsername) return errorMsg.innerText = "Username unchanged";
+
+  try {
+    const user = auth.currentUser;
+    await updateProfile(user, { displayName: newUsername });
+    const userRef = doc(db,'users',user.uid);
+    await updateDoc(userRef,{ username: newUsername });
+
+    originalUsername = newUsername;
+    successMsg.innerText = "Username updated successfully!";
+  } catch(e){ errorMsg.innerText = e.message; }
+});
+
+// Password reset
+resetBtn.addEventListener('click', async () => {
+  successMsg.innerText = '';
+  errorMsg.innerText = '';
+
+  const user = auth.currentUser;
+  if(!user || !user.email) return errorMsg.innerText = "No email found for this account";
+
+  try {
+    await sendPasswordResetEmail(auth, user.email);
+    successMsg.innerText = "Password reset email sent. Check your inbox.";
+  } catch(e){ errorMsg.innerText = e.message; }
+});
+</script>
+
+</body>
+</html>
