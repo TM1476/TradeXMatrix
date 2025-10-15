@@ -3,215 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trade X Matrix - Profile</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<title>TradeXMatrix - Profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
   --bg: #121217;
   --panel: #1a1a20;
   --card: #21212c;
-  --muted: #8b8b90;
   --text: #B8B8BD;
   --accent: #00A381;
-  --accent-hover: #007a61;
   --border: #2e2e3a;
+  --green: #00A381;
+  --green-hover: #007a61;
+  --red: #FF4C4C;
+  --yellow: #FFC107;
 }
 body {
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  margin:0; font-family:'Inter', sans-serif; background:var(--bg); color:var(--text);
+  display:flex; min-height:100vh; overflow-x:hidden;
 }
-
-.profile-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 40px 20px;
+/* Sidebar */
+.sidebar {
+  width:210px; min-width:70px; background:var(--panel);
+  display:flex; flex-direction:column; border-right:1px solid var(--border);
+  transition:width .25s;
 }
+.sidebar.collapsed { width:70px; }
+.sidebar .top { display:flex; align-items:center; justify-content:flex-start; padding:12px; border-bottom:1px solid var(--border); }
+.sidebar.collapsed .top { justify-content:center; }
+.brand { display:flex; align-items:center; gap:6px; cursor:pointer; }
+.brand img { height:36px; }
+.brand .title { font-weight:700; color:white; font-size:1rem; }
+.sidebar.collapsed .brand .title { display:none; }
+.menu { flex:1; display:flex; flex-direction:column; gap:4px; padding:6px; }
+.menu a { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:8px; color:var(--text); text-decoration:none; transition:background .2s; }
+.menu a:hover { background: rgba(255,255,255,0.06); color:white; }
+.menu a i { width:20px; text-align:center; }
+.sidebar.collapsed .menu a { justify-content:center; padding:10px 0; }
+.sidebar.collapsed .menu a .label { display:none; }
+.bottom { padding:10px; border-top:1px solid var(--border); text-align:center; transition:opacity .25s; }
+.sidebar.collapsed .bottom { opacity:0; pointer-events:none; }
+.socials { display:flex; justify-content:center; gap:12px; }
+.socials a { color:var(--accent); font-size:1.1rem; transition:color .2s; }
+.socials a:hover { color:white; }
 
-.card {
-  background: var(--card);
-  border-radius: 14px;
-  padding: 30px 24px;
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  margin-bottom: 30px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+/* Main */
+.main { flex:1; padding:20px; transition:margin-left .25s; margin-left:210px; }
+.sidebar.collapsed ~ .main { margin-left:70px; }
 
-h2 {
-  color: white;
-  margin-bottom: 20px;
-  font-weight: 700;
-  text-align: center;
-}
+/* Profile Card */
+.profile-card { max-width:700px; margin:auto; background:var(--card); padding:30px; border-radius:12px; border:1px solid var(--border); box-shadow:0 6px 20px rgba(0,0,0,0.4); display:flex; flex-direction:column; gap:20px; }
+.profile-card h2 { font-size:1.6rem; color:white; font-weight:700; margin-bottom:10px; }
+.profile-row { display:flex; flex-direction:column; gap:6px; }
+.profile-row label { font-weight:500; font-size:0.9rem; color:var(--text); }
+.profile-row input { padding:10px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:white; font-size:1rem; width:100%; }
+.profile-row input[readonly] { background:rgba(255,255,255,0.01); color:var(--text); cursor:not-allowed; }
+.button-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+.button { padding:10px 16px; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:background .2s; color:white; }
+.save-btn { background:var(--green); }
+.save-btn:hover { background:var(--green-hover); }
+.reset-btn { background:var(--accent); }
+.reset-btn:hover { background:#00775a; }
+.verify-btn { background:var(--yellow); color:black; }
+.verify-btn:hover { background:#e6b800; }
 
-.label { 
-  display: block; 
-  font-weight: 600; 
-  margin-bottom: 6px; 
-  color: white; 
-}
+/* Avatar */
+.avatar { width:120px; height:120px; border-radius:50%; border:2px solid var(--accent); overflow:hidden; margin:auto; }
+.avatar img { width:100%; height:100%; object-fit:cover; }
 
-.input-field {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #1e1e28;
-  color: white;
-  font-size: 1rem;
-}
-
-.input-field[readonly] {
-  background: rgba(255,255,255,0.05);
-  cursor: not-allowed;
-}
-
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  background: var(--accent);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  margin-right: 12px;
-}
-button:hover { background: var(--accent-hover); }
-
-.status {
-  font-size: 0.95rem;
-  margin-bottom: 16px;
-}
-
-.success-msg { color: #00ff9f; margin-top: 10px; font-weight: 500; }
-.error-msg { color: #ff5a5a; margin-top: 10px; font-weight: 500; }
-
-@media(max-width: 650px) {
-  .profile-container { margin: 20px 10px; }
-  .card { padding: 20px 16px; }
-}
+/* Responsive */
+@media(max-width:768px){.profile-card{padding:20px;margin:15px;} .main{padding:15px;}}
 </style>
 </head>
 <body>
 
-<div class="profile-container">
-  <h2>User Profile</h2>
-  <div class="card">
-    <div class="status" id="emailStatus"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="top">
+    <div class="brand" id="logoToggle">
+      <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/logo-pica.png" alt="logo">
+      <span class="title">TradeXMatrix</span>
+    </div>
+  </div>
+  <nav class="menu">
+    <a href="#"><i class="fa-solid fa-gauge-high"></i><span class="label">Dashboard</span></a>
+    <a href="#"><i class="fa-solid fa-user"></i><span class="label">Profile</span></a>
+  </nav>
+  <div class="bottom">
+    <div class="socials">
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+</aside>
 
-    <label for="usernameInput" class="label">Username</label>
-    <input type="text" id="usernameInput" class="input-field" placeholder="Username">
+<main class="main">
+  <div class="profile-card">
+    <div class="avatar">
+      <img src="https://raw.githubusercontent.com/TM1476/TradeXMatrix/main/avatar.png" alt="Avatar">
+    </div>
+    <h2>Profile</h2>
 
-    <label for="emailInput" class="label">Email</label>
-    <input type="email" id="emailInput" class="input-field" readonly>
-
-    <label for="demoBalance" class="label">Demo Account Balance</label>
-    <input type="text" id="demoBalance" class="input-field" readonly>
-
-    <label for="market" class="label">Market</label>
-    <input type="text" id="market" class="input-field" readonly>
-
-    <label for="features" class="label">Features</label>
-    <input type="text" id="features" class="input-field" readonly>
-
-    <div style="margin-top:10px;">
-      <button id="updateUsernameBtn"><i class="fa-solid fa-pen"></i> Update Username</button>
-      <button id="resetPasswordBtn"><i class="fa-solid fa-key"></i> Reset Password</button>
+    <div class="profile-row">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Username">
     </div>
 
-    <div class="success-msg" id="successMsg"></div>
-    <div class="error-msg" id="errorMsg"></div>
+    <div class="profile-row">
+      <label>Email</label>
+      <input type="text" id="email" readonly>
+    </div>
+
+    <div class="profile-row">
+      <label>Email Verification Status</label>
+      <input type="text" id="emailStatus" readonly>
+      <button class="verify-btn" id="verifyEmailBtn" style="display:none;">Verify Email</button>
+    </div>
+
+    <div class="profile-row">
+      <label>Demo Balance</label>
+      <input type="text" id="demoBalance" readonly>
+    </div>
+
+    <div class="profile-row">
+      <label>Market</label>
+      <input type="text" id="market" readonly>
+    </div>
+
+    <div class="profile-row">
+      <label>Features</label>
+      <input type="text" id="features" readonly>
+    </div>
+
+    <div class="button-row">
+      <button class="button save-btn" id="saveBtn">Save Username</button>
+      <button class="button reset-btn" id="resetPasswordBtn">Reset Password</button>
+    </div>
   </div>
-</div>
+</main>
 
 <script type="module">
 import { auth, db } from './src/firebase/firebase.js';
-import { onAuthStateChanged, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const usernameInput = document.getElementById('usernameInput');
-const emailInput = document.getElementById('emailInput');
-const demoBalance = document.getElementById('demoBalance');
+const usernameInput = document.getElementById('username');
+const emailInput = document.getElementById('email');
+const emailStatusInput = document.getElementById('emailStatus');
+const verifyEmailBtn = document.getElementById('verifyEmailBtn');
+const demoBalanceInput = document.getElementById('demoBalance');
 const marketInput = document.getElementById('market');
 const featuresInput = document.getElementById('features');
-const emailStatus = document.getElementById('emailStatus');
-const successMsg = document.getElementById('successMsg');
-const errorMsg = document.getElementById('errorMsg');
-
-const updateBtn = document.getElementById('updateUsernameBtn');
-const resetBtn = document.getElementById('resetPasswordBtn');
-
-let originalUsername = '';
+const saveBtn = document.getElementById('saveBtn');
+const resetPasswordBtn = document.getElementById('resetPasswordBtn');
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user) return window.location.href='login.html';
-  try {
-    const ref = doc(db,'users',user.uid);
-    const snap = await getDoc(ref);
+  if(!user) return window.location.href='login.html';
 
-    if(snap.exists()){
-      const data = snap.data();
-      originalUsername = data.username || user.displayName || '';
-      usernameInput.value = originalUsername;
-      emailInput.value = user.email;
-      demoBalance.value = data.demoBalance || '0';
-      marketInput.value = data.market || 'N/A';
-      featuresInput.value = data.features ? data.features.join(', ') : 'None';
-      emailStatus.innerHTML = user.emailVerified 
-        ? '✅ Email Verified' 
-        : '⚠️ Email Not Verified - Please verify your email';
-    } else {
-      usernameInput.value = user.displayName || '';
-      emailInput.value = user.email;
-    }
-  } catch(e){ console.error(e); errorMsg.innerText = e.message; }
+  const ref = doc(db,'users',user.uid);
+  const snap = await getDoc(ref);
+  if(snap.exists()){
+    const data = snap.data();
+    usernameInput.value = data.username || user.displayName || '';
+    emailInput.value = user.email;
+    demoBalanceInput.value = data.demoBalance || '0';
+    marketInput.value = data.market || '';
+    featuresInput.value = data.features || '';
+    emailStatusInput.value = user.emailVerified ? '✅ Email Verified' : '⚠️ Email Not Verified';
+    if(!user.emailVerified) verifyEmailBtn.style.display = 'inline-block';
+  }
 });
 
-// Update username
-updateBtn.addEventListener('click', async () => {
-  successMsg.innerText = '';
-  errorMsg.innerText = '';
-
+// Save username
+saveBtn.addEventListener('click', async ()=>{
   const newUsername = usernameInput.value.trim();
-  if(newUsername === '') return errorMsg.innerText = "Username cannot be empty";
-  if(newUsername === originalUsername) return errorMsg.innerText = "Username unchanged";
-
-  try {
-    const user = auth.currentUser;
-    await updateProfile(user, { displayName: newUsername });
-    const userRef = doc(db,'users',user.uid);
-    await updateDoc(userRef,{ username: newUsername });
-
-    originalUsername = newUsername;
-    successMsg.innerText = "Username updated successfully!";
-  } catch(e){ errorMsg.innerText = e.message; }
+  if(newUsername===''){ alert('Username cannot be empty'); return; }
+  const user = auth.currentUser;
+  await updateProfile(user,{displayName:newUsername});
+  const ref = doc(db,'users',user.uid);
+  await updateDoc(ref,{username:newUsername});
+  alert('Username updated successfully!');
 });
 
-// Password reset
-resetBtn.addEventListener('click', async () => {
-  successMsg.innerText = '';
-  errorMsg.innerText = '';
-
+// Reset password
+resetPasswordBtn.addEventListener('click', async ()=>{
   const user = auth.currentUser;
-  if(!user || !user.email) return errorMsg.innerText = "No email found for this account";
+  await sendPasswordResetEmail(auth,user.email);
+  alert('Password reset email sent to ' + user.email);
+});
 
-  try {
-    await sendPasswordResetEmail(auth, user.email);
-    successMsg.innerText = "Password reset email sent. Check your inbox.";
-  } catch(e){ errorMsg.innerText = e.message; }
+// Send email verification
+verifyEmailBtn.addEventListener('click', async ()=>{
+  const user = auth.currentUser;
+  await sendEmailVerification(user);
+  alert('Verification email sent to ' + user.email);
+  verifyEmailBtn.style.display='none';
 });
 </script>
-
 </body>
 </html>
