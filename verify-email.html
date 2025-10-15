@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email - TradeXMatrix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121217;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1a1a20;
+      padding: 30px 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #00A381;
+    }
+    p {
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #00A381;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: #007a61;
+    }
+    .error {
+      color: #ff4c4c;
+    }
+    .success {
+      color: #00ff9c;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Email Verification</h1>
+  <p id="message">Verifying your email, please wait...</p>
+  <a href="login.html" class="btn" id="loginBtn" style="display:none;">Go to Login</a>
+</div>
+
+<script type="module">
+  import { auth } from './src/firebase/firebase.js';
+  import { applyActionCode, checkActionCode } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode'); // should be 'verifyEmail'
+  const actionCode = urlParams.get('oobCode'); // the verification code
+
+  const messageEl = document.getElementById('message');
+  const loginBtn = document.getElementById('loginBtn');
+
+  if (mode === 'verifyEmail' && actionCode) {
+    // Check if the action code is valid
+    checkActionCode(auth, actionCode)
+      .then(() => {
+        // Apply the action code to verify email
+        return applyActionCode(auth, actionCode);
+      })
+      .then(() => {
+        messageEl.textContent = "✅ Your email has been successfully verified!";
+        messageEl.classList.add('success');
+        loginBtn.style.display = 'inline-block';
+      })
+      .catch((error) => {
+        console.error(error);
+        messageEl.textContent = "❌ Verification failed. This link may be invalid or expired.";
+        messageEl.classList.add('error');
+        loginBtn.style.display = 'inline-block';
+      });
+  } else {
+    messageEl.textContent = "❌ Invalid verification link.";
+    messageEl.classList.add('error');
+    loginBtn.style.display = 'inline-block';
+  }
+</script>
+
+</body>
+</html>
