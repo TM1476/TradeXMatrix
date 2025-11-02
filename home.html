@@ -339,5 +339,31 @@ onAuthStateChanged(auth, async (user)=>{
   } catch(e){ console.error(e);}
 });
 </script>
+
+<!-- TradingView Live Chart -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    new TradingView.widget({
+      autosize: true,
+      symbol: "NSE:NIFTY", // default chart
+      interval: "D",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: "en",
+      toolbar_bg: "#1f1f28",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      container_id: "tradingview-widget",
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      details: true,
+      studies: [],
+    });
+  });
+</script>
+
 </body>
 </html>
